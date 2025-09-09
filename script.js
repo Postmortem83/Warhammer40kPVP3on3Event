@@ -1,6 +1,3 @@
-// script.js
-
-// Prüfen, ob Admin-Token im localStorage ist
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("adminToken");
   if (token) {
