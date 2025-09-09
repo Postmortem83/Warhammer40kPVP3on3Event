@@ -5,18 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Überblick – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Zentrierung und größere Schrift */
+    .hero__content, .card {
+      text-align: center;
+    }
+
+    .card {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #ff4f4f;
+      text-shadow: 0 0 10px #000;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #eee;
+      text-align: left; /* Punkte linksbündig für bessere Lesbarkeit */
+    }
+
+    ul li {
+      margin-bottom: 1rem;
+      background: rgba(255, 79, 79, 0.05);
+      padding: 0.8rem 1rem;
+      border-left: 4px solid #ff4f4f;
+      border-radius: 5px;
+    }
+
+    ul li span {
+      display: block;
+      font-size: 1rem;
+      color: #ccc;
+      margin-top: 0.3rem;
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
     <div class="overlay"></div>
     <div class="hero__content">
-      <h1>Event Überblick</h1>
+      <h1>Überblick</h1>
     </div>
   </header>
 
   <nav class="topnav">
     <a href="index.html">Start</a>
-    <a href="rules.html">Regeln & Ablauf</a>
+    <a href="about.html">Überblick</a>
     <a href="bracket.html">Turnierbaum</a>
     <a href="report.html">Match-Reporting</a>
     <a href="register.html">Anmeldung</a>
@@ -24,14 +67,37 @@
 
   <main class="container">
     <section class="card">
-      <h2>Überblick</h2>
-      <p><strong>Event:</strong> Warhammer 40k PvP Clash (3v3). <strong>Format:</strong> Double-Elimination, maximal 16 Teams. <strong>Datum/Uhrzeit:</strong> wird angekündigt. <strong>Kommunikation:</strong> Discord (Link nach Anmeldung).</p>
-      <div class="pill-row">
-        <span class="pill">3v3</span>
-        <span class="pill">Double-Elim</span>
-        <span class="pill">16 Teams</span>
-        <span class="pill">Best-of-3 (Finale Bo5)</span>
-      </div>
+      <h2>Turnier Überblick</h2>
+      <ul>
+        <li>
+          <strong>Spielmodus:</strong> 3v3 Double-Elimination
+          <span>Teams spielen in Winner- und Lower-Bracket gegeneinander, bis ein Sieger feststeht.</span>
+        </li>
+        <li>
+          <strong>Teams:</strong> 16 Teams maximal
+          <span>Jedes Team besteht aus 3 Spielern plus optional einem Ersatzspieler.</span>
+        </li>
+        <li>
+          <strong>Matchdauer:</strong> 12–15 Minuten
+          <span>Jedes Match dauert in etwa 12–15 Minuten, Best-of-3 im Normalfall.</span>
+        </li>
+        <li>
+          <strong>Grand Final:</strong> Best-of-5
+          <span>Das Finale wird etwas länger gespielt, um den Sieger eindeutig zu bestimmen.</span>
+        </li>
+        <li>
+          <strong>Kommunikation:</strong> Discord & Twitch
+          <span>Teams sollen über Discord erreichbar sein und Spiele werden auf Twitch gestreamt.</span>
+        </li>
+        <li>
+          <strong>Fairplay:</strong> Keine Cheats erlaubt
+          <span>Verstöße führen zu sofortigem Ausschluss aus dem Turnier.</span>
+        </li>
+        <li>
+          <strong>Pünktlichkeit:</strong> Rechtzeitig erscheinen
+          <span>Verspätungen können zu Matchverlust führen.</span>
+        </li>
+      </ul>
     </section>
   </main>
 </body>
