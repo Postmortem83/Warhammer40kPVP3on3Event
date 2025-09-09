@@ -4,101 +4,112 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Turnierbaum – Warhammer 40k PvP Clash</title>
-<link rel="stylesheet" href="style.css">
 <style>
-  body {
-    background: #111;
-    color: #eee;
-    font-family: 'Inter', sans-serif;
-    text-align: center;
-  }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #111;
+  color: #eee;
+  text-align: center;
+  margin: 0;
+  padding: 2rem;
+}
 
-  h2 {
-    color: #ff4f4f;
-    text-shadow: 0 0 10px #000;
-    margin-bottom: 2rem;
-  }
+h2 {
+  color: #ff4f4f;
+  margin-bottom: 2rem;
+}
 
-  .bracket-container {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-    margin: 2rem 0;
-  }
+.bracket {
+  display: flex;
+  justify-content: center;
+  gap: 6rem;
+  flex-wrap: wrap;
+}
 
-  .bracket {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  .bracket h3 {
-    margin-bottom: 1rem;
-    color: #ff4f4f;
-  }
+.match {
+  width: 150px;
+  padding: 0.5rem;
+  background: #222;
+  border: 2px solid #ff4f4f;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0 0 10px #000;
+}
 
-  .match {
-    background: #222;
-    border: 2px solid #ff4f4f;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    margin: 0.5rem 0;
-    width: 180px;
-    text-align: center;
-    box-shadow: 0 0 10px #000;
-  }
+.match span {
+  display: block;
+  padding: 0.3rem 0;
+}
 
-  .line {
-    width: 2px;
-    height: 20px;
-    background: #ff4f4f;
-    margin: 0 auto;
-  }
+.team-ready { background: #0a8000; color: #fff; }
+.team-out { background: #800000; color: #fff; }
 
-  /* Optional: farbliche Markierung der Teams */
-  .team-ready { background: #0a8000; color: #fff; }
-  .team-out { background: #800000; color: #fff; }
+/* Linien */
+.round .match::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  width: 30px;
+  height: 2px;
+  background: #ff4f4f;
+}
+
+.round:last-child .match::after { display: none; }
+
+/* Verbindung nach unten */
+.match:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  width: 2px;
+  height: 100%;
+  background: #ff4f4f;
+}
 </style>
 </head>
 <body>
 
-<h2>Double-Elimination Turnierbaum – 16 Teams</h2>
+<h2>Double-Elimination Turnier – 16 Teams</h2>
 
-<div class="bracket-container">
+<div class="bracket">
 
-  <!-- Winner Bracket -->
-  <div class="bracket">
-    <h3>Winner Bracket</h3>
-    <div class="match">Team 1</div>
-    <div class="match">Team 2</div>
-    <div class="match">Team 3</div>
-    <div class="match">Team 4</div>
-    <div class="match">Team 5</div>
-    <div class="match">Team 6</div>
-    <div class="match">Team 7</div>
-    <div class="match">Team 8</div>
-    <div class="match">Team 9</div>
-    <div class="match">Team 10</div>
-    <div class="match">Team 11</div>
-    <div class="match">Team 12</div>
-    <div class="match">Team 13</div>
-    <div class="match">Team 14</div>
-    <div class="match">Team 15</div>
-    <div class="match">Team 16</div>
+  <!-- Runde 1 -->
+  <div class="round">
+    <div class="match"><span>Team 1</span><span>Team 2</span></div>
+    <div class="match"><span>Team 3</span><span>Team 4</span></div>
+    <div class="match"><span>Team 5</span><span>Team 6</span></div>
+    <div class="match"><span>Team 7</span><span>Team 8</span></div>
+    <div class="match"><span>Team 9</span><span>Team 10</span></div>
+    <div class="match"><span>Team 11</span><span>Team 12</span></div>
+    <div class="match"><span>Team 13</span><span>Team 14</span></div>
+    <div class="match"><span>Team 15</span><span>Team 16</span></div>
   </div>
 
-  <!-- Lower Bracket -->
-  <div class="bracket">
-    <h3>Lower Bracket</h3>
-    <div class="match">Team A</div>
-    <div class="match">Team B</div>
-    <div class="match">Team C</div>
-    <div class="match">Team D</div>
-    <div class="match">Team E</div>
-    <div class="match">Team F</div>
-    <div class="match">Team G</div>
-    <div class="match">Team H</div>
+  <!-- Runde 2 -->
+  <div class="round">
+    <div class="match"><span>Sieger 1-2</span><span>Sieger 3-4</span></div>
+    <div class="match"><span>Sieger 5-6</span><span>Sieger 7-8</span></div>
+    <div class="match"><span>Sieger 9-10</span><span>Sieger 11-12</span></div>
+    <div class="match"><span>Sieger 13-14</span><span>Sieger 15-16</span></div>
+  </div>
+
+  <!-- Runde 3 -->
+  <div class="round">
+    <div class="match"><span>Sieger R2-1</span><span>Sieger R2-2</span></div>
+    <div class="match"><span>Sieger R2-3</span><span>Sieger R2-4</span></div>
+  </div>
+
+  <!-- Runde 4 (Finale Winner Bracket) -->
+  <div class="round">
+    <div class="match"><span>Winner Bracket Finale</span></div>
   </div>
 
 </div>
