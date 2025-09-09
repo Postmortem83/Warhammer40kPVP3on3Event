@@ -2,39 +2,12 @@
 
 // Prüfen, ob Admin-Token im localStorage ist
 document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("adminToken") === "VALID_ADMIN") {
+  const token = localStorage.getItem("adminToken");
+  if (token) {
     enableAdminMode();
   }
-});
 
-function adminLogin(username, password) {
-  // Passwort lokal geprüft (sicherer als sichtbar im HTML)
-  // Du kannst hier auch ein Hash vergleichen für etwas mehr Sicherheit
-  if (username === "admin" && password === "ForTheEmperor83!") {
-    localStorage.setItem("adminToken", "VALID_ADMIN");
-    enableAdminMode();
-    alert("Admin eingeloggt!");
-  } else {
-    alert("Falscher Benutzername oder Passwort!");
-  }
-}
-
-function adminLogout() {
-  localStorage.removeItem("adminToken");
-  document.querySelector(".admin-tools").style.display = "none";
-  document.getElementById("adminLogoutBtn").style.display = "none";
-  document.getElementById("adminLoginLink").style.display = "inline-flex";
-  alert("Admin ausgeloggt!");
-}
-
-function enableAdminMode() {
-  document.querySelector(".admin-tools").style.display = "block";
-  document.getElementById("adminLogoutBtn").style.display = "inline-flex";
-  document.getElementById("adminLoginLink").style.display = "none";
-}
-
-// Speicher-Buttons für Bracket
-document.addEventListener("DOMContentLoaded", () => {
+  // Speicher-Buttons für Bracket
   const saveBtn = document.getElementById("saveLocal");
   const clearBtn = document.getElementById("clearLocal");
   const exportBtn = document.getElementById("exportJSON");
@@ -90,3 +63,44 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("lb-bracket").innerHTML = localStorage.getItem("lbBracket");
   }
 });
+
+// Admin Login über Netlify Function
+async function adminLogin(username, password) {
+  try {
+    const res = await fetch("/.netlify/functions/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem("adminToken", data.token);
+      enableAdminMode();
+      alert("Admin eingeloggt!");
+    } else {
+      alert(data.error || "Login fehlgeschlagen");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Serverfehler beim Login");
+  }
+}
+
+// Admin Logout
+function adminLogout() {
+  localStorage.removeItem("adminToken");
+  document.querySelector(".admin-tools").style.display = "none";
+  document.getElementById("adminLogoutBtn").style.display = "none";
+  document.getElementById("adminLoginLink").style.display = "inline-flex";
+  alert("Admin ausgeloggt!");
+}
+
+// Admin-Modus aktivieren
+function enableAdminMode() {
+  document.querySelector(".admin-tools").style.display = "block";
+  document.getElementById("adminLogoutBtn").style.display = "inline-flex";
+  document.getElementById("adminLoginLink").style.display = "none";
+}
+
