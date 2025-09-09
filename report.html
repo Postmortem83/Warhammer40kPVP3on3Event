@@ -11,6 +11,7 @@
     <div class="overlay"></div>
     <div class="hero__content">
       <h1>Match-Reporting</h1>
+      <p>Bitte trage hier dein Spielergebnis ein. Es wird nach Überprüfung freigegeben.</p>
     </div>
   </header>
 
@@ -25,8 +26,12 @@
   <main class="container">
     <section class="card">
       <h2>Teamleader Formular</h2>
-      <form name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <form name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="thank-you.html">
         <input type="hidden" name="form-name" value="match-report">
+        <p class="hidden">
+          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+        </p>
+
         <div class="form-grid">
           <label>Teamleader Name<input type="text" name="leader" required></label>
           <label>Kontakt E-Mail<input type="email" name="email" required></label>
@@ -45,6 +50,7 @@
           <label>VOD/Clip-Link<input type="url" name="vod"></label>
           <label>Kommentar<textarea name="comment" rows="3"></textarea></label>
         </div>
+
         <button class="btn btn--primary" type="submit">Ergebnis senden</button>
       </form>
     </section>
