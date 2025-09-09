@@ -1,359 +1,115 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Turnierbaum – Warhammer 40k PvP Clash</title>
+  <meta charset="UTF-8">
+  <title>Turnier Bracket</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* ------- Bracket-spezifische Styles (kann auch in style.css) ------- */
-    .bracket-area {
-      position: relative;
-      padding: 1rem;
-      overflow-x: auto;
-    }
-
-    .bracket-grid {
+    /* Zusatz damit alles reinpasst */
+    .bracket-container {
       display: flex;
-      gap: 2.5rem;
-      align-items: flex-start;
-      padding: 2rem 0;
-      min-width: 1200px; /* damit es nicht zu schmal wird */
+      justify-content: space-between;
+      gap: 4rem;
+      transform: scale(0.85); /* verkleinert den Baum */
+      transform-origin: top center;
     }
-
-    .col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2rem;
-      min-width: 150px;
+    .bracket {
+      flex: 1;
     }
-
-    .col .col-title {
-      color: #ff4f4f;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-      text-shadow: 0 0 6px #000;
-    }
-
-    .slot {
-      background: #111;
-      border: 2px solid #ff4f4f;
-      color: #fff;
-      padding: 0.45rem 0.6rem;
-      min-width: 140px;
-      height: 40px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      box-shadow: 0 0 10px #000 inset;
-      position: relative;
-    }
-
-    .slot.empty {
-      color: #666;
-      font-weight: 600;
-    }
-
-    /* center finals stacked */
     .center-final {
       display: flex;
       flex-direction: column;
-      gap: 2.5rem;
+      justify-content: center;
       align-items: center;
-      min-width: 180px;
+      gap: 2rem;
+      min-width: 200px;
     }
-
-    .final-box {
-      background: #0f0f0f;
-      border: 3px solid #ff4f4f;
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      min-width: 180px;
-      height: 56px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:1rem;
-      font-weight:800;
-      color:#fff;
-      box-shadow: 0 0 12px #000 inset;
-    }
-
-    /* SVG overlay covers bracket area */
-    #bracket-svg {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none; /* klickbar */
-      overflow: visible;
-    }
-
-    /* responsive shrink */
-    @media (max-width: 900px) {
-      .bracket-grid { gap: 1.2rem; min-width: 1000px; }
-      .slot { min-width: 120px; height:38px; }
-      .center-final { min-width: 150px; }
+    .match-line {
+      border-left: 2px solid #ff4f4f;
+      height: 20px;
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="overlay"></div>
-    <div class="hero__content">
-      <h1>Turnierbaum – Double-Elimination</h1>
-      <p class="subtitle muted">Links: Winner Bracket (16 → 8 → 4 → 2 → Finale) — Rechts: Lower Bracket (8 → 4 → 2 → Finale)</p>
+  <div class="container">
+    <h1 style="text-align:center; color:#ff4f4f; margin:2rem 0;">Turnierbaum</h1>
+    
+    <div class="bracket-container">
+      
+      <!-- WINNER BRACKET -->
+      <div class="bracket" id="winner-bracket">
+        <h2>Winner Bracket</h2>
+        
+        <!-- Runde 1 (16 Teams) -->
+        <div class="round">
+          <div class="match" id="w-r1-m1"><span>Team 1</span> vs <span>Team 2</span></div>
+          <div class="match" id="w-r1-m2"><span>Team 3</span> vs <span>Team 4</span></div>
+          <div class="match" id="w-r1-m3"><span>Team 5</span> vs <span>Team 6</span></div>
+          <div class="match" id="w-r1-m4"><span>Team 7</span> vs <span>Team 8</span></div>
+          <div class="match" id="w-r1-m5"><span>Team 9</span> vs <span>Team 10</span></div>
+          <div class="match" id="w-r1-m6"><span>Team 11</span> vs <span>Team 12</span></div>
+          <div class="match" id="w-r1-m7"><span>Team 13</span> vs <span>Team 14</span></div>
+          <div class="match" id="w-r1-m8"><span>Team 15</span> vs <span>Team 16</span></div>
+        </div>
+
+        <!-- Runde 2 (8 Matches) -->
+        <div class="round">
+          <div class="match" id="w-r2-m1">Sieger M1 vs Sieger M2</div>
+          <div class="match" id="w-r2-m2">Sieger M3 vs Sieger M4</div>
+          <div class="match" id="w-r2-m3">Sieger M5 vs Sieger M6</div>
+          <div class="match" id="w-r2-m4">Sieger M7 vs Sieger M8</div>
+        </div>
+
+        <!-- Runde 3 (4 Matches) -->
+        <div class="round">
+          <div class="match" id="w-r3-m1">Sieger R2M1 vs Sieger R2M2</div>
+          <div class="match" id="w-r3-m2">Sieger R2M3 vs Sieger R2M4</div>
+        </div>
+
+        <!-- Halbfinale -->
+        <div class="round">
+          <div class="match" id="w-r4-m1">Sieger R3M1 vs Sieger R3M2</div>
+        </div>
+      </div>
+
+      <!-- FINALE / MITTE -->
+      <div class="center-final">
+        <h2>Finale</h2>
+        <div class="match" id="grand-final">Winner Bracket Sieger vs Loser Bracket Sieger</div>
+        <div class="match-line"></div>
+        <p class="muted">Grand Champion</p>
+      </div>
+
+      <!-- LOSER BRACKET -->
+      <div class="bracket" id="loser-bracket">
+        <h2>Loser Bracket</h2>
+        
+        <!-- Runde 1 (8 Matches) -->
+        <div class="round">
+          <div class="match" id="l-r1-m1">Loser W-R1-M1 vs Loser W-R1-M2</div>
+          <div class="match" id="l-r1-m2">Loser W-R1-M3 vs Loser W-R1-M4</div>
+          <div class="match" id="l-r1-m3">Loser W-R1-M5 vs Loser W-R1-M6</div>
+          <div class="match" id="l-r1-m4">Loser W-R1-M7 vs Loser W-R1-M8</div>
+        </div>
+
+        <!-- Runde 2 (4 Matches) -->
+        <div class="round">
+          <div class="match" id="l-r2-m1">Sieger L-R1-M1 vs Sieger L-R1-M2</div>
+          <div class="match" id="l-r2-m2">Sieger L-R1-M3 vs Sieger L-R1-M4</div>
+        </div>
+
+        <!-- Runde 3 (2 Matches) -->
+        <div class="round">
+          <div class="match" id="l-r3-m1">Sieger L-R2-M1 vs Sieger L-R2-M2</div>
+        </div>
+
+        <!-- Finale Loser Bracket -->
+        <div class="round">
+          <div class="match" id="l-final">Loser Finale: Sieger R3 vs Verlierer WB-Halbfinale</div>
+        </div>
+      </div>
     </div>
-  </header>
-
-  <nav class="topnav">
-    <a href="index.html">Start</a>
-    <a href="about.html">Überblick</a>
-    <a href="rules.html">Regeln & Ablauf</a>
-    <a href="report.html">Match-Reporting</a>
-    <a href="register.html">Anmeldung</a>
-  </nav>
-
-  <main class="container">
-    <section class="card bracket-card">
-      <div class="bracket-area" id="bracketArea">
-        <!-- SVG für Linien -->
-        <svg id="bracket-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-
-        <div class="bracket-grid" id="bracketGrid">
-
-          <!-- column: 16 initial team slots -->
-          <div class="col col-teams">
-            <div class="col-title">Teams (16)</div>
-            <!-- t1..t16 -->
-            <div class="slot empty" id="t1"></div>
-            <div class="slot empty" id="t2"></div>
-            <div class="slot empty" id="t3"></div>
-            <div class="slot empty" id="t4"></div>
-            <div class="slot empty" id="t5"></div>
-            <div class="slot empty" id="t6"></div>
-            <div class="slot empty" id="t7"></div>
-            <div class="slot empty" id="t8"></div>
-            <div class="slot empty" id="t9"></div>
-            <div class="slot empty" id="t10"></div>
-            <div class="slot empty" id="t11"></div>
-            <div class="slot empty" id="t12"></div>
-            <div class="slot empty" id="t13"></div>
-            <div class="slot empty" id="t14"></div>
-            <div class="slot empty" id="t15"></div>
-            <div class="slot empty" id="t16"></div>
-          </div>
-
-          <!-- column: WB - 8 -->
-          <div class="col col-wb2">
-            <div class="col-title">WB – 8</div>
-            <div class="slot empty" id="w2_1"></div>
-            <div class="slot empty" id="w2_2"></div>
-            <div class="slot empty" id="w2_3"></div>
-            <div class="slot empty" id="w2_4"></div>
-            <div class="slot empty" id="w2_5"></div>
-            <div class="slot empty" id="w2_6"></div>
-            <div class="slot empty" id="w2_7"></div>
-            <div class="slot empty" id="w2_8"></div>
-          </div>
-
-          <!-- column: WB - 4 -->
-          <div class="col col-wb3">
-            <div class="col-title">WB – 4</div>
-            <div class="slot empty" id="w3_1"></div>
-            <div class="slot empty" id="w3_2"></div>
-            <div class="slot empty" id="w3_3"></div>
-            <div class="slot empty" id="w3_4"></div>
-          </div>
-
-          <!-- column: WB - 2 -->
-          <div class="col col-wb4">
-            <div class="col-title">WB – 2</div>
-            <div class="slot empty" id="w4_1"></div>
-            <div class="slot empty" id="w4_2"></div>
-          </div>
-
-          <!-- center: Finals (Winner + Loser final area) -->
-          <div class="col center-final">
-            <div class="col-title">Finals (Mitte)</div>
-            <div class="final-box" id="w_final">Winner Finale</div>
-            <div style="height:12px"></div>
-            <div class="final-box" id="lb_final">Loser Finale</div>
-          </div>
-
-          <!-- Lower Bracket initial: 8 slots -->
-          <div class="col col-lb1">
-            <div class="col-title">LB – 8</div>
-            <div class="slot empty" id="lb1_1"></div>
-            <div class="slot empty" id="lb1_2"></div>
-            <div class="slot empty" id="lb1_3"></div>
-            <div class="slot empty" id="lb1_4"></div>
-            <div class="slot empty" id="lb1_5"></div>
-            <div class="slot empty" id="lb1_6"></div>
-            <div class="slot empty" id="lb1_7"></div>
-            <div class="slot empty" id="lb1_8"></div>
-          </div>
-
-          <!-- LB - 4 -->
-          <div class="col col-lb2">
-            <div class="col-title">LB – 4</div>
-            <div class="slot empty" id="lb2_1"></div>
-            <div class="slot empty" id="lb2_2"></div>
-            <div class="slot empty" id="lb2_3"></div>
-            <div class="slot empty" id="lb2_4"></div>
-          </div>
-
-          <!-- LB - 2 -->
-          <div class="col col-lb3">
-            <div class="col-title">LB – 2</div>
-            <div class="slot empty" id="lb3_1"></div>
-            <div class="slot empty" id="lb3_2"></div>
-          </div>
-
-        </div> <!-- .bracket-grid -->
-      </div> <!-- .bracket-area -->
-    </section>
-  </main>
-
-  <script>
-  // --------- JS: Linien zeichnen (SVG) zwischen definierten Paaren ----------
-  (function() {
-    const bracketArea = document.getElementById('bracketArea');
-    const svg = document.getElementById('bracket-svg');
-
-    // Mapping pairs: [sourceId, sourceId, ..., targetId]
-    const mappings = [
-      // Round of 16 -> WB-8 + LB1 (each pair of team slots -> one WB slot and one LB slot)
-      ['t1','t2','w2_1','lb1_1'],
-      ['t3','t4','w2_2','lb1_2'],
-      ['t5','t6','w2_3','lb1_3'],
-      ['t7','t8','w2_4','lb1_4'],
-      ['t9','t10','w2_5','lb1_5'],
-      ['t11','t12','w2_6','lb1_6'],
-      ['t13','t14','w2_7','lb1_7'],
-      ['t15','t16','w2_8','lb1_8'],
-
-      // WB-8 -> WB-4
-      ['w2_1','w2_2','w3_1'],
-      ['w2_3','w2_4','w3_2'],
-      ['w2_5','w2_6','w3_3'],
-      ['w2_7','w2_8','w3_4'],
-
-      // WB-4 -> WB-2
-      ['w3_1','w3_2','w4_1'],
-      ['w3_3','w3_4','w4_2'],
-
-      // WB-2 -> Winner Final (center)
-      ['w4_1','w4_2','w_final'],
-
-      // LB1 -> LB2
-      ['lb1_1','lb1_2','lb2_1'],
-      ['lb1_3','lb1_4','lb2_2'],
-      ['lb1_5','lb1_6','lb2_3'],
-      ['lb1_7','lb1_8','lb2_4'],
-
-      // LB2 -> LB3
-      ['lb2_1','lb2_2','lb3_1'],
-      ['lb2_3','lb2_4','lb3_2'],
-
-      // LB3 -> Loser Final
-      ['lb3_1','lb3_2','lb_final']
-    ];
-
-    function clearSVG() {
-      while (svg.firstChild) svg.removeChild(svg.firstChild);
-    }
-
-    function getCenter(elem) {
-      const r = elem.getBoundingClientRect();
-      const containerR = bracketArea.getBoundingClientRect();
-      // coordinates relative to svg (bracketArea)
-      const x = r.left - containerR.left + r.width / 2;
-      const y = r.top - containerR.top + r.height / 2;
-      return {x, y};
-    }
-
-    // draw a path with an elbow (mid vertical) from a -> b
-    function drawElbow(x1,y1,x2,y2, opts = {}) {
-      const midX = (x1 + x2) / 2;
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      const d = `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`;
-      path.setAttribute('d', d);
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', opts.color || '#ff4f4f');
-      path.setAttribute('stroke-width', opts.width || 2);
-      path.setAttribute('stroke-linecap', 'round');
-      svg.appendChild(path);
-    }
-
-    function drawDot(x,y,color='#ff4f4f') {
-      const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      c.setAttribute('cx', x);
-      c.setAttribute('cy', y);
-      c.setAttribute('r', 3);
-      c.setAttribute('fill', color);
-      svg.appendChild(c);
-    }
-
-    function drawAll() {
-      clearSVG();
-      // make svg size match area
-      svg.setAttribute('width', bracketArea.clientWidth);
-      svg.setAttribute('height', bracketArea.clientHeight);
-      // for each mapping draw lines from each source to the target (except last element is target)
-      mappings.forEach(group => {
-        const targetId = group[group.length - 1];
-        const targetEl = document.getElementById(targetId);
-        if (!targetEl) return;
-        const targetC = getCenter(targetEl);
-        // for each source (all but last), draw a line to target
-        for (let i = 0; i < group.length - 1; i++) {
-          const srcEl = document.getElementById(group[i]);
-          if (!srcEl) continue;
-          const srcC = getCenter(srcEl);
-          drawElbow(srcC.x, srcC.y, targetC.x, targetC.y, { color: '#ff4f4f', width: 2 });
-          // optionally draw endpoint dots
-          drawDot(srcC.x, srcC.y, '#ff4f4f');
-          drawDot(targetC.x, targetC.y, '#ff4f4f');
-        }
-      });
-    }
-
-    // redraw on load & resize (debounced)
-    let t;
-    window.addEventListener('resize', () => {
-      clearTimeout(t);
-      t = setTimeout(drawAll, 120);
-    });
-
-    window.addEventListener('load', () => {
-      // small delay to allow fonts/layout
-      setTimeout(drawAll, 80);
-    });
-
-    // expose function to update slot text (so report page can call it)
-    window.updateSlot = function(id, text) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.classList.remove('empty');
-      el.textContent = text || '';
-      setTimeout(drawAll, 50);
-    };
-
-    // helper: reset all slots (if needed)
-    window.clearAllSlots = function() {
-      document.querySelectorAll('.slot').forEach(s => {
-        s.textContent = '';
-        s.classList.add('empty');
-      });
-      setTimeout(drawAll, 50);
-    };
-
-  })();
-  </script>
+  </div>
 </body>
 </html>
