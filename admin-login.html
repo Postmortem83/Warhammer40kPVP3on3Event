@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Login – Warhammer PvP</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="container" style="padding-top:4rem;">
+    <section class="card" style="max-width:480px; margin:auto;">
+      <h2>Admin Login</h2>
+      <form onsubmit="event.preventDefault(); adminLogin(user.value, pass.value);">
+        <label>Benutzername
+          <input type="text" id="user" required placeholder="admin">
+        </label>
+        <label>Passwort
+          <input type="password" id="pass" required>
+        </label>
+        <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+          <button class="btn btn--primary" type="submit">Login</button>
+          <a href="bracket.html" class="btn btn--ghost" style="display:inline-flex; align-items:center;">Abbrechen</a>
+        </div>
+      </form>
+      <p style="margin-top:1rem; color:#ccc; font-size:0.9rem;">Hinweis: Login-Daten werden serverseitig geprüft.</p>
+    </section>
+  </main>
+</body>
+</html>
