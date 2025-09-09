@@ -1,65 +1,56 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Turnierbaum – Warhammer 40k PvP Clash</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turnierbaum – Warhammer 40k PvP Clash</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav class="topnav">
-  <a href="index.html">Start</a>
-  <a href="about.html">Überblick</a>
-  <a href="rules.html">Regeln & Ablauf</a>
-  <a href="bracket.html">Turnierbaum</a>
-  <a href="report.html">Match-Reporting</a>
-  <a href="register.html">Anmeldung</a>
-</nav>
+  <header class="hero">
+    <div class="overlay"></div>
+    <div class="hero__content">
+      <h1>Turnierbaum</h1>
+    </div>
+  </header>
+  <nav class="topnav">
+    <a href="index.html">Start</a>
+    <a href="about.html">Überblick</a>
+    <a href="rules.html">Regeln & Ablauf</a>
+    <a href="report.html">Match-Reporting</a>
+    <a href="register.html">Anmeldung</a>
+  </nav>
 
-<main class="container">
-<section class="card">
-<h2>Turnierbaum (Double Elimination – 16 Teams)</h2>
-<p class="muted">Admin-Bereich nur für dich! Namen/Scores lokal bearbeitbar.</p>
+  <main class="container">
+    <section class="card">
+      <h2>Double-Elimination – 16 Teams</h2>
+      <p class="muted">Admin-Toggle: nur für dich sichtbar.</p>
 
-<div class="bracket-wrap" id="wb-bracket"></div>
-<div class="bracket-wrap" id="lb-bracket"></div>
+      <div class="bracket-wrap" id="wb-bracket">
+        <img src="https://i.imgur.com/g4x6Y5A.jpg" alt="Winner Bracket Space Marines" style="width:100%; border-radius:10px; box-shadow:0 0 20px #000;">
+      </div>
+      <div class="bracket-wrap" id="lb-bracket">
+        <img src="https://i.imgur.com/D5gFGwR.jpg" alt="Lower Bracket Space Marines" style="width:100%; border-radius:10px; box-shadow:0 0 20px #000;">
+      </div>
 
-<div class="admin-tools container">
-<label class="switch">
-  <input type="checkbox" id="adminToggle">
-  <span class="slider"></span>
-</label>
-<span>Admin-Edit-Modus (nur mit Passwort)</span>
-<div class="admin-btns">
-  <button class="btn btn--small" id="saveLocal">Speichern (lokal)</button>
-  <button class="btn btn--small btn--ghost" id="clearLocal">Lokal löschen</button>
-  <button class="btn btn--small" id="exportJSON">Export JSON</button>
-  <label class="file-btn">
-    Import JSON <input type="file" id="importJSON" accept="application/json">
-  </label>
-</div>
-</div>
-</section>
-</main>
+      <div class="admin-tools container">
+        <label class="switch">
+          <input type="checkbox" id="adminToggle">
+          <span class="slider"></span>
+        </label>
+        <span>Admin-Edit-Modus (lokal speichern)</span>
+        <div class="admin-btns">
+          <button class="btn btn--small" id="saveLocal">Speichern (lokal)</button>
+          <button class="btn btn--small btn--ghost" id="clearLocal">Lokal löschen</button>
+          <button class="btn btn--small" id="exportJSON">Export JSON</button>
+          <label class="file-btn">
+            Import JSON <input type="file" id="importJSON" accept="application/json">
+          </label>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<footer class="footer">
-<div class="container footer__grid">
-<div>
-<h4>Kontakt</h4>
-<p>Discord: wird nach Anmeldung zugesendet<br>E-Mail: nach Registrierung</p>
-</div>
-<div>
-<h4>Stream</h4>
-<p><a class="link" href="https://www.twitch.tv/postmortem83" target="_blank" rel="noopener">twitch.tv/postmortem83</a></p>
-</div>
-<div>
-<h4>Hinweis</h4>
-<p>Fan-Seite – keine offiziellen Assets von Warhammer 40k.</p>
-</div>
-</div>
-</footer>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
