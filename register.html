@@ -1,58 +1,46 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Team-Anmeldung – Warhammer 40k PvP Clash</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team-Anmeldung – Warhammer 40k PvP Clash</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav class="topnav">
-  <a href="index.html">Start</a>
-  <a href="about.html">Überblick</a>
-  <a href="rules.html">Regeln & Ablauf</a>
-  <a href="bracket.html">Turnierbaum</a>
-  <a href="report.html">Match-Reporting</a>
-  <a href="register.html">Anmeldung</a>
-</nav>
+  <header class="hero">
+    <div class="overlay"></div>
+    <div class="hero__content">
+      <h1>Team-Anmeldung</h1>
+    </div>
+  </header>
+  <nav class="topnav">
+    <a href="index.html">Start</a>
+    <a href="about.html">Überblick</a>
+    <a href="rules.html">Regeln & Ablauf</a>
+    <a href="bracket.html">Turnierbaum</a>
+    <a href="report.html">Match-Reporting</a>
+  </nav>
 
-<main class="container">
-<section class="card">
-<h2>Team-Anmeldung</h2>
-<form name="team-register" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-<input type="hidden" name="form-name" value="team-register">
-<div class="form-grid">
-<label>Teamname<input type="text" name="teamname" required></label>
-<label>Leader (Nickname)<input type="text" name="leader" required></label>
-<label>Kontakt E-Mail<input type="email" name="email" required></label>
-<label>Spieler 1<input type="text" name="p1" required></label>
-<label>Spieler 2<input type="text" name="p2" required></label>
-<label>Spieler 3<input type="text" name="p3" required></label>
-<label>Ersatz<input type="text" name="sub"></label>
-<label>Team-Logo / Bild (URL)<input type="url" name="logo" placeholder="https://..."></label>
-<label>Nachricht<textarea name="msg" rows="3"></textarea></label>
-</div>
-<button class="btn btn--primary" type="submit">Team anmelden</button>
-</form>
-</section>
-</main>
-
-<footer class="footer">
-<div class="container footer__grid">
-<div>
-<h4>Kontakt</h4>
-<p>Discord: wird nach Anmeldung zugesendet<br>E-Mail: nach Registrierung</p>
-</div>
-<div>
-<h4>Stream</h4>
-<p><a class="link" href="https://www.twitch.tv/postmortem83" target="_blank" rel="noopener">twitch.tv/postmortem83</a></p>
-</div>
-<div>
-<h4>Hinweis</h4>
-<p>Fan-Seite – keine offiziellen Assets von Warhammer 40k.</p>
-</div>
-</div>
-</footer>
+  <main class="container">
+    <section class="card">
+      <h2>Team Formular</h2>
+      <form name="team-register" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="team-register">
+        <div class="form-grid">
+          <label>Teamname<input type="text" name="teamname" required></label>
+          <label>Leader (Nickname)<input type="text" name="leader" required></label>
+          <label>Kontakt E-Mail<input type="email" name="email" required></label>
+          <label>Spieler 1<input type="text" name="p1" required></label>
+          <label>Spieler 2<input type="text" name="p2" required></label>
+          <label>Spieler 3<input type="text" name="p3" required></label>
+          <label>Ersatz<input type="text" name="sub"></label>
+          <label>Team-Logo / Bild (URL)<input type="url" name="logo" placeholder="https://..."></label>
+          <label>Nachricht<textarea name="msg" rows="3"></textarea></label>
+        </div>
+        <button class="btn btn--primary" type="submit">Team anmelden</button>
+      </form>
+      <img src="https://i.imgur.com/4QzWzVb.jpg" alt="Anmeldung Space Marines" style="width:100%; margin-top:1rem; border-radius:10px; box-shadow:0 0 20px #000;">
+    </section>
+  </main>
 </body>
 </html>
