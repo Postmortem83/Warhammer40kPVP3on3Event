@@ -1,12 +1,12 @@
 // netlify/functions/login.js
-// Server-side admin login (Netlify Function)
-// Verwende ENV-Variablen auf Netlify: ADMIN_USER, ADMIN_PASS, JWT_SECRET
+// Server-side Admin Login
+// Benutze Netlify ENV-Variablen: ADMIN_USER, ADMIN_PASS, JWT_SECRET
 
 const jwt = require("jsonwebtoken");
 
-const ADMIN_USER = process.env.ADMIN_USER || "admin";
-const ADMIN_PASS = process.env.ADMIN_PASS || "ForTheEmperor83!";
-const JWT_SECRET = process.env.JWT_SECRET || "CHANGE_THIS_TO_A_STRONG_SECRET";
+const ADMIN_USER = process.env.ADMIN_USER;
+const ADMIN_PASS = process.env.ADMIN_PASS;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -21,9 +21,7 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: "Missing credentials" }) };
     }
 
-    // Prüfen: wenn Username+Pass korrekt -> Token erzeugen
     if (username === ADMIN_USER && password === ADMIN_PASS) {
-      // Token mit kurzer Laufzeit (z.B. 2 Stunden)
       const token = jwt.sign({ user: username, role: "admin" }, JWT_SECRET, { expiresIn: "2h" });
       return {
         statusCode: 200,
@@ -36,3 +34,4 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: "Server error", details: err.message }) };
   }
 };
+
