@@ -1,7 +1,3 @@
-// netlify/functions/login.js
-// Server-side Admin Login
-// Benutze Netlify ENV-Variablen: ADMIN_USER, ADMIN_PASS, JWT_SECRET
-
 const jwt = require("jsonwebtoken");
 
 const ADMIN_USER = process.env.ADMIN_USER;
