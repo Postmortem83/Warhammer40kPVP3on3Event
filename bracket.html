@@ -3,65 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Turnierbaum – Warhammer 40k PvP Clash</title>
+  <title>Turnierbaum – Warhammer PvP</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="hero">
-    <div class="overlay"></div>
-    <div class="hero__content">
-      <h1>Turnierbaum</h1>
-    </div>
-  </header>
-  <nav class="topnav">
-    <a href="index.html">Start</a>
-    <a href="about.html">Überblick</a>
-    <a href="rules.html">Regeln & Ablauf</a>
-    <a href="report.html">Match-Reporting</a>
-    <a href="register.html">Anmeldung</a>
-  </nav>
+  <main class="container">
+    <section class="card">
+      <h2>Double-Elimination – 16 Teams</h2>
+      <p class="muted">Admin-Toggle: nur für dich sichtbar.</p>
 
-<!-- ... oberer Teil der Seite ... -->
-
-<main class="container">
-  <section class="card">
-    <h2>Double-Elimination – 16 Teams</h2>
-    <p class="muted">Admin-Toggle: nur für dich sichtbar.</p>
-
-    <div class="bracket-wrap" id="wb-bracket">
-      <!-- Platzhalter; Admin kann hier HTML einfügen -->
-      <p style="color:#999;">Winner Bracket (hier Admin-Inhalte einfügen).</p>
-    </div>
-
-    <div class="bracket-wrap" id="lb-bracket">
-      <p style="color:#999;">Lower Bracket (hier Admin-Inhalte einfügen).</p>
-    </div>
-
-    <!-- Login-Link / Logout -->
-    <div style="margin-top:1rem;">
-      <a id="adminLoginLink" class="btn btn--ghost" href="admin-login.html">Admin Login</a>
-      <button id="adminLogout" class="btn btn--ghost" style="display:none;" onclick="adminLogout()">Logout</button>
-    </div>
-
-    <!-- Admin Tools (hidden per default, sichtbar nur wenn token vorhanden) -->
-    <div class="admin-tools" style="display:none; margin-top:1rem;">
-      <div class="admin-btns">
-        <button class="btn btn--primary" id="saveLocal">Speichern (lokal)</button>
-        <button class="btn btn--ghost" id="clearLocal">Lokal löschen</button>
-        <button class="btn btn--ghost" id="exportJSON">Export JSON</button>
-        <label class="file-btn btn btn--ghost" style="cursor:pointer;">
-          Import JSON <input type="file" id="importJSON" accept="application/json">
-        </label>
+      <div class="bracket-wrap" id="wb-bracket">
+        <p style="color:#999;">Winner Bracket (hier Admin-Inhalte einfügen).</p>
       </div>
-      <p class="muted" style="margin-top:0.5rem;">Admin-Modus: Bearbeite die Brackets direkt im HTML der Boxen und speichere lokal.</p>
-    </div>
 
-  </section>
-</main>
+      <div class="bracket-wrap" id="lb-bracket">
+        <p style="color:#999;">Lower Bracket (hier Admin-Inhalte einfügen).</p>
+      </div>
 
-<!-- ... restlicher Footer ... -->
+      <!-- Login/Logout -->
+      <div style="margin-top:1rem;">
+        <a id="adminLoginLink" class="btn btn--ghost" href="admin-login.html">Admin Login</a>
+        <button id="adminLogoutBtn" class="btn btn--ghost" style="display:none;" onclick="adminLogout()">Logout</button>
+      </div>
 
-
-  <script src="script.js"></script>
+      <!-- Admin Tools -->
+      <div class="admin-tools" style="display:none; margin-top:1rem;">
+        <div class="admin-btns">
+          <button class="btn btn--primary" id="saveLocal">Speichern (lokal)</button>
+          <button class="btn btn--ghost" id="clearLocal">Lokal löschen</button>
+          <button class="btn btn--ghost" id="exportJSON">Export JSON</button>
+          <label class="file-btn btn btn--ghost" style="cursor:pointer;">
+            Import JSON <input type="file" id="importJSON" accept="application/json">
+          </label>
+        </div>
+        <p class="muted" style="margin-top:0.5rem;">Admin-Modus: Bearbeite die Brackets direkt im HTML und speichere lokal.</p>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
