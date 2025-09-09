@@ -20,22 +20,11 @@
         <a class="btn btn--primary" href="#register">Jetzt anmelden</a>
         <a class="btn btn--ghost" href="https://www.twitch.tv/postmortem83" target="_blank" rel="noopener">🔴 Live zuschauen</a>
       </div>
+      <div class="hero-images">
+        <img src="https://i.imgur.com/5C9tRkS.png" alt="Space Marine Charakter" class="hero-img left">
+        <img src="https://i.imgur.com/8I0QZaf.png" alt="Warhammer Charakter" class="hero-img right">
+      </div>
     </div>
-    <svg class="hero__svg" viewBox="0 0 800 400" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#1a1f2e" />
-          <stop offset="100%" stop-color="#0b0e14" />
-        </linearGradient>
-      </defs>
-      <rect x="0" y="0" width="800" height="400" fill="url(#grad1)"></rect>
-      <g opacity="0.18">
-        <path d="M30 320 L180 200 L240 260 L420 120 L550 200 L760 40" stroke="#7aa0ff" stroke-width="4" fill="none"/>
-        <circle cx="240" cy="260" r="6" fill="#7aa0ff"/>
-        <circle cx="420" cy="120" r="6" fill="#7aa0ff"/>
-        <circle cx="550" cy="200" r="6" fill="#7aa0ff"/>
-      </g>
-    </svg>
   </header>
 
   <nav class="topnav">
@@ -106,83 +95,8 @@
     <section id="bracket" class="container">
       <h2>Turnierbaum (Double Elimination – 16 Teams)</h2>
       <p class="muted">Admin-Toggle unten: Namen/Scores direkt im Browser editierbar (lokal gespeichert). Für offizielle Anzeige bitte Ergebnisse zusätzlich über „Match-Reporting“ melden.</p>
-
-      <div class="bracket-wrap card">
-        <h3>Winner Bracket</h3>
-        <div class="bracket-grid" id="wb-grid">
-          <div class="round">
-            <h4>Runde 1</h4>
-            <div class="match" data-id="W1"><div class="slot" contenteditable>Team 1</div><div class="slot" contenteditable>Team 2</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="W2"><div class="slot" contenteditable>Team 3</div><div class="slot" contenteditable>Team 4</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="W3"><div class="slot" contenteditable>Team 5</div><div class="slot" contenteditable>Team 6</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="W4"><div class="slot" contenteditable>Team 7</div><div class="slot" contenteditable>Team 8</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="W5"><div class="slot" contenteditable>Team 9</div><div class="slot" contenteditable>Team 10</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="W6"><div class="slot" contenteditable>Team 11</div><div class="slot" contenteditable>Team 12</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="W7"><div class="slot" contenteditable>Team 13</div><div class="slot" contenteditable>Team 14</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="W8"><div class="slot" contenteditable>Team 15</div><div class="slot" contenteditable>Team 16</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>Viertelfinale</h4>
-            <div class="match" data-id="WQ1"><div class="slot" contenteditable>Winner W1</div><div class="slot" contenteditable>Winner W2</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="WQ2"><div class="slot" contenteditable>Winner W3</div><div class="slot" contenteditable>Winner W4</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="WQ3"><div class="slot" contenteditable>Winner W5</div><div class="slot" contenteditable>Winner W6</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="WQ4"><div class="slot" contenteditable>Winner W7</div><div class="slot" contenteditable>Winner W8</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>Halbfinale</h4>
-            <div class="match" data-id="WS1"><div class="slot" contenteditable>Winner WQ1</div><div class="slot" contenteditable>Winner WQ2</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="WS2"><div class="slot" contenteditable>Winner WQ3</div><div class="slot" contenteditable>Winner WQ4</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>WB-Finale</h4>
-            <div class="match" data-id="WF"><div class="slot" contenteditable>Winner WS1</div><div class="slot" contenteditable>Winner WS2</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bracket-wrap card">
-        <h3>Lower Bracket</h3>
-        <p class="muted">Verlierer fallen rundenweise hierher. Platzhalter sind vorbereitet – trage real auftretende Teams ein.</p>
-        <div class="bracket-grid" id="lb-grid">
-          <div class="round">
-            <h4>LB-R1</h4>
-            <div class="match" data-id="L1"><div class="slot" contenteditable>L: W1</div><div class="slot" contenteditable>L: W2</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L2"><div class="slot" contenteditable>L: W3</div><div class="slot" contenteditable>L: W4</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L3"><div class="slot" contenteditable>L: W5</div><div class="slot" contenteditable>L: W6</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L4"><div class="slot" contenteditable>L: W7</div><div class="slot" contenteditable>L: W8</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>LB-R2</h4>
-            <div class="match" data-id="L5"><div class="slot" contenteditable>Winner L1</div><div class="slot" contenteditable>L: WQ1</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L6"><div class="slot" contenteditable>Winner L2</div><div class="slot" contenteditable>L: WQ2</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L7"><div class="slot" contenteditable>Winner L3</div><div class="slot" contenteditable>L: WQ3</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L8"><div class="slot" contenteditable>Winner L4</div><div class="slot" contenteditable>L: WQ4</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>LB-R3</h4>
-            <div class="match" data-id="L9"><div class="slot" contenteditable>Winner L5</div><div class="slot" contenteditable>Winner L6</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L10"><div class="slot" contenteditable>Winner L7</div><div class="slot" contenteditable>Winner L8</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>LB-R4</h4>
-            <div class="match" data-id="L11"><div class="slot" contenteditable>Winner L9</div><div class="slot" contenteditable>L: WS1</div><div class="score" contenteditable>0 : 0</div></div>
-            <div class="match" data-id="L12"><div class="slot" contenteditable>Winner L10</div><div class="slot" contenteditable>L: WS2</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>LB-R5</h4>
-            <div class="match" data-id="L13"><div class="slot" contenteditable>Winner L11</div><div class="slot" contenteditable>Winner L12</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>LB-Finale</h4>
-            <div class="match" data-id="LF"><div class="slot" contenteditable>Winner L13</div><div class="slot" contenteditable>L: WF</div><div class="score" contenteditable>0 : 0</div></div>
-          </div>
-          <div class="round">
-            <h4>Grand Final</h4>
-            <div class="match" data-id="GF"><div class="slot" contenteditable>WB Sieger</div><div class="slot" contenteditable>LB Sieger</div><div class="score" contenteditable>0 : 0</div></div>
-            <p class="muted small">Hinweis: Falls das LB-Team gewinnt, spielt ihr ein Reset (Bo5).</p>
-          </div>
-        </div>
-      </div>
+      <div class="bracket-wrap card" id="wb-bracket"></div>
+      <div class="bracket-wrap card" id="lb-bracket"></div>
 
       <div class="admin-tools container">
         <label class="switch">
@@ -203,19 +117,11 @@
 
     <section id="report" class="card container">
       <h2>Match-Reporting (Teamleader)</h2>
-      <p class="muted">Ergebnisse hier melden – die Orga bestätigt &amp; aktualisiert den Turnierbaum. <strong>Netlify Forms</strong> sendet die Meldung per E-Mail an den Admin.</p>
       <form name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="match-report">
-        <p class="hidden">
-          <label>Don’t fill this out: <input name="bot-field"></label>
-        </p>
         <div class="form-grid">
-          <label>Teamleader Name
-            <input type="text" name="leader" required>
-          </label>
-          <label>Kontakt E-Mail
-            <input type="email" name="email" required>
-          </label>
+          <label>Teamleader Name<input type="text" name="leader" required></label>
+          <label>Kontakt E-Mail<input type="email" name="email" required></label>
           <label>Bracket
             <select name="bracket" required>
               <option value="Winner">Winner Bracket</option>
@@ -223,27 +129,13 @@
               <option value="Grand Final">Grand Final</option>
             </select>
           </label>
-          <label>Match-ID (z.B. W1, WQ3, L12, GF)
-            <input type="text" name="match_id" required placeholder="z.B. W1">
-          </label>
-          <label>Team A
-            <input type="text" name="team_a" required>
-          </label>
-          <label>Team B
-            <input type="text" name="team_b" required>
-          </label>
-          <label>Score (z.B. 2:1)
-            <input type="text" name="score" required placeholder="z.B. 2:1">
-          </label>
-          <label>Gewinner
-            <input type="text" name="winner" required>
-          </label>
-          <label>VOD/Clip-Link (optional)
-            <input type="url" name="vod">
-          </label>
-          <label>Kommentar (optional)
-            <textarea name="comment" rows="3"></textarea>
-          </label>
+          <label>Match-ID<input type="text" name="match_id" required placeholder="z.B. W1"></label>
+          <label>Team A<input type="text" name="team_a" required></label>
+          <label>Team B<input type="text" name="team_b" required></label>
+          <label>Score<input type="text" name="score" required placeholder="z.B. 2:1"></label>
+          <label>Gewinner<input type="text" name="winner" required></label>
+          <label>VOD/Clip-Link<input type="url" name="vod"></label>
+          <label>Kommentar<textarea name="comment" rows="3"></textarea></label>
         </div>
         <button class="btn btn--primary" type="submit">Ergebnis senden</button>
       </form>
@@ -251,40 +143,18 @@
 
     <section id="register" class="card container">
       <h2>Team-Anmeldung</h2>
-      <p class="muted">Tragt euer Team ein (max. 16 Teams). Nach Bestätigung erhaltet ihr den Discord-Link.</p>
       <form name="team-register" method="POST" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="team-register">
-        <p class="hidden">
-          <label>Don’t fill this out: <input name="bot-field"></label>
-        </p>
         <div class="form-grid">
-          <label>Teamname
-            <input type="text" name="teamname" required>
-          </label>
-          <label>Leader (Nickname)
-            <input type="text" name="leader" required>
-          </label>
-          <label>Kontakt E-Mail
-            <input type="email" name="email" required>
-          </label>
-          <label>Spieler 1
-            <input type="text" name="p1" required>
-          </label>
-          <label>Spieler 2
-            <input type="text" name="p2" required>
-          </label>
-          <label>Spieler 3
-            <input type="text" name="p3" required>
-          </label>
-          <label>Ersatz (optional)
-            <input type="text" name="sub">
-          </label>
-          <label>Team-Logo / Bild (URL, optional)
-            <input type="url" name="logo" placeholder="https://...">
-          </label>
-          <label>Nachricht (optional)
-            <textarea name="msg" rows="3"></textarea>
-          </label>
+          <label>Teamname<input type="text" name="teamname" required></label>
+          <label>Leader (Nickname)<input type="text" name="leader" required></label>
+          <label>Kontakt E-Mail<input type="email" name="email" required></label>
+          <label>Spieler 1<input type="text" name="p1" required></label>
+          <label>Spieler 2<input type="text" name="p2" required></label>
+          <label>Spieler 3<input type="text" name="p3" required></label>
+          <label>Ersatz<input type="text" name="sub"></label>
+          <label>Team-Logo / Bild (URL)<input type="url" name="logo" placeholder="https://..."></label>
+          <label>Nachricht<textarea name="msg" rows="3"></textarea></label>
         </div>
         <button class="btn btn--primary" type="submit">Team anmelden</button>
       </form>
