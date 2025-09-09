@@ -7,15 +7,28 @@
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
 }
+
 body {
-  background: #0a0a0a;
-  color: #e5e5e5;
+  background: linear-gradient(#0a0a0a, #1b1b1b);
+  color: #eee;
   line-height: 1.5;
   font-size: 16px;
-  background-image: url('https://i.imgur.com/T8QnHfO.jpg'); /* subtiler Hintergrund */
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: 0.2s;
+}
+
+/* ---------------------------------------------
+   Container
+--------------------------------------------- */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
 }
 
 /* ---------------------------------------------
@@ -29,85 +42,102 @@ body {
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  background: url("https://i.imgur.com/6yR1cRt.jpg") no-repeat center/cover;
 }
+
 .hero .overlay {
   position: absolute;
   top:0; left:0;
-  width:100%; height:100%;
+  width:100%;
+  height:100%;
   background: rgba(0,0,0,0.8);
   z-index:1;
 }
+
 .hero__content {
   position: relative;
   z-index: 2;
+  color: #fff;
+  text-shadow: 2px 2px 10px #000;
 }
+
 .hero h1 {
   font-family: 'Oswald', sans-serif;
-  font-size: 3.2rem;
-  color: #f5f5f5;
-  text-shadow: 2px 2px 6px #000;
+  font-size: 3rem;
+  color: #ff4f4f;
   margin-bottom: 1rem;
+  text-shadow: 0 0 15px #ff0000, 0 0 20px #ff4f4f;
 }
-.hero h1 span {
-  color: #ff1f1f;
-  text-shadow: 2px 2px 8px #7f0000;
-}
+
 .subtitle {
   font-size: 1.3rem;
   margin-bottom: 1.5rem;
   color: #ccc;
-  text-shadow: 1px 1px 4px #000;
+  text-shadow: 0 0 5px #000;
 }
+
+/* Hero Buttons */
 .cta-row {
   display: flex;
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+  margin-top: 1rem;
 }
+
 .btn {
-  padding: 0.8rem 1.8rem;
-  border-radius: 6px;
+  padding: 1rem 2rem;
+  border-radius: 8px;
   font-weight: 700;
+  transition: 0.3s;
+  cursor: pointer;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: 0.2s;
-  cursor: pointer;
-  border: 2px solid transparent;
-  box-shadow: 0 0 10px #000 inset, 0 0 15px #000;
+  box-shadow: 0 0 10px #000;
 }
+
 .btn--primary {
-  background: linear-gradient(145deg, #ff1f1f, #990000);
+  background: linear-gradient(135deg, #ff4f4f, #d10000);
   color: #fff;
-  border: 2px solid #ff1f1f;
+  border: 2px solid #ff4f4f;
 }
+
 .btn--primary:hover {
-  background: linear-gradient(145deg, #ff4f4f, #cc0000);
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #ff1f1f, 0 0 20px #990000 inset;
+  background: linear-gradient(135deg, #d10000, #ff4f4f);
+  box-shadow: 0 0 20px #ff0000;
 }
+
 .btn--ghost {
-  border: 2px solid #ff1f1f;
-  color: #ff1f1f;
+  border: 2px solid #ff4f4f;
+  color: #ff4f4f;
   background: transparent;
 }
+
 .btn--ghost:hover {
-  background: #ff1f1f;
+  background: #ff4f4f;
   color: #fff;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #ff1f1f;
+  box-shadow: 0 0 15px #ff4f4f;
 }
+
+/* Hero Images */
 .hero-images {
   margin-top: 2rem;
   display: flex;
   justify-content: center;
   gap: 2rem;
 }
+
 .hero-img {
   height: 250px;
   object-fit: contain;
-  border: 2px solid #ff1f1f;
+  border: 2px solid #ff4f4f;
   border-radius: 10px;
-  box-shadow: 0 0 15px #ff0000;
+  box-shadow: 0 0 20px #ff4f4f;
+  transition: transform 0.3s;
+}
+
+.hero-img:hover {
+  transform: scale(1.05);
 }
 
 /* ---------------------------------------------
@@ -118,47 +148,55 @@ body {
   justify-content: center;
   gap: 2rem;
   background: #111;
-  padding: 1rem 0;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  padding: 0.8rem 0;
+  box-shadow: 0 2px 10px #000 inset;
 }
+
 .topnav a {
   color: #eee;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  transition: 0.2s;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: 0.3s;
 }
+
 .topnav a:hover {
-  color: #ff1f1f;
-  text-shadow: 0 0 8px #ff1f1f;
+  color: #ff4f4f;
+  background: rgba(255, 79, 79, 0.1);
+  box-shadow: 0 0 10px #ff4f4f;
 }
 
 /* ---------------------------------------------
    Cards & Sections
 --------------------------------------------- */
 .card {
-  background: linear-gradient(135deg, #1b1b1b, #111111);
+  background: linear-gradient(#1b1b1b, #111);
   padding: 2rem;
   border-radius: 12px;
   margin: 2rem 0;
-  border: 2px solid #222;
+  border: 2px solid #ff4f4f;
   box-shadow: 0 0 20px #000 inset;
 }
+
 h2 {
   font-family: 'Oswald', sans-serif;
-  color: #ff1f1f;
+  color: #ff4f4f;
   margin-bottom: 1rem;
-  text-shadow: 2px 2px 6px #000;
+  text-shadow: 0 0 10px #000;
 }
+
 h3 {
   color: #fff;
   margin-bottom: 0.5rem;
+  text-shadow: 0 0 5px #000;
 }
+
 .rules-grid {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
+
 .rules-grid ul, .rules-grid ol {
   padding-left: 1rem;
   list-style: disc;
@@ -174,15 +212,16 @@ h3 {
   gap: 0.5rem;
   flex-wrap: wrap;
 }
+
 .pill {
-  background: #ff1f1f;
+  background: linear-gradient(135deg, #ff4f4f, #d10000);
   color: #fff;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
   font-size: 0.9rem;
-  text-transform: uppercase;
   font-weight: 700;
-  box-shadow: 0 0 5px #990000;
+  box-shadow: 0 0 10px #000;
+  text-transform: uppercase;
 }
 
 /* ---------------------------------------------
@@ -192,18 +231,30 @@ form label {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #ccc;
 }
+
 form input, form select, form textarea {
   margin-top: 0.3rem;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: none;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #444;
   outline: none;
   background: #222;
   color: #fff;
+  transition: 0.3s;
 }
-form textarea { resize: vertical; }
+
+form input:focus, form select:focus, form textarea:focus {
+  border-color: #ff4f4f;
+  box-shadow: 0 0 10px #ff4f4f;
+}
+
+form textarea {
+  resize: vertical;
+}
+
 .form-grid {
   display: grid;
   gap: 1rem;
@@ -217,15 +268,29 @@ form textarea { resize: vertical; }
   background: #111;
   padding: 2rem 1rem;
   color: #aaa;
+  border-top: 2px solid #ff4f4f;
+  box-shadow: 0 -2px 10px #000 inset;
 }
+
 .footer__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
   margin-bottom: 1rem;
 }
-.footer a.link { color: #ff1f1f; text-shadow: 1px 1px 5px #000; }
-.copyright { text-align: center; font-size: 0.9rem; }
+
+.footer a.link {
+  color: #ff4f4f;
+}
+
+.footer a.link:hover {
+  text-shadow: 0 0 10px #ff4f4f;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.9rem;
+}
 
 /* ---------------------------------------------
    Brackets / Admin Tools
@@ -233,35 +298,75 @@ form textarea { resize: vertical; }
 .bracket-wrap {
   background: #111;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-top: 1rem;
   overflow-x: auto;
-  border: 2px solid #222;
+  border: 2px solid #ff4f4f;
+  box-shadow: 0 0 20px #000 inset;
 }
-.muted { color: #777; font-size: 0.9rem; }
-.admin-tools { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-.admin-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-.file-btn input { display: none; }
+
+.muted {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.admin-tools {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.file-btn input {
+  display: none;
+}
 
 /* Toggle Switch */
-.switch { position: relative; display: inline-block; width: 50px; height: 24px; }
-.switch input { opacity: 0; width: 0; height: 0; }
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
 .slider {
   position: absolute;
   cursor: pointer;
-  top:0; left:0; right:0; bottom:0;
-  background-color: #555;
+  top:0; left:0;
+  right:0; bottom:0;
+  background-color: #444;
   transition: 0.4s;
   border-radius: 24px;
 }
+
 .slider:before {
   position: absolute;
   content:"";
-  height: 18px; width: 18px;
-  left:3px; bottom:3px;
+  height: 18px;
+  width: 18px;
+  left:3px;
+  bottom:3px;
   background-color:white;
   transition:0.4s;
   border-radius: 50%;
 }
-input:checked + .slider { background-color: #ff1f1f; }
-input:checked + .slider:before { transform: translateX(26px); }
+
+input:checked + .slider {
+  background-color: #ff4f4f;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
