@@ -5,6 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Team-Anmeldung – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Status-Farben */
+    .status {
+      padding: 0.3rem 0.8rem;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .status.green { background: #28a745; }
+    .status.red { background: #dc3545; }
+    .registered-list {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .registered-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background: #222;
+      border-radius: 10px;
+      border: 1px solid #444;
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
@@ -25,8 +53,7 @@
   <main class="container">
     <section class="card">
       <h2>Team Formular</h2>
-      <form name="team-register" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="team-register">
+      <form id="teamForm">
         <div class="form-grid">
           <label>Teamname<input type="text" name="teamname" required></label>
           <label>Leader (Nickname)<input type="text" name="leader" required></label>
@@ -35,12 +62,57 @@
           <label>Spieler 2<input type="text" name="p2" required></label>
           <label>Spieler 3<input type="text" name="p3" required></label>
           <label>Ersatz<input type="text" name="sub"></label>
-          <label>Team-Logo / Bild (URL)<input type="url" name="logo" placeholder="https://..."></label>
-          <label>Nachricht<textarea name="msg" rows="3"></textarea></label>
         </div>
         <button class="btn btn--primary" type="submit">Team anmelden</button>
       </form>
+
+      <h2>Registrierte Teams</h2>
+      <div id="registeredTeams" class="registered-list"></div>
     </section>
   </main>
+
+  <script>
+    const form = document.getElementById('teamForm');
+    const list = document.getElementById('registeredTeams');
+
+    // Lade lokale Registrierungen beim Start
+    let teams = JSON.parse(localStorage.getItem('teams')) || [];
+
+    function renderList() {
+      list.innerHTML = '';
+      teams.forEach((team, index) => {
+        const item = document.createElement('div');
+        item.className = 'registered-item';
+        item.innerHTML = `
+          <span>${team.teamname} (Leader: ${team.leader})</span>
+          <span class="status ${team.status}" data-index="${index}">${team.status === 'green' ? 'DABEI' : 'RAUS'}</span>
+        `;
+        list.appendChild(item);
+      });
+
+      // Status-Buttons anklickbar machen
+      document.querySelectorAll('.status').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.index;
+          teams[idx].status = teams[idx].status === 'green' ? 'red' : 'green';
+          localStorage.setItem('teams', JSON.stringify(teams));
+          renderList();
+        });
+      });
+    }
+
+    // Formular absenden
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.status = 'green'; // Standard: dabei
+      teams.push(data);
+      localStorage.setItem('teams', JSON.stringify(teams));
+      form.reset();
+      renderList();
+    });
+
+    renderList();
+  </script>
 </body>
 </html>
