@@ -1,0 +1,267 @@
+/* ---------------------------------------------
+   Grund-Reset & Fonts
+--------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+body {
+  background: #0a0a0a;
+  color: #e5e5e5;
+  line-height: 1.5;
+  font-size: 16px;
+  background-image: url('https://i.imgur.com/T8QnHfO.jpg'); /* subtiler Hintergrund */
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+/* ---------------------------------------------
+   Header / Hero
+--------------------------------------------- */
+.hero {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.hero .overlay {
+  position: absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.8);
+  z-index:1;
+}
+.hero__content {
+  position: relative;
+  z-index: 2;
+}
+.hero h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3.2rem;
+  color: #f5f5f5;
+  text-shadow: 2px 2px 6px #000;
+  margin-bottom: 1rem;
+}
+.hero h1 span {
+  color: #ff1f1f;
+  text-shadow: 2px 2px 8px #7f0000;
+}
+.subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: #ccc;
+  text-shadow: 1px 1px 4px #000;
+}
+.cta-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 0.8rem 1.8rem;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: 0.2s;
+  cursor: pointer;
+  border: 2px solid transparent;
+  box-shadow: 0 0 10px #000 inset, 0 0 15px #000;
+}
+.btn--primary {
+  background: linear-gradient(145deg, #ff1f1f, #990000);
+  color: #fff;
+  border: 2px solid #ff1f1f;
+}
+.btn--primary:hover {
+  background: linear-gradient(145deg, #ff4f4f, #cc0000);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #ff1f1f, 0 0 20px #990000 inset;
+}
+.btn--ghost {
+  border: 2px solid #ff1f1f;
+  color: #ff1f1f;
+  background: transparent;
+}
+.btn--ghost:hover {
+  background: #ff1f1f;
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #ff1f1f;
+}
+.hero-images {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+.hero-img {
+  height: 250px;
+  object-fit: contain;
+  border: 2px solid #ff1f1f;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #ff0000;
+}
+
+/* ---------------------------------------------
+   Navigation
+--------------------------------------------- */
+.topnav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  background: #111;
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+}
+.topnav a {
+  color: #eee;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: 0.2s;
+}
+.topnav a:hover {
+  color: #ff1f1f;
+  text-shadow: 0 0 8px #ff1f1f;
+}
+
+/* ---------------------------------------------
+   Cards & Sections
+--------------------------------------------- */
+.card {
+  background: linear-gradient(135deg, #1b1b1b, #111111);
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 2px solid #222;
+  box-shadow: 0 0 20px #000 inset;
+}
+h2 {
+  font-family: 'Oswald', sans-serif;
+  color: #ff1f1f;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 6px #000;
+}
+h3 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.rules-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+.rules-grid ul, .rules-grid ol {
+  padding-left: 1rem;
+  list-style: disc;
+  color: #ccc;
+}
+
+/* ---------------------------------------------
+   Pills / Tags
+--------------------------------------------- */
+.pill-row {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.pill {
+  background: #ff1f1f;
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  box-shadow: 0 0 5px #990000;
+}
+
+/* ---------------------------------------------
+   Forms
+--------------------------------------------- */
+form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+form input, form select, form textarea {
+  margin-top: 0.3rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background: #222;
+  color: #fff;
+}
+form textarea { resize: vertical; }
+.form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* ---------------------------------------------
+   Footer
+--------------------------------------------- */
+.footer {
+  background: #111;
+  padding: 2rem 1rem;
+  color: #aaa;
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+.footer a.link { color: #ff1f1f; text-shadow: 1px 1px 5px #000; }
+.copyright { text-align: center; font-size: 0.9rem; }
+
+/* ---------------------------------------------
+   Brackets / Admin Tools
+--------------------------------------------- */
+.bracket-wrap {
+  background: #111;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  overflow-x: auto;
+  border: 2px solid #222;
+}
+.muted { color: #777; font-size: 0.9rem; }
+.admin-tools { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.admin-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.file-btn input { display: none; }
+
+/* Toggle Switch */
+.switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top:0; left:0; right:0; bottom:0;
+  background-color: #555;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+.slider:before {
+  position: absolute;
+  content:"";
+  height: 18px; width: 18px;
+  left:3px; bottom:3px;
+  background-color:white;
+  transition:0.4s;
+  border-radius: 50%;
+}
+input:checked + .slider { background-color: #ff1f1f; }
+input:checked + .slider:before { transform: translateX(26px); }
