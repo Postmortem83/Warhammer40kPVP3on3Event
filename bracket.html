@@ -8,90 +8,81 @@
 </head>
 <body>
 
-  <header class="hero">
-    <div class="overlay"></div>
-    <div class="hero__content">
-      <h1>Turnierbaum – 16 Teams Double-Elimination</h1>
-    </div>
-  </header>
+<header class="hero">
+  <div class="overlay"></div>
+  <div class="hero__content">
+    <h1>Turnierbaum – Double-Elimination</h1>
+  </div>
+</header>
 
-  <nav class="topnav">
-    <a href="index.html">Start</a>
-    <a href="about.html">Überblick</a>
-    <a href="rules.html">Regeln & Ablauf</a>
-    <a href="report.html">Match-Reporting</a>
-    <a href="register.html">Anmeldung</a>
-  </nav>
+<nav class="topnav">
+  <a href="index.html">Start</a>
+  <a href="about.html">Überblick</a>
+  <a href="rules.html">Regeln & Ablauf</a>
+  <a href="report.html">Match-Reporting</a>
+  <a href="register.html">Anmeldung</a>
+</nav>
 
-  <main class="container">
-    <section class="card bracket-card">
-      <div class="bracket-container">
+<main class="container">
+  <section class="card bracket-card">
+    <div class="bracket-container">
 
-        <!-- Winner Bracket -->
-        <div class="bracket wb">
-          <h2>Winner Bracket</h2>
-          <div class="round round-1">
-            <div class="match" id="w1"><span contenteditable="true">Team 1</span> <button class="status-btn">✔</button></div>
-            <div class="match" id="w2"><span contenteditable="true">Team 2</span> <button class="status-btn">✔</button></div>
-            <div class="match" id="w3"><span contenteditable="true">Team 3</span> <button class="status-btn">✔</button></div>
-            <div class="match" id="w4"><span contenteditable="true">Team 4</span> <button class="status-btn">✔</button></div>
-            <div class="match" id="w5"><span contenteditable="true">Team 5</span> <button class="status-btn">✔</button></div>
-            <div class="match" id="w6"><span contenteditable="true">Team 6</span> <button class="status-btn">✔</button></div>
-            <div class="match" id="w7"><span contenteditable="true">Team 7</span> <button class="status-btn">✔</button></div>
-            <div class="match" id="w8"><span contenteditable="true">Team 8</span> <button class="status-btn">✔</button></div>
-          </div>
-          <div class="round round-2">
-            <div class="match" id="w9"><span>–</span></div>
-            <div class="match" id="w10"><span>–</span></div>
-            <div class="match" id="w11"><span>–</span></div>
-            <div class="match" id="w12"><span>–</span></div>
-          </div>
-          <div class="round round-3">
-            <div class="match" id="w13"><span>–</span></div>
-            <div class="match" id="w14"><span>–</span></div>
-          </div>
-          <div class="round round-4">
-            <div class="match" id="w15"><span>–</span></div>
-          </div>
+      <!-- Winner Bracket -->
+      <div class="bracket wb">
+        <h2>Winner Bracket</h2>
+
+        <div class="round round-1">
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
         </div>
 
-        <!-- Lower Bracket -->
-        <div class="bracket lb">
-          <h2>Lower Bracket</h2>
-          <div class="round round-1">
-            <div class="match" id="l1"><span>–</span></div>
-            <div class="match" id="l2"><span>–</span></div>
-            <div class="match" id="l3"><span>–</span></div>
-            <div class="match" id="l4"><span>–</span></div>
-          </div>
-          <div class="round round-2">
-            <div class="match" id="l5"><span>–</span></div>
-            <div class="match" id="l6"><span>–</span></div>
-          </div>
-          <div class="round round-3">
-            <div class="match" id="l7"><span>–</span></div>
-          </div>
+        <div class="round round-2">
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
         </div>
 
+        <div class="round round-3">
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+        </div>
+
+        <div class="round round-4">
+          <div class="match"><span></span></div>
+        </div>
       </div>
-    </section>
-  </main>
 
-  <script>
-    // Status-Button toggeln
-    document.querySelectorAll(".status-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const span = btn.previousElementSibling;
-        if(span.style.backgroundColor === "green"){
-          span.style.backgroundColor = "red";
-          span.style.color = "#fff";
-        } else {
-          span.style.backgroundColor = "green";
-          span.style.color = "#fff";
-        }
-      });
-    });
-  </script>
+      <!-- Lower Bracket -->
+      <div class="bracket lb">
+        <h2>Lower Bracket</h2>
+
+        <div class="round round-1">
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+        </div>
+
+        <div class="round round-2">
+          <div class="match"><span></span></div>
+          <div class="match"><span></span></div>
+        </div>
+
+        <div class="round round-3">
+          <div class="match"><span></span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
 
 </body>
 </html>
