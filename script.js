@@ -1,166 +1,119 @@
-// script.js (Frontend) - Admin-Login + Bracket local storage + Logout
+// -------------------- CONFIG --------------------
+const ADMIN_USER = "admin";           // dein Benutzername
+const ADMIN_PASS = "SpaceMarine42";   // dein Passwort
 
-// ------ Admin Login (Frontend) ------
-async function adminLogin(username, password) {
-  try {
-    const res = await fetch("/.netlify/functions/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(()=>({}));
-      alert("Login fehlgeschlagen: " + (err.error || res.statusText));
-      return false;
-    }
-
-    const data = await res.json();
-    localStorage.setItem("adminToken", data.token);
-    alert("Login erfolgreich — Du wirst zum Turnierbaum weitergeleitet.");
+// -------------------- ADMIN LOGIN --------------------
+function adminLogin(username, password) {
+  if (username === ADMIN_USER && password === ADMIN_PASS) {
+    localStorage.setItem("adminToken", "true");
+    alert("Admin erfolgreich eingeloggt!");
+    showAdminTools(true);
+    // Optional: direkt zurück zur Bracket-Seite
     window.location.href = "bracket.html";
-    return true;
-  } catch (e) {
-    console.error(e);
-    alert("Fehler beim Login.");
-    return false;
+  } else {
+    alert("Falscher Benutzername oder Passwort!");
   }
-}
-
-// ------ JWT Hilfsfunktionen ------
-function parseJwt(token) {
-  if (!token) return null;
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(atob(base64).split("").map(c =>
-      "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
-    ).join(""));
-    return JSON.parse(jsonPayload);
-  } catch (e) {
-    return null;
-  }
-}
-
-function isAdmin() {
-  const token = localStorage.getItem("adminToken");
-  if (!token) return false;
-  const payload = parseJwt(token);
-  if (!payload) return false;
-  // payload.exp (in Sekunden) -> in ms vergleichen
-  if (payload.exp && payload.exp * 1000 < Date.now()) {
-    // Token abgelaufen
-    localStorage.removeItem("adminToken");
-    return false;
-  }
-  return payload.role === "admin";
 }
 
 function adminLogout() {
   localStorage.removeItem("adminToken");
-  alert("Abgemeldet.");
-  location.reload();
+  showAdminTools(false);
+  alert("Admin ausgeloggt!");
 }
 
-// ------ Admin UI Sichtbarkeit ------
-function showAdminTools() {
-  const adminEls = document.querySelectorAll(".admin-tools");
+// -------------------- ADMIN TOOLS ANZEIGEN --------------------
+function showAdminTools(show) {
+  const adminTools = document.querySelectorAll(".admin-tools");
   const loginLink = document.getElementById("adminLoginLink");
-  const logoutBtn = document.getElementById("adminLogout");
-  if (isAdmin()) {
-    adminEls.forEach(el => el.style.display = "block");
-    if (loginLink) loginLink.style.display = "none";
-    if (logoutBtn) logoutBtn.style.display = "inline-block";
-  } else {
-    adminEls.forEach(el => el.style.display = "none");
-    if (loginLink) loginLink.style.display = "inline-block";
-    if (logoutBtn) logoutBtn.style.display = "none";
-  }
+  const logoutBtn = document.getElementById("adminLogoutBtn");
+
+  adminTools.forEach(el => el.style.display = show ? "block" : "none");
+  if (loginLink) loginLink.style.display = show ? "none" : "inline-flex";
+  if (logoutBtn) logoutBtn.style.display = show ? "inline-flex" : "none";
 }
 
-// ------ Bracket: lokale Speicherung / Export / Import (nur Admin) ------
-function ensureAdminOrAlert() {
-  if (!isAdmin()) {
-    alert("Nur Admin kann das ausführen. Bitte zuerst einloggen.");
-    return false;
-  }
-  return true;
+// -------------------- LOCAL STORAGE FUNKTIONEN --------------------
+function saveBrackets() {
+  const wb = document.getElementById("wb-bracket");
+  const lb = document.getElementById("lb-bracket");
+  if (!wb || !lb) return;
+
+  const data = {
+    wbHTML: wb.innerHTML,
+    lbHTML: lb.innerHTML
+  };
+
+  localStorage.setItem("bracketsData", JSON.stringify(data));
+  alert("Brackets lokal gespeichert!");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  showAdminTools();
+function loadBrackets() {
+  const wb = document.getElementById("wb-bracket");
+  const lb = document.getElementById("lb-bracket");
+  const data = JSON.parse(localStorage.getItem("bracketsData") || "{}");
 
-  // Elemente (können auf manchen Seiten fehlen; daher checks)
-  const saveBtn = document.getElementById("saveLocal");
-  const clearBtn = document.getElementById("clearLocal");
-  const exportBtn = document.getElementById("exportJSON");
-  const importInput = document.getElementById("importJSON");
-  const wbEl = document.getElementById("wb-bracket");
-  const lbEl = document.getElementById("lb-bracket");
+  if (wb && data.wbHTML) wb.innerHTML = data.wbHTML;
+  if (lb && data.lbHTML) lb.innerHTML = data.lbHTML;
+}
 
-  // Lade gespeicherte Brackets
-  const stored = localStorage.getItem("brackets");
-  if (stored && (wbEl || lbEl)) {
+function clearBrackets() {
+  localStorage.removeItem("bracketsData");
+  loadBrackets();
+  alert("Lokale Brackets gelöscht!");
+}
+
+// -------------------- EXPORT / IMPORT JSON --------------------
+function exportBrackets() {
+  const data = localStorage.getItem("bracketsData");
+  if (!data) return alert("Keine Daten zum Exportieren!");
+
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "brackets.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importBrackets(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
     try {
-      const data = JSON.parse(stored);
-      if (wbEl && data.wb) wbEl.innerHTML = data.wb;
-      if (lbEl && data.lb) lbEl.innerHTML = data.lb;
-    } catch (e) { /* ignore */ }
-  }
+      const data = JSON.parse(e.target.result);
+      localStorage.setItem("bracketsData", JSON.stringify(data));
+      loadBrackets();
+      alert("Brackets importiert!");
+    } catch (err) {
+      alert("Fehler beim Importieren der Datei!");
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+}
 
-  if (saveBtn) {
-    saveBtn.addEventListener("click", () => {
-      if (!ensureAdminOrAlert()) return;
-      const data = {
-        wb: wbEl ? wbEl.innerHTML : "",
-        lb: lbEl ? lbEl.innerHTML : ""
-      };
-      localStorage.setItem("brackets", JSON.stringify(data));
-      alert("Brackets lokal gespeichert.");
-    });
-  }
+// -------------------- EVENT LISTENER --------------------
+document.addEventListener("DOMContentLoaded", () => {
+  // Admin-Status prüfen
+  const isAdmin = localStorage.getItem("adminToken") === "true";
+  showAdminTools(isAdmin);
 
-  if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      if (!ensureAdminOrAlert()) return;
-      localStorage.removeItem("brackets");
-      if (wbEl) wbEl.innerHTML = "";
-      if (lbEl) lbEl.innerHTML = "";
-      alert("Lokale Brackets gelöscht.");
-    });
-  }
+  // Brackets beim Laden anzeigen
+  loadBrackets();
 
-  if (exportBtn) {
-    exportBtn.addEventListener("click", () => {
-      if (!ensureAdminOrAlert()) return;
-      const payload = localStorage.getItem("brackets") || JSON.stringify({ wb: "", lb: "" });
-      const blob = new Blob([payload], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "brackets.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-  }
+  // Buttons
+  const saveBtn = document.getElementById("saveLocal");
+  if (saveBtn) saveBtn.addEventListener("click", saveBrackets);
 
-  if (importInput) {
-    importInput.addEventListener("change", (e) => {
-      if (!ensureAdminOrAlert()) return;
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const parsed = JSON.parse(reader.result);
-          localStorage.setItem("brackets", JSON.stringify(parsed));
-          alert("Brackets importiert. Seite wird neu geladen.");
-          location.reload();
-        } catch (err) {
-          alert("Importfehler: ungültiges JSON.");
-        }
-      };
-      reader.readAsText(file);
-    });
-  }
+  const clearBtn = document.getElementById("clearLocal");
+  if (clearBtn) clearBtn.addEventListener("click", clearBrackets);
+
+  const exportBtn = document.getElementById("exportJSON");
+  if (exportBtn) exportBtn.addEventListener("click", exportBrackets);
+
+  const importInput = document.getElementById("importJSON");
+  if (importInput) importInput.addEventListener("change", importBrackets);
 });
