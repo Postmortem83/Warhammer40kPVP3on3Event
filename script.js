@@ -1,86 +1,77 @@
-const adminPassword = "MeinSuperGeheimesPasswort"; // ändere hier dein Passwort
+// Admin Passwort
+const ADMIN_PASSWORD = "DeinGeheimesPW123"; // nur du kennst es
 
 const adminToggle = document.getElementById("adminToggle");
-const saveLocalBtn = document.getElementById("saveLocal");
-const clearLocalBtn = document.getElementById("clearLocal");
-const exportJSONBtn = document.getElementById("exportJSON");
-const importJSONInput = document.getElementById("importJSON");
+const saveBtn = document.getElementById("saveLocal");
+const clearBtn = document.getElementById("clearLocal");
+const exportBtn = document.getElementById("exportJSON");
+const importInput = document.getElementById("importJSON");
 
-// Passwortabfrage
+// Admin Login beim Aktivieren
 if(adminToggle){
   adminToggle.addEventListener("change", () => {
     if(adminToggle.checked){
-      const pw = prompt("Bitte Admin-Passwort eingeben:");
-      if(pw !== adminPassword){
+      const pw = prompt("Admin Passwort eingeben:");
+      if(pw !== ADMIN_PASSWORD){
         alert("Falsches Passwort!");
         adminToggle.checked = false;
-      } else {
-        alert("Admin-Modus aktiviert!");
       }
     }
   });
 }
 
-// Beispiel: lokale Speicherung (nur wenn Admin aktiviert)
-if(saveLocalBtn){
-  saveLocalBtn.addEventListener("click", () => {
-    if(!adminToggle.checked) return alert("Nur Admin kann speichern!");
-    const wbData = document.getElementById("wb-bracket")?.innerHTML || "";
-    const lbData = document.getElementById("lb-bracket")?.innerHTML || "";
-    localStorage.setItem("wbBracket", wbData);
-    localStorage.setItem("lbBracket", lbData);
-    alert("Bracket lokal gespeichert!");
+// Lokale Speicherung (nur für dich)
+if(saveBtn){
+  saveBtn.addEventListener("click", () => {
+    const brackets = {
+      wb: document.getElementById("wb-bracket")?.innerHTML,
+      lb: document.getElementById("lb-bracket")?.innerHTML
+    };
+    localStorage.setItem("brackets", JSON.stringify(brackets));
+    alert("Brackets lokal gespeichert!");
   });
 }
 
-if(clearLocalBtn){
-  clearLocalBtn.addEventListener("click", () => {
-    if(!adminToggle.checked) return alert("Nur Admin kann löschen!");
-    localStorage.removeItem("wbBracket");
-    localStorage.removeItem("lbBracket");
+if(clearBtn){
+  clearBtn.addEventListener("click", () => {
+    localStorage.removeItem("brackets");
     alert("Lokale Daten gelöscht!");
   });
 }
 
-if(exportJSONBtn){
-  exportJSONBtn.addEventListener("click", () => {
-    if(!adminToggle.checked) return alert("Nur Admin kann exportieren!");
-    const data = {
-      wb: document.getElementById("wb-bracket")?.innerHTML || "",
-      lb: document.getElementById("lb-bracket")?.innerHTML || ""
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+if(exportBtn){
+  exportBtn.addEventListener("click", () => {
+    const brackets = localStorage.getItem("brackets");
+    const blob = new Blob([brackets], {type:"application/json"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "bracket.json";
+    a.download = "brackets.json";
     a.click();
     URL.revokeObjectURL(url);
   });
 }
 
-if(importJSONInput){
-  importJSONInput.addEventListener("change", (e) => {
-    if(!adminToggle.checked) return alert("Nur Admin kann importieren!");
+if(importInput){
+  importInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
-    if(!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      try{
-        const data = JSON.parse(reader.result);
-        if(document.getElementById("wb-bracket")) document.getElementById("wb-bracket").innerHTML = data.wb || "";
-        if(document.getElementById("lb-bracket")) document.getElementById("lb-bracket").innerHTML = data.lb || "";
-        alert("Bracket importiert!");
-      } catch(err){
-        alert("Fehler beim Import!");
-      }
-    };
+    reader.onload = function(event){
+      const data = event.target.result;
+      localStorage.setItem("brackets", data);
+      alert("Brackets importiert!");
+      location.reload();
+    }
     reader.readAsText(file);
   });
 }
 
-// Brackets beim Laden wiederherstellen
+// Lade gespeicherte Brackets automatisch
 window.addEventListener("load", () => {
-  if(document.getElementById("wb-bracket")) document.getElementById("wb-bracket").innerHTML = localStorage.getItem("wbBracket") || "";
-  if(document.getElementById("lb-bracket")) document.getElementById("lb-bracket").innerHTML = localStorage.getItem("lbBracket") || "";
+  const data = localStorage.getItem("brackets");
+  if(data){
+    const brackets = JSON.parse(data);
+    if(document.getElementById("wb-bracket")) document.getElementById("wb-bracket").innerHTML = brackets.wb;
+    if(document.getElementById("lb-bracket")) document.getElementById("lb-bracket").innerHTML = brackets.lb;
+  }
 });
