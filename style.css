@@ -1,13 +1,3 @@
-/* ---------------------------------------------
-   Google Fonts
---------------------------------------------- */
-/* Stelle sicher, dass du diesen Link auch im <head> deiner HTML-Dateien hast:
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
-*/
-
-/* ---------------------------------------------
-   Grund-Reset & Fonts
---------------------------------------------- */
 * {
   margin: 0;
   padding: 0;
