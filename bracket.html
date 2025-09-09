@@ -1,98 +1,107 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Turnierbaum – Warhammer PvP</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Einfaches Styling für Brackets */
-    body {
-      background: #0a0a0a;
-      color: #eee;
-      font-family: 'Inter', sans-serif;
-      padding: 2rem;
-    }
-    h1, h2 {
-      color: #ff4f4f;
-      text-align: center;
-    }
-    .bracket-wrap {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-    }
-    .bracket {
-      background: #111;
-      border: 2px solid #ff4f4f;
-      padding: 1rem;
-      border-radius: 10px;
-      min-width: 250px;
-      box-shadow: 0 0 20px #000 inset;
-    }
-    .match {
-      background: #1b1b1b;
-      border: 1px solid #ff4f4f;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border-radius: 6px;
-      text-align: center;
-    }
-    .winner {
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 5px #ff0000;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turnierbaum – Warhammer 40k PvP Clash</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    background: #111;
+    color: #eee;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+  }
+
+  h2 {
+    color: #ff4f4f;
+    text-shadow: 0 0 10px #000;
+    margin-bottom: 2rem;
+  }
+
+  .bracket-container {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+  }
+
+  .bracket {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bracket h3 {
+    margin-bottom: 1rem;
+    color: #ff4f4f;
+  }
+
+  .match {
+    background: #222;
+    border: 2px solid #ff4f4f;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    width: 180px;
+    text-align: center;
+    box-shadow: 0 0 10px #000;
+  }
+
+  .line {
+    width: 2px;
+    height: 20px;
+    background: #ff4f4f;
+    margin: 0 auto;
+  }
+
+  /* Optional: farbliche Markierung der Teams */
+  .team-ready { background: #0a8000; color: #fff; }
+  .team-out { background: #800000; color: #fff; }
+</style>
 </head>
 <body>
-  <h1>Warhammer 40k PvP Clash – 3v3 Double-Elimination</h1>
-  <h2>Turnierbaum Übersicht</h2>
 
-  <div class="bracket-wrap">
-    <!-- Winner Bracket -->
-    <div class="bracket">
-      <h3>Winner Bracket</h3>
-      <div class="match">
-        Match W1: Team Alpha vs Team Beta <br>
-        Gewinner: <span class="winner">Team Alpha</span>
-      </div>
-      <div class="match">
-        Match W2: Team Gamma vs Team Delta <br>
-        Gewinner: <span class="winner">Team Delta</span>
-      </div>
-      <div class="match">
-        Match W3: Team Epsilon vs Team Zeta <br>
-        Gewinner: <span class="winner">Team Zeta</span>
-      </div>
-      <div class="match">
-        Match W4: Team Eta vs Team Theta <br>
-        Gewinner: <span class="winner">Team Eta</span>
-      </div>
-    </div>
+<h2>Double-Elimination Turnierbaum – 16 Teams</h2>
 
-    <!-- Lower Bracket -->
-    <div class="bracket">
-      <h3>Lower Bracket</h3>
-      <div class="match">
-        Match L1: Team Beta vs Team Gamma <br>
-        Gewinner: <span class="winner">Team Beta</span>
-      </div>
-      <div class="match">
-        Match L2: Team Epsilon vs Team Theta <br>
-        Gewinner: <span class="winner">Team Theta</span>
-      </div>
-      <div class="match">
-        Match L3: Team Zeta vs Team Delta <br>
-        Gewinner: <span class="winner">Team Zeta</span>
-      </div>
-      <div class="match">
-        Match L4: Team Eta vs Team Alpha <br>
-        Gewinner: <span class="winner">Team Alpha</span>
-      </div>
-    </div>
+<div class="bracket-container">
+
+  <!-- Winner Bracket -->
+  <div class="bracket">
+    <h3>Winner Bracket</h3>
+    <div class="match">Team 1</div>
+    <div class="match">Team 2</div>
+    <div class="match">Team 3</div>
+    <div class="match">Team 4</div>
+    <div class="match">Team 5</div>
+    <div class="match">Team 6</div>
+    <div class="match">Team 7</div>
+    <div class="match">Team 8</div>
+    <div class="match">Team 9</div>
+    <div class="match">Team 10</div>
+    <div class="match">Team 11</div>
+    <div class="match">Team 12</div>
+    <div class="match">Team 13</div>
+    <div class="match">Team 14</div>
+    <div class="match">Team 15</div>
+    <div class="match">Team 16</div>
   </div>
+
+  <!-- Lower Bracket -->
+  <div class="bracket">
+    <h3>Lower Bracket</h3>
+    <div class="match">Team A</div>
+    <div class="match">Team B</div>
+    <div class="match">Team C</div>
+    <div class="match">Team D</div>
+    <div class="match">Team E</div>
+    <div class="match">Team F</div>
+    <div class="match">Team G</div>
+    <div class="match">Team H</div>
+  </div>
+
+</div>
+
 </body>
 </html>
