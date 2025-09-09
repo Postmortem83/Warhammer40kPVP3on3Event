@@ -5,41 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Turnierbaum – Warhammer PvP</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
 </head>
 <body>
   <main class="container">
     <section class="card">
       <h2>Double-Elimination – 16 Teams</h2>
-      <p class="muted">Admin-Toggle: nur sichtbar wenn eingeloggt.</p>
 
       <div class="bracket-wrap" id="wb-bracket">
-        <p style="color:#999;">Winner Bracket (hier Admin-Inhalte einfügen).</p>
+        <p style="color:#999;">Winner Bracket – Inhalte hier einfügen.</p>
       </div>
 
       <div class="bracket-wrap" id="lb-bracket">
-        <p style="color:#999;">Lower Bracket (hier Admin-Inhalte einfügen).</p>
-      </div>
-
-      <!-- Login/Logout -->
-      <div style="margin-top:1rem;">
-        <a id="adminLoginLink" class="btn btn--ghost" href="admin-login.html">Admin Login</a>
-        <button id="adminLogoutBtn" class="btn btn--ghost" style="display:none;" onclick="adminLogout()">Logout</button>
-      </div>
-
-      <!-- Admin Tools -->
-      <div class="admin-tools" style="display:none; margin-top:1rem;">
-        <div class="admin-btns">
-          <button class="btn btn--primary" id="saveLocal">Speichern (lokal)</button>
-          <button class="btn btn--ghost" id="clearLocal">Lokal löschen</button>
-          <button class="btn btn--ghost" id="exportJSON">Export JSON</button>
-          <label class="file-btn btn btn--ghost" style="cursor:pointer;">
-            Import JSON <input type="file" id="importJSON" accept="application/json">
-          </label>
-        </div>
-        <p class="muted" style="margin-top:0.5rem;">
-          Admin-Modus: Bearbeite die Brackets direkt im HTML und speichere lokal. Nur sichtbar wenn eingeloggt.
-        </p>
+        <p style="color:#999;">Lower Bracket – Inhalte hier einfügen.</p>
       </div>
     </section>
   </main>
