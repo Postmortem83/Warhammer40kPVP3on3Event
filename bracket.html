@@ -1,118 +1,97 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Turnierbaum – Warhammer 40k PvP Clash</title>
-<style>
-body {
-  font-family: 'Inter', sans-serif;
-  background: #111;
-  color: #eee;
-  text-align: center;
-  margin: 0;
-  padding: 2rem;
-}
-
-h2 {
-  color: #ff4f4f;
-  margin-bottom: 2rem;
-}
-
-.bracket {
-  display: flex;
-  justify-content: center;
-  gap: 6rem;
-  flex-wrap: wrap;
-}
-
-.round {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.match {
-  width: 150px;
-  padding: 0.5rem;
-  background: #222;
-  border: 2px solid #ff4f4f;
-  border-radius: 5px;
-  position: relative;
-  box-shadow: 0 0 10px #000;
-}
-
-.match span {
-  display: block;
-  padding: 0.3rem 0;
-}
-
-.team-ready { background: #0a8000; color: #fff; }
-.team-out { background: #800000; color: #fff; }
-
-/* Linien */
-.round .match::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: -30px;
-  width: 30px;
-  height: 2px;
-  background: #ff4f4f;
-}
-
-.round:last-child .match::after { display: none; }
-
-/* Verbindung nach unten */
-.match:not(:last-child)::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: -30px;
-  width: 2px;
-  height: 100%;
-  background: #ff4f4f;
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turnierbaum – Warhammer 40k PvP Clash</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Double-Elimination Turnier – 16 Teams</h2>
+  <header class="hero">
+    <div class="overlay"></div>
+    <div class="hero__content">
+      <h1>Turnierbaum – 16 Teams Double-Elimination</h1>
+    </div>
+  </header>
 
-<div class="bracket">
+  <nav class="topnav">
+    <a href="index.html">Start</a>
+    <a href="about.html">Überblick</a>
+    <a href="rules.html">Regeln & Ablauf</a>
+    <a href="report.html">Match-Reporting</a>
+    <a href="register.html">Anmeldung</a>
+  </nav>
 
-  <!-- Runde 1 -->
-  <div class="round">
-    <div class="match"><span>Team 1</span><span>Team 2</span></div>
-    <div class="match"><span>Team 3</span><span>Team 4</span></div>
-    <div class="match"><span>Team 5</span><span>Team 6</span></div>
-    <div class="match"><span>Team 7</span><span>Team 8</span></div>
-    <div class="match"><span>Team 9</span><span>Team 10</span></div>
-    <div class="match"><span>Team 11</span><span>Team 12</span></div>
-    <div class="match"><span>Team 13</span><span>Team 14</span></div>
-    <div class="match"><span>Team 15</span><span>Team 16</span></div>
-  </div>
+  <main class="container">
+    <section class="card bracket-card">
+      <div class="bracket-container">
 
-  <!-- Runde 2 -->
-  <div class="round">
-    <div class="match"><span>Sieger 1-2</span><span>Sieger 3-4</span></div>
-    <div class="match"><span>Sieger 5-6</span><span>Sieger 7-8</span></div>
-    <div class="match"><span>Sieger 9-10</span><span>Sieger 11-12</span></div>
-    <div class="match"><span>Sieger 13-14</span><span>Sieger 15-16</span></div>
-  </div>
+        <!-- Winner Bracket -->
+        <div class="bracket wb">
+          <h2>Winner Bracket</h2>
+          <div class="round round-1">
+            <div class="match" id="w1"><span contenteditable="true">Team 1</span> <button class="status-btn">✔</button></div>
+            <div class="match" id="w2"><span contenteditable="true">Team 2</span> <button class="status-btn">✔</button></div>
+            <div class="match" id="w3"><span contenteditable="true">Team 3</span> <button class="status-btn">✔</button></div>
+            <div class="match" id="w4"><span contenteditable="true">Team 4</span> <button class="status-btn">✔</button></div>
+            <div class="match" id="w5"><span contenteditable="true">Team 5</span> <button class="status-btn">✔</button></div>
+            <div class="match" id="w6"><span contenteditable="true">Team 6</span> <button class="status-btn">✔</button></div>
+            <div class="match" id="w7"><span contenteditable="true">Team 7</span> <button class="status-btn">✔</button></div>
+            <div class="match" id="w8"><span contenteditable="true">Team 8</span> <button class="status-btn">✔</button></div>
+          </div>
+          <div class="round round-2">
+            <div class="match" id="w9"><span>–</span></div>
+            <div class="match" id="w10"><span>–</span></div>
+            <div class="match" id="w11"><span>–</span></div>
+            <div class="match" id="w12"><span>–</span></div>
+          </div>
+          <div class="round round-3">
+            <div class="match" id="w13"><span>–</span></div>
+            <div class="match" id="w14"><span>–</span></div>
+          </div>
+          <div class="round round-4">
+            <div class="match" id="w15"><span>–</span></div>
+          </div>
+        </div>
 
-  <!-- Runde 3 -->
-  <div class="round">
-    <div class="match"><span>Sieger R2-1</span><span>Sieger R2-2</span></div>
-    <div class="match"><span>Sieger R2-3</span><span>Sieger R2-4</span></div>
-  </div>
+        <!-- Lower Bracket -->
+        <div class="bracket lb">
+          <h2>Lower Bracket</h2>
+          <div class="round round-1">
+            <div class="match" id="l1"><span>–</span></div>
+            <div class="match" id="l2"><span>–</span></div>
+            <div class="match" id="l3"><span>–</span></div>
+            <div class="match" id="l4"><span>–</span></div>
+          </div>
+          <div class="round round-2">
+            <div class="match" id="l5"><span>–</span></div>
+            <div class="match" id="l6"><span>–</span></div>
+          </div>
+          <div class="round round-3">
+            <div class="match" id="l7"><span>–</span></div>
+          </div>
+        </div>
 
-  <!-- Runde 4 (Finale Winner Bracket) -->
-  <div class="round">
-    <div class="match"><span>Winner Bracket Finale</span></div>
-  </div>
+      </div>
+    </section>
+  </main>
 
-</div>
+  <script>
+    // Status-Button toggeln
+    document.querySelectorAll(".status-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const span = btn.previousElementSibling;
+        if(span.style.backgroundColor === "green"){
+          span.style.backgroundColor = "red";
+          span.style.color = "#fff";
+        } else {
+          span.style.backgroundColor = "green";
+          span.style.color = "#fff";
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
