@@ -5,17 +5,61 @@
   <title>Turnier Bracket</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Zusatz damit alles reinpasst */
     .bracket-container {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
       gap: 4rem;
-      transform: scale(0.85); /* verkleinert den Baum */
+      transform: scale(0.85);
       transform-origin: top center;
     }
+
     .bracket {
-      flex: 1;
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
     }
+
+    .round {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .pair {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .team-box {
+      background: #111;
+      border: 2px solid #ff4f4f;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      text-align: center;
+      min-width: 120px;
+      box-shadow: 0 0 10px #000 inset;
+    }
+
+    /* Linien zu den nächsten Matches */
+    .pair::after {
+      content: "";
+      position: absolute;
+      right: -2rem;
+      top: 25%;
+      width: 2rem;
+      height: 50%;
+      border-right: 2px solid #ff4f4f;
+      border-top: 2px solid #ff4f4f;
+      border-bottom: 2px solid #ff4f4f;
+    }
+
+    .next-match {
+      margin-top: 2.5rem;
+    }
+
     .center-final {
       display: flex;
       flex-direction: column;
@@ -24,10 +68,15 @@
       gap: 2rem;
       min-width: 200px;
     }
-    .match-line {
-      border-left: 2px solid #ff4f4f;
-      height: 20px;
-      margin: 0 auto;
+
+    .final-box {
+      background: #222;
+      border: 2px solid #ff4f4f;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      text-align: center;
+      min-width: 160px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -39,74 +88,121 @@
       
       <!-- WINNER BRACKET -->
       <div class="bracket" id="winner-bracket">
-        <h2>Winner Bracket</h2>
-        
-        <!-- Runde 1 (16 Teams) -->
+        <!-- Runde 1 -->
         <div class="round">
-          <div class="match" id="w-r1-m1"><span>Team 1</span> vs <span>Team 2</span></div>
-          <div class="match" id="w-r1-m2"><span>Team 3</span> vs <span>Team 4</span></div>
-          <div class="match" id="w-r1-m3"><span>Team 5</span> vs <span>Team 6</span></div>
-          <div class="match" id="w-r1-m4"><span>Team 7</span> vs <span>Team 8</span></div>
-          <div class="match" id="w-r1-m5"><span>Team 9</span> vs <span>Team 10</span></div>
-          <div class="match" id="w-r1-m6"><span>Team 11</span> vs <span>Team 12</span></div>
-          <div class="match" id="w-r1-m7"><span>Team 13</span> vs <span>Team 14</span></div>
-          <div class="match" id="w-r1-m8"><span>Team 15</span> vs <span>Team 16</span></div>
+          <div class="pair">
+            <div class="team-box">Team 1</div>
+            <div class="team-box">Team 2</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Team 3</div>
+            <div class="team-box">Team 4</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Team 5</div>
+            <div class="team-box">Team 6</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Team 7</div>
+            <div class="team-box">Team 8</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Team 9</div>
+            <div class="team-box">Team 10</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Team 11</div>
+            <div class="team-box">Team 12</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Team 13</div>
+            <div class="team-box">Team 14</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Team 15</div>
+            <div class="team-box">Team 16</div>
+          </div>
         </div>
 
-        <!-- Runde 2 (8 Matches) -->
+        <!-- Runde 2 -->
         <div class="round">
-          <div class="match" id="w-r2-m1">Sieger M1 vs Sieger M2</div>
-          <div class="match" id="w-r2-m2">Sieger M3 vs Sieger M4</div>
-          <div class="match" id="w-r2-m3">Sieger M5 vs Sieger M6</div>
-          <div class="match" id="w-r2-m4">Sieger M7 vs Sieger M8</div>
+          <div class="team-box next-match">Sieger Match 1</div>
+          <div class="team-box next-match">Sieger Match 2</div>
+          <div class="team-box next-match">Sieger Match 3</div>
+          <div class="team-box next-match">Sieger Match 4</div>
+          <div class="team-box next-match">Sieger Match 5</div>
+          <div class="team-box next-match">Sieger Match 6</div>
+          <div class="team-box next-match">Sieger Match 7</div>
+          <div class="team-box next-match">Sieger Match 8</div>
         </div>
 
-        <!-- Runde 3 (4 Matches) -->
+        <!-- Runde 3 -->
         <div class="round">
-          <div class="match" id="w-r3-m1">Sieger R2M1 vs Sieger R2M2</div>
-          <div class="match" id="w-r3-m2">Sieger R2M3 vs Sieger R2M4</div>
+          <div class="team-box next-match">Sieger R2M1</div>
+          <div class="team-box next-match">Sieger R2M2</div>
+          <div class="team-box next-match">Sieger R2M3</div>
+          <div class="team-box next-match">Sieger R2M4</div>
         </div>
 
         <!-- Halbfinale -->
         <div class="round">
-          <div class="match" id="w-r4-m1">Sieger R3M1 vs Sieger R3M2</div>
+          <div class="team-box next-match">Sieger R3M1</div>
+          <div class="team-box next-match">Sieger R3M2</div>
+        </div>
+
+        <!-- Finale Platz Winner -->
+        <div class="round">
+          <div class="team-box next-match">Winner Finale</div>
         </div>
       </div>
 
-      <!-- FINALE / MITTE -->
+      <!-- FINALE -->
       <div class="center-final">
         <h2>Finale</h2>
-        <div class="match" id="grand-final">Winner Bracket Sieger vs Loser Bracket Sieger</div>
-        <div class="match-line"></div>
+        <div class="final-box">Winner Bracket Sieger</div>
+        <div class="final-box">Loser Bracket Sieger</div>
         <p class="muted">Grand Champion</p>
       </div>
 
       <!-- LOSER BRACKET -->
       <div class="bracket" id="loser-bracket">
-        <h2>Loser Bracket</h2>
-        
-        <!-- Runde 1 (8 Matches) -->
+        <!-- Runde 1 -->
         <div class="round">
-          <div class="match" id="l-r1-m1">Loser W-R1-M1 vs Loser W-R1-M2</div>
-          <div class="match" id="l-r1-m2">Loser W-R1-M3 vs Loser W-R1-M4</div>
-          <div class="match" id="l-r1-m3">Loser W-R1-M5 vs Loser W-R1-M6</div>
-          <div class="match" id="l-r1-m4">Loser W-R1-M7 vs Loser W-R1-M8</div>
+          <div class="pair">
+            <div class="team-box">Loser Match 1</div>
+            <div class="team-box">Loser Match 2</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Loser Match 3</div>
+            <div class="team-box">Loser Match 4</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Loser Match 5</div>
+            <div class="team-box">Loser Match 6</div>
+          </div>
+          <div class="pair">
+            <div class="team-box">Loser Match 7</div>
+            <div class="team-box">Loser Match 8</div>
+          </div>
         </div>
 
-        <!-- Runde 2 (4 Matches) -->
+        <!-- Runde 2 -->
         <div class="round">
-          <div class="match" id="l-r2-m1">Sieger L-R1-M1 vs Sieger L-R1-M2</div>
-          <div class="match" id="l-r2-m2">Sieger L-R1-M3 vs Sieger L-R1-M4</div>
+          <div class="team-box next-match">Sieger L-R1M1</div>
+          <div class="team-box next-match">Sieger L-R1M2</div>
+          <div class="team-box next-match">Sieger L-R1M3</div>
+          <div class="team-box next-match">Sieger L-R1M4</div>
         </div>
 
-        <!-- Runde 3 (2 Matches) -->
+        <!-- Runde 3 -->
         <div class="round">
-          <div class="match" id="l-r3-m1">Sieger L-R2-M1 vs Sieger L-R2-M2</div>
+          <div class="team-box next-match">Sieger L-R2M1</div>
+          <div class="team-box next-match">Sieger L-R2M2</div>
         </div>
 
-        <!-- Finale Loser Bracket -->
+        <!-- Loser Finale -->
         <div class="round">
-          <div class="match" id="l-final">Loser Finale: Sieger R3 vs Verlierer WB-Halbfinale</div>
+          <div class="team-box next-match">Loser Finale</div>
         </div>
       </div>
     </div>
