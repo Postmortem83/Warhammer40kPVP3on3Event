@@ -224,23 +224,14 @@ form textarea {
   text-transform: uppercase;
 }
 
-/* Brackets */
-.bracket-wrap {
-  background: #111;
-  padding: 1rem;
-  border-radius: 10px;
-  margin-top: 1rem;
-  overflow-x: auto;
-  border: 2px solid #ff4f4f;
-  box-shadow: 0 0 20px #000 inset;
-}
-
 .muted {
   color: #777;
   font-size: 0.9rem;
 }
 
-/* Footer */
+/* ---------------------------------------------
+   Footer
+--------------------------------------------- */
 .footer {
   background: #111;
   padding: 2rem 1rem;
@@ -268,66 +259,67 @@ form textarea {
   text-align: center;
   font-size: 0.9rem;
 }
-/* Bracket Styles */
-.bracket-card {
-  overflow-x: auto;
+
+/* ---------------------------------------------
+   WM-Plan Bracket Style
+--------------------------------------------- */
+.tournament-bracket {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3rem;
   padding: 2rem;
-}
-
-.bracket-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-}
-
-.bracket {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 300px;
-}
-
-.bracket h2 {
-  color: #ff4f4f;
-  text-shadow: 0 0 10px #000;
-  margin-bottom: 1rem;
+  overflow-x: auto;
 }
 
 .round {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  justify-content: space-around;
+  gap: 2rem;
+  min-width: 160px;
+  position: relative;
 }
 
 .match {
-  background: #111;
+  background: #1b1b1b;
   border: 2px solid #ff4f4f;
-  padding: 0.5rem 1rem;
   border-radius: 8px;
+  padding: 0.6rem;
   text-align: center;
-  min-width: 120px;
-  box-shadow: 0 0 10px #000 inset;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.match span {
-  flex: 1;
-  padding-right: 0.5rem;
-}
-
-.status-btn {
-  background: #ff4f4f;
-  border: none;
+  font-weight: 600;
   color: #fff;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 700;
+  min-width: 140px;
+  position: relative;
+  box-shadow: 0 0 10px #000 inset;
 }
 
-.status-btn:hover {
-  background: #d10000;
+/* Verbindungslinien */
+.round:not(:last-child) .match::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  width: 40px;
+  height: 2px;
+  background: #ff4f4f;
+}
+
+.round:not(:first-child) .match::before {
+  content: "";
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  width: 40px;
+  height: 2px;
+  background: #ff4f4f;
+}
+
+/* Headline für jede Runde */
+.round-title {
+  text-align: center;
+  color: #ff4f4f;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  text-shadow: 0 0 8px #000;
 }
