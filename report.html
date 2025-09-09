@@ -28,13 +28,19 @@
       <h2>Teamleader Formular</h2>
       <form name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="thank-you.html">
         <input type="hidden" name="form-name" value="match-report">
-        <p class="hidden">
-          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
-        </p>
+
+        <!-- Honeypot Feld für Bots -->
+        <div style="display:none;">
+          <label>Wenn du ein Mensch bist, lass dieses Feld leer: <input name="bot-field"></label>
+        </div>
 
         <div class="form-grid">
-          <label>Teamleader Name<input type="text" name="leader" required></label>
-          <label>Kontakt E-Mail<input type="email" name="email" required></label>
+          <label>Teamleader Name
+            <input type="text" name="leader" required>
+          </label>
+          <label>Kontakt E-Mail
+            <input type="email" name="email" required>
+          </label>
           <label>Bracket
             <select name="bracket" required>
               <option value="Winner">Winner Bracket</option>
@@ -42,13 +48,27 @@
               <option value="Grand Final">Grand Final</option>
             </select>
           </label>
-          <label>Match-ID<input type="text" name="match_id" required placeholder="z.B. W1"></label>
-          <label>Team A<input type="text" name="team_a" required></label>
-          <label>Team B<input type="text" name="team_b" required></label>
-          <label>Score<input type="text" name="score" required placeholder="z.B. 2:1"></label>
-          <label>Gewinner<input type="text" name="winner" required></label>
-          <label>VOD/Clip-Link<input type="url" name="vod"></label>
-          <label>Kommentar<textarea name="comment" rows="3"></textarea></label>
+          <label>Match-ID
+            <input type="text" name="match_id" required placeholder="z.B. W1">
+          </label>
+          <label>Team A
+            <input type="text" name="team_a" required>
+          </label>
+          <label>Team B
+            <input type="text" name="team_b" required>
+          </label>
+          <label>Score
+            <input type="text" name="score" required placeholder="z.B. 2:1">
+          </label>
+          <label>Gewinner
+            <input type="text" name="winner" required>
+          </label>
+          <label>VOD/Clip-Link
+            <input type="url" name="vod">
+          </label>
+          <label>Kommentar
+            <textarea name="comment" rows="3"></textarea>
+          </label>
         </div>
 
         <button class="btn btn--primary" type="submit">Ergebnis senden</button>
