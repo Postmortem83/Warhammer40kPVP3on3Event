@@ -1,15 +1,19 @@
-// -------------------- CONFIG --------------------
-const ADMIN_USER = "admin";           // dein Benutzername
-const ADMIN_PASS = "SpaceMarine42";   // dein Passwort
+// script.js
 
-// -------------------- ADMIN LOGIN --------------------
+// Prüfen, ob Admin-Token im localStorage ist
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("adminToken") === "VALID_ADMIN") {
+    enableAdminMode();
+  }
+});
+
 function adminLogin(username, password) {
-  if (username === ADMIN_USER && password === ADMIN_PASS) {
-    localStorage.setItem("adminToken", "true");
-    alert("Admin erfolgreich eingeloggt!");
-    showAdminTools(true);
-    // Optional: direkt zurück zur Bracket-Seite
-    window.location.href = "bracket.html";
+  // Passwort lokal geprüft (sicherer als sichtbar im HTML)
+  // Du kannst hier auch ein Hash vergleichen für etwas mehr Sicherheit
+  if (username === "admin" && password === "ForTheEmperor83!") {
+    localStorage.setItem("adminToken", "VALID_ADMIN");
+    enableAdminMode();
+    alert("Admin eingeloggt!");
   } else {
     alert("Falscher Benutzername oder Passwort!");
   }
@@ -17,103 +21,72 @@ function adminLogin(username, password) {
 
 function adminLogout() {
   localStorage.removeItem("adminToken");
-  showAdminTools(false);
+  document.querySelector(".admin-tools").style.display = "none";
+  document.getElementById("adminLogoutBtn").style.display = "none";
+  document.getElementById("adminLoginLink").style.display = "inline-flex";
   alert("Admin ausgeloggt!");
 }
 
-// -------------------- ADMIN TOOLS ANZEIGEN --------------------
-function showAdminTools(show) {
-  const adminTools = document.querySelectorAll(".admin-tools");
-  const loginLink = document.getElementById("adminLoginLink");
-  const logoutBtn = document.getElementById("adminLogoutBtn");
-
-  adminTools.forEach(el => el.style.display = show ? "block" : "none");
-  if (loginLink) loginLink.style.display = show ? "none" : "inline-flex";
-  if (logoutBtn) logoutBtn.style.display = show ? "inline-flex" : "none";
+function enableAdminMode() {
+  document.querySelector(".admin-tools").style.display = "block";
+  document.getElementById("adminLogoutBtn").style.display = "inline-flex";
+  document.getElementById("adminLoginLink").style.display = "none";
 }
 
-// -------------------- LOCAL STORAGE FUNKTIONEN --------------------
-function saveBrackets() {
-  const wb = document.getElementById("wb-bracket");
-  const lb = document.getElementById("lb-bracket");
-  if (!wb || !lb) return;
-
-  const data = {
-    wbHTML: wb.innerHTML,
-    lbHTML: lb.innerHTML
-  };
-
-  localStorage.setItem("bracketsData", JSON.stringify(data));
-  alert("Brackets lokal gespeichert!");
-}
-
-function loadBrackets() {
-  const wb = document.getElementById("wb-bracket");
-  const lb = document.getElementById("lb-bracket");
-  const data = JSON.parse(localStorage.getItem("bracketsData") || "{}");
-
-  if (wb && data.wbHTML) wb.innerHTML = data.wbHTML;
-  if (lb && data.lbHTML) lb.innerHTML = data.lbHTML;
-}
-
-function clearBrackets() {
-  localStorage.removeItem("bracketsData");
-  loadBrackets();
-  alert("Lokale Brackets gelöscht!");
-}
-
-// -------------------- EXPORT / IMPORT JSON --------------------
-function exportBrackets() {
-  const data = localStorage.getItem("bracketsData");
-  if (!data) return alert("Keine Daten zum Exportieren!");
-
-  const blob = new Blob([data], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "brackets.json";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importBrackets(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      localStorage.setItem("bracketsData", JSON.stringify(data));
-      loadBrackets();
-      alert("Brackets importiert!");
-    } catch (err) {
-      alert("Fehler beim Importieren der Datei!");
-      console.error(err);
-    }
-  };
-  reader.readAsText(file);
-}
-
-// -------------------- EVENT LISTENER --------------------
+// Speicher-Buttons für Bracket
 document.addEventListener("DOMContentLoaded", () => {
-  // Admin-Status prüfen
-  const isAdmin = localStorage.getItem("adminToken") === "true";
-  showAdminTools(isAdmin);
-
-  // Brackets beim Laden anzeigen
-  loadBrackets();
-
-  // Buttons
   const saveBtn = document.getElementById("saveLocal");
-  if (saveBtn) saveBtn.addEventListener("click", saveBrackets);
-
   const clearBtn = document.getElementById("clearLocal");
-  if (clearBtn) clearBtn.addEventListener("click", clearBrackets);
-
   const exportBtn = document.getElementById("exportJSON");
-  if (exportBtn) exportBtn.addEventListener("click", exportBrackets);
-
   const importInput = document.getElementById("importJSON");
-  if (importInput) importInput.addEventListener("change", importBrackets);
+
+  if (saveBtn) saveBtn.onclick = () => {
+    localStorage.setItem("wbBracket", document.getElementById("wb-bracket").innerHTML);
+    localStorage.setItem("lbBracket", document.getElementById("lb-bracket").innerHTML);
+    alert("Bracket lokal gespeichert!");
+  };
+
+  if (clearBtn) clearBtn.onclick = () => {
+    localStorage.removeItem("wbBracket");
+    localStorage.removeItem("lbBracket");
+    alert("Lokal gespeicherte Daten gelöscht!");
+  };
+
+  if (exportBtn) exportBtn.onclick = () => {
+    const data = {
+      wb: document.getElementById("wb-bracket").innerHTML,
+      lb: document.getElementById("lb-bracket").innerHTML
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "bracket.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  if (importInput) importInput.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target.result);
+        document.getElementById("wb-bracket").innerHTML = data.wb;
+        document.getElementById("lb-bracket").innerHTML = data.lb;
+        alert("Bracket importiert!");
+      } catch {
+        alert("Fehler beim Importieren!");
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  // Wenn localStorage Brackets gespeichert hat, laden
+  if (localStorage.getItem("wbBracket")) {
+    document.getElementById("wb-bracket").innerHTML = localStorage.getItem("wbBracket");
+  }
+  if (localStorage.getItem("lbBracket")) {
+    document.getElementById("lb-bracket").innerHTML = localStorage.getItem("lbBracket");
+  }
 });
