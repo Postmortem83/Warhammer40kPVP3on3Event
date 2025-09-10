@@ -32,7 +32,7 @@ a {
 }
 
 /* ---------------------------------------------
-   Header / Hero
+   Header / Hero mit Banner-Bild
 --------------------------------------------- */
 .hero {
   position: relative;
@@ -42,7 +42,10 @@ a {
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  background: linear-gradient(#0a0a0a, #1b1b1b); /* dunkel, kein Bild */
+  background-image: url('images/banner.jpg'); /* Hier dein Banner-Bild einfügen */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero .overlay {
