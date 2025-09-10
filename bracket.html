@@ -13,26 +13,9 @@
       transform: scale(0.85);
       transform-origin: top center;
     }
-
-    .bracket {
-      display: flex;
-      flex-direction: row;
-      gap: 2rem;
-    }
-
-    .round {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .pair {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      position: relative;
-    }
-
+    .bracket { display: flex; flex-direction: row; gap: 2rem; }
+    .round { display: flex; flex-direction: column; gap: 2rem; }
+    .pair { display: flex; flex-direction: column; gap: 0.5rem; position: relative; }
     .team-box {
       background: #111;
       border: 2px solid #ff4f4f;
@@ -42,8 +25,6 @@
       min-width: 120px;
       box-shadow: 0 0 10px #000 inset;
     }
-
-    /* Linien zu den nächsten Matches */
     .pair::after {
       content: "";
       position: absolute;
@@ -55,11 +36,7 @@
       border-top: 2px solid #ff4f4f;
       border-bottom: 2px solid #ff4f4f;
     }
-
-    .next-match {
-      margin-top: 2.5rem;
-    }
-
+    .next-match { margin-top: 2.5rem; }
     .center-final {
       display: flex;
       flex-direction: column;
@@ -68,7 +45,6 @@
       gap: 2rem;
       min-width: 200px;
     }
-
     .final-box {
       background: #222;
       border: 2px solid #ff4f4f;
@@ -78,41 +54,21 @@
       min-width: 160px;
       font-weight: bold;
     }
-
-    /* Hero / Banner Hintergrund */
     .hero {
       position: relative;
-      height: 500px;
+      height: 200px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      overflow: hidden;
-      background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
-      background-size: cover;
+      background: #000;
     }
-
-    .hero .overlay {
-      position: absolute;
-      top:0; left:0;
-      width:100%;
-      height:100%;
-      background: rgba(0,0,0,0.6);
-      z-index:1;
-    }
-
-    .hero__content {
-      position: relative;
-      z-index: 2;
-      color: #fff;
-      text-shadow: 2px 2px 10px #000;
-    }
+    .hero__content { color: #fff; }
   </style>
 </head>
 <body>
-  <!-- Hero / Banner Header -->
+  <!-- Hero -->
   <header class="hero">
-    <div class="overlay"></div>
     <div class="hero__content">
       <h1>Turnierbaum</h1>
     </div>
@@ -121,47 +77,14 @@
   <!-- Main Content -->
   <div class="container">
     <div class="bracket-container">
-      
+
       <!-- WINNER BRACKET -->
       <div class="bracket" id="winner-bracket">
-        <!-- Runde 1 -->
-        <div class="round">
-          <div class="pair">
-            <div class="team-box">Team 1</div>
-            <div class="team-box">Team 2</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Team 3</div>
-            <div class="team-box">Team 4</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Team 5</div>
-            <div class="team-box">Team 6</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Team 7</div>
-            <div class="team-box">Team 8</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Team 9</div>
-            <div class="team-box">Team 10</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Team 11</div>
-            <div class="team-box">Team 12</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Team 13</div>
-            <div class="team-box">Team 14</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Team 15</div>
-            <div class="team-box">Team 16</div>
-          </div>
-        </div>
+        <!-- Runde 1 (Teams werden hier automatisch eingesetzt) -->
+        <div class="round" id="round1"></div>
 
         <!-- Runde 2 -->
-        <div class="round">
+        <div class="round" id="round2">
           <div class="team-box next-match">Sieger Match 1</div>
           <div class="team-box next-match">Sieger Match 2</div>
           <div class="team-box next-match">Sieger Match 3</div>
@@ -192,7 +115,7 @@
         </div>
       </div>
 
-      <!-- FINALE -->
+      <!-- Finale -->
       <div class="center-final">
         <h2>Finale</h2>
         <div class="final-box">Winner Bracket Sieger</div>
@@ -243,5 +166,35 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // 👉 Google Sheet CSV-Link hier eintragen:
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSoO9rihcjkr6HAW3lZm_8HyMxBoOrdKz0_gqa_XCBfAG2KDT6823ZbBGrBzmR5ev6F-IUw1aDayrOJ/pub?output=csv";
+
+    async function loadTeams() {
+      const response = await fetch(sheetURL);
+      const csv = await response.text();
+      const rows = csv.split("\n").map(r => r.split(","));
+      
+      // Annahme: erste Spalte = Teamname
+      const teams = rows.slice(1).map(r => r[0]).filter(Boolean);
+
+      const round1 = document.getElementById("round1");
+      round1.innerHTML = "";
+
+      // Teams in Paaren einsetzen
+      for (let i = 0; i < teams.length; i += 2) {
+        const pair = document.createElement("div");
+        pair.className = "pair";
+        pair.innerHTML = `
+          <div class="team-box">${teams[i] || ""}</div>
+          <div class="team-box">${teams[i+1] || ""}</div>
+        `;
+        round1.appendChild(pair);
+      }
+    }
+
+    loadTeams();
+  </script>
 </body>
 </html>
