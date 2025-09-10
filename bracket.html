@@ -182,60 +182,81 @@
   </footer>
 
   <!-- Google Sheet Import -->
-  <script>
-    // Sheet-ID hier eintragen
-    const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s"; 
-    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+<script>
+  const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
+  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-    async function loadTeams() {
-      const response = await fetch(SHEET_URL);
-      const data = await response.text();
-      const rows = data.split("\n").map(r => r.split(",")).filter(r => r[0]);
+  async function loadTeams() {
+    const response = await fetch(SHEET_URL);
+    const data = await response.text();
+    const rows = data.split("\n").map(r => r.split(",")).filter(r => r[0]);
+    const teams = rows.slice(1).map(r => r[0]); // erste Zeile Überschrift
+    renderBracket(teams);
+  }
 
-      // Teams aus der ersten Spalte ziehen
-      const teams = rows.slice(1).map(r => r[0]); // erste Zeile ist Überschrift
+  function createPair(team1, team2) {
+    const pair = document.createElement("div");
+    pair.classList.add("pair");
 
-      renderBracket(teams);
-    }
+    const t1 = document.createElement("div");
+    t1.classList.add("team-box");
+    t1.textContent = team1 || "Frei";
 
-    function renderBracket(teams) {
-      const winnerBracket = document.getElementById("winner-bracket");
-      const loserBracket = document.getElementById("loser-bracket");
+    const t2 = document.createElement("div");
+    t2.classList.add("team-box");
+    t2.textContent = team2 || "Frei";
 
-      // Beispiel: 16 Teams → 8 Matches in Runde 1
-      const round1 = document.createElement("div");
-      round1.classList.add("round");
+    pair.appendChild(t1);
+    pair.appendChild(t2);
 
-      for (let i = 0; i < teams.length; i += 2) {
-        const pair = document.createElement("div");
-        pair.classList.add("pair");
+    return pair;
+  }
 
-        const team1 = document.createElement("div");
-        team1.classList.add("team-box");
-        team1.textContent = teams[i] || "Frei";
+  function renderBracket(teams) {
+    const winnerBracket = document.getElementById("winner-bracket");
+    const loserBracket = document.getElementById("loser-bracket");
 
-        const team2 = document.createElement("div");
-        team2.classList.add("team-box");
-        team2.textContent = teams[i + 1] || "Frei";
+    const totalRounds = Math.ceil(Math.log2(teams.length));
+    let currentTeams = [...teams];
 
-        pair.appendChild(team1);
-        pair.appendChild(team2);
-        round1.appendChild(pair);
+    // Winner Bracket Runden
+    for (let round = 1; round <= totalRounds; round++) {
+      const roundDiv = document.createElement("div");
+      roundDiv.classList.add("round");
+
+      for (let i = 0; i < currentTeams.length; i += 2) {
+        const team1 = currentTeams[i];
+        const team2 = currentTeams[i + 1];
+        roundDiv.appendChild(createPair(team1, team2));
       }
 
-      winnerBracket.appendChild(round1);
+      winnerBracket.appendChild(roundDiv);
 
-      // Loser Bracket erstmal leer als Platzhalter
-      const loserRound = document.createElement("div");
-      loserRound.classList.add("round");
-      loserRound.innerHTML = `
-        <div class="pair"><div class="team-box">Loser Match 1</div><div class="team-box">Loser Match 2</div></div>
-        <div class="pair"><div class="team-box">Loser Match 3</div><div class="team-box">Loser Match 4</div></div>
-      `;
-      loserBracket.appendChild(loserRound);
+      // Nächste Runde: Gewinner (leer, Platzhalter)
+      const nextRoundTeams = new Array(Math.ceil(currentTeams.length / 2)).fill("");
+      currentTeams = nextRoundTeams;
     }
 
-    loadTeams();
-  </script>
+    // Loser Bracket Runden (einfacher Platzhalter)
+    const loserRounds = totalRounds - 1; // Anzahl der Loser-Runden
+    let loserTeams = ["Loser Match 1", "Loser Match 2"];
+    for (let i = 0; i < loserRounds; i++) {
+      const roundDiv = document.createElement("div");
+      roundDiv.classList.add("round");
+
+      for (let j = 0; j < loserTeams.length; j += 2) {
+        roundDiv.appendChild(createPair(loserTeams[j], loserTeams[j + 1]));
+      }
+
+      loserBracket.appendChild(roundDiv);
+
+      // Nächste Runde: Platzhalter
+      const nextLoserTeams = new Array(Math.ceil(loserTeams.length / 2)).fill("TBD");
+      loserTeams = nextLoserTeams;
+    }
+  }
+
+  loadTeams();
+</script>
 </body>
 </html>
