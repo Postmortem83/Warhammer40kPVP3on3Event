@@ -1,34 +1,115 @@
-<header class="hero">
-  <div class="overlay"></div>
-  <div class="hero__content">
-    <h1>Regeln & Ablauf</h1>
-  </div>
-</header>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regeln & Ablauf – Warhammer 40k PvP Clash</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #111;
+      color: #eee;
+      line-height: 1.5;
+    }
 
-<style>
-  .hero {
-    position: relative;
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-    background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
-    background-size: cover;
-  }
-  .hero .overlay {
-    position: absolute;
-    top:0; left:0;
-    width:100%;
-    height:100%;
-    background: rgba(0,0,0,0.6);
-    z-index:1;
-  }
-  .hero__content {
-    position: relative;
-    z-index: 2;
-    color: #ff4f4f;
-    text-shadow: 0 0 10px #000;
-  }
-</style>
+    /* Header Hero Banner */
+    .hero {
+      position: relative;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
+      background-size: cover;
+    }
+    .hero .overlay {
+      position: absolute;
+      top:0; left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.6);
+      z-index:1;
+    }
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      color: #ff4f4f;
+      text-shadow: 0 0 10px #000;
+    }
+
+    /* Container für Hauptinhalt */
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      color: #ff4f4f;
+      text-shadow: 0 0 5px #000;
+      margin-top: 2rem;
+      font-size: 2rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 1.2rem;
+      line-height: 1.8;
+    }
+
+    ul li {
+      margin-bottom: 0.8rem;
+    }
+
+    .cheater-warning {
+      color: #ff4f4f;
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+      text-shadow: 0 0 5px #000;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Banner / Hero -->
+  <header class="hero">
+    <div class="overlay"></div>
+    <div class="hero__content">
+      <h1>Regeln & Ablauf</h1>
+    </div>
+  </header>
+
+  <!-- Hauptinhalt -->
+  <main class="container">
+    <h2>Grundregeln</h2>
+    <ul>
+      <li>Jedes Team besteht aus 3 Spielern (plus optional 1 Ersatzspieler).</li>
+      <li>Das Turnier wird im <strong>Double-Elimination</strong> Format gespielt: Winner- und Lower-Bracket.</li>
+      <li>Die Matchlänge beträgt etwa 12–15 Minuten pro Runde.</li>
+      <li>Alle Matches sind <strong>Best-of-3</strong>, das Grand Final <strong>Best-of-5</strong>.</li>
+      <li>Es dürfen nur Standard-PvP-Maps ohne Mods verwendet werden.</li>
+      <li>Spieler müssen sich fair verhalten und die Regeln respektieren.</li>
+      <li>Cheaten, Bug-Exploits oder absichtliches Stören anderer Spieler führt zum sofortigen Ausschluss.</li>
+      <li>Cheater werden von allen kommenden Spielen ausgeschlossen und dauerhaft gebannt.</li>
+      <li>Teams sollten pünktlich sein – verspätete Teams riskieren den Verlust des Matches.</li>
+      <li>Jede Entscheidung der Turnierleitung ist endgültig und wird respektiert.</li>
+    </ul>
+    <div class="cheater-warning">
+      ⚠️ CHEATER werden sofort rausgeworfen und für kommende Spiele gebannt!
+    </div>
+  </main>
+
+</body>
+</html>
