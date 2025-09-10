@@ -6,6 +6,41 @@
   <title>Team-Anmeldung – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Hero-Bereich mit eigenem Bild */
+    .hero {
+      position: relative;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
+      background-size: cover;
+    }
+
+    .hero .overlay {
+      position: absolute;
+      top:0; left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.6);
+      z-index:1;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #ff4f4f;
+      text-shadow: 0 0 10px #000;
+    }
+
+    .hero__content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
     /* Status-Farben */
     .status {
       padding: 0.3rem 0.8rem;
@@ -17,6 +52,7 @@
     }
     .status.green { background: #28a745; }
     .status.red { background: #dc3545; }
+
     .registered-list {
       margin-top: 2rem;
       display: flex;
@@ -110,6 +146,11 @@
       localStorage.setItem('teams', JSON.stringify(teams));
       form.reset();
       renderList();
+
+      // Pop-up mit Discord-Link
+      if(confirm("Dein Team wurde registriert!\nWillst du unserem Discord beitreten?")) {
+        window.open("https://discord.gg/Cy78DEeD", "_blank");
+      }
     });
 
     renderList();
