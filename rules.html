@@ -1,85 +1,34 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Regeln & Ablauf – Warhammer 40k PvP Clash</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Zentrierung und größere Schrift */
-    .hero__content, .card {
-      text-align: center;
-    }
+<header class="hero">
+  <div class="overlay"></div>
+  <div class="hero__content">
+    <h1>Regeln & Ablauf</h1>
+  </div>
+</header>
 
-    .card {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-    }
-
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: #ff4f4f;
-      text-shadow: 0 0 10px #000;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      font-size: 1.2rem;
-      line-height: 1.8;
-      color: #eee;
-    }
-
-    ul li {
-      margin-bottom: 0.8rem;
-    }
-
-    .cheater-warning {
-      color: #ff4f4f;
-      font-weight: 700;
-      font-size: 1.3rem;
-      margin-top: 1.5rem;
-      text-shadow: 0 0 5px #000;
-    }
-  </style>
-</head>
-<body>
-  <header class="hero">
-    <div class="overlay"></div>
-    <div class="hero__content">
-      <h1>Regeln & Ablauf</h1>
-    </div>
-  </header>
-
-  <nav class="topnav">
-    <a href="index.html">Start</a>
-    <a href="about.html">Überblick</a>
-    <a href="bracket.html">Turnierbaum</a>
-    <a href="report.html">Match-Reporting</a>
-    <a href="register.html">Anmeldung</a>
-  </nav>
-
-  <main class="container">
-    <section class="card">
-      <h2>Grundregeln</h2>
-      <ul>
-        <li>Jedes Team besteht aus 3 Spielern (plus optional 1 Ersatzspieler).</li>
-        <li>Das Turnier wird im <strong>Double-Elimination</strong> Format gespielt: Winner- und Lower-Bracket.</li>
-        <li>Die Matchlänge beträgt etwa 12–15 Minuten pro Runde.</li>
-        <li>Alle Matches sind <strong>Best-of-3</strong>, das Grand Final <strong>Best-of-5</strong>.</li>
-        <li>Es dürfen nur Standard-PvP-Maps ohne Mods verwendet werden.</li>
-        <li>Spieler müssen sich fair verhalten und die Regeln respektieren.</li>
-        <li>Cheaten, Bug-Exploits oder absichtliches Stören anderer Spieler führt zum sofortigen Ausschluss.</li>
-        <li>Cheater werden von allen kommenden Spielen ausgeschlossen und dauerhaft gebannt.</li>
-        <li>Teams sollten pünktlich sein – verspätete Teams riskieren den Verlust des Matches.</li>
-        <li>Jede Entscheidung der Turnierleitung ist endgültig und wird respektiert.</li>
-      </ul>
-      <div class="cheater-warning">
-        ⚠️ CHEATER werden sofort rausgeworfen und für kommende Spiele gebannt!
-      </div>
-    </section>
-  </main>
-</body>
-</html>
+<style>
+  .hero {
+    position: relative;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
+    background-size: cover;
+  }
+  .hero .overlay {
+    position: absolute;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.6);
+    z-index:1;
+  }
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    color: #ff4f4f;
+    text-shadow: 0 0 10px #000;
+  }
+</style>
