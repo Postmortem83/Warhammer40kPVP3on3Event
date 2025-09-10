@@ -5,6 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Match-Reporting – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .hero {
+      position: relative;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
+      background-size: cover;
+    }
+    .hero .overlay {
+      position: absolute;
+      top:0; left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.6);
+      z-index:1;
+    }
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      color: #ff4f4f;
+      text-shadow: 0 0 10px #000;
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
@@ -26,7 +53,7 @@
   <main class="container">
     <section class="card">
       <h2>Teamleader Formular</h2>
-      <form name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="thank-you.html">
+      <form id="matchForm" name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="thank-you.html">
         <input type="hidden" name="form-name" value="match-report">
 
         <!-- Honeypot Feld für Bots -->
@@ -75,5 +102,19 @@
       </form>
     </section>
   </main>
+
+  <script>
+    const form = document.getElementById('matchForm');
+
+    form.addEventListener('submit', function(e) {
+      // Hier lassen wir das Netlify-Formular normal weiterlaufen,
+      // aber zusätzlich erscheint der Discord-Hinweis
+      alert("Danke für dein Ergebnis!\n\nBitte denke daran, im Discord Event-Channel unter 'Bilder' einen Screenshot als Beweis hochzuladen.");
+
+      if(confirm("Willst du jetzt direkt zum Discord-Server wechseln?")) {
+        window.open("https://discord.gg/Cy78DEeD", "_blank");
+      }
+    });
+  </script>
 </body>
 </html>
