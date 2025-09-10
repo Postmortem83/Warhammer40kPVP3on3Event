@@ -2,9 +2,65 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Turnier Bracket</title>
+  <title>Turnierbaum – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #eee;
+    }
+
+    /* Navigation */
+    .topnav {
+      display: flex;
+      justify-content: center;
+      background: #111;
+      padding: 0.8rem;
+      gap: 1.5rem;
+      border-bottom: 2px solid #ff4f4f;
+    }
+    .topnav a {
+      color: #eee;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+    .topnav a:hover {
+      color: #ff4f4f;
+    }
+
+    /* Hero / Banner */
+    .hero {
+      position: relative;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
+      background-size: cover;
+      color: #fff;
+    }
+    .hero .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    /* Bracket */
+    .container {
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
     .bracket-container {
       display: flex;
       justify-content: space-between;
@@ -13,9 +69,22 @@
       transform: scale(0.85);
       transform-origin: top center;
     }
-    .bracket { display: flex; flex-direction: row; gap: 2rem; }
-    .round { display: flex; flex-direction: column; gap: 2rem; }
-    .pair { display: flex; flex-direction: column; gap: 0.5rem; position: relative; }
+    .bracket {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+    }
+    .round {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .pair {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
     .team-box {
       background: #111;
       border: 2px solid #ff4f4f;
@@ -36,7 +105,9 @@
       border-top: 2px solid #ff4f4f;
       border-bottom: 2px solid #ff4f4f;
     }
-    .next-match { margin-top: 2.5rem; }
+    .next-match {
+      margin-top: 2.5rem;
+    }
     .center-final {
       display: flex;
       flex-direction: column;
@@ -54,66 +125,44 @@
       min-width: 160px;
       font-weight: bold;
     }
-    .hero {
-      position: relative;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: #000;
+    .muted {
+      color: #aaa;
+      font-size: 0.9rem;
     }
-    .hero__content { color: #fff; }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #111;
+      border-top: 2px solid #ff4f4f;
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
+  <!-- Navigation -->
+  <nav class="topnav">
+    <a href="index.html">Start</a>
+    <a href="about.html">Überblick</a>
+    <a href="rules.html">Regeln & Ablauf</a>
+    <a href="bracket.html">Turnierbaum</a>
+    <a href="report.html">Match-Reporting</a>
+  </nav>
+
   <!-- Hero -->
   <header class="hero">
+    <div class="overlay"></div>
     <div class="hero__content">
       <h1>Turnierbaum</h1>
+      <p>Doppel-Eliminierung – Wer verliert, kämpft sich durchs Loser Bracket zurück!</p>
     </div>
   </header>
 
   <!-- Main Content -->
-  <div class="container">
+  <main class="container">
     <div class="bracket-container">
-
-      <!-- WINNER BRACKET -->
-      <div class="bracket" id="winner-bracket">
-        <!-- Runde 1 (Teams werden hier automatisch eingesetzt) -->
-        <div class="round" id="round1"></div>
-
-        <!-- Runde 2 -->
-        <div class="round" id="round2">
-          <div class="team-box next-match">Sieger Match 1</div>
-          <div class="team-box next-match">Sieger Match 2</div>
-          <div class="team-box next-match">Sieger Match 3</div>
-          <div class="team-box next-match">Sieger Match 4</div>
-          <div class="team-box next-match">Sieger Match 5</div>
-          <div class="team-box next-match">Sieger Match 6</div>
-          <div class="team-box next-match">Sieger Match 7</div>
-          <div class="team-box next-match">Sieger Match 8</div>
-        </div>
-
-        <!-- Runde 3 -->
-        <div class="round">
-          <div class="team-box next-match">Sieger R2M1</div>
-          <div class="team-box next-match">Sieger R2M2</div>
-          <div class="team-box next-match">Sieger R2M3</div>
-          <div class="team-box next-match">Sieger R2M4</div>
-        </div>
-
-        <!-- Halbfinale -->
-        <div class="round">
-          <div class="team-box next-match">Sieger R3M1</div>
-          <div class="team-box next-match">Sieger R3M2</div>
-        </div>
-
-        <!-- Finale Platz Winner -->
-        <div class="round">
-          <div class="team-box next-match">Winner Finale</div>
-        </div>
-      </div>
+      <!-- Winner Bracket -->
+      <div class="bracket" id="winner-bracket"></div>
 
       <!-- Finale -->
       <div class="center-final">
@@ -123,75 +172,67 @@
         <p class="muted">Grand Champion</p>
       </div>
 
-      <!-- LOSER BRACKET -->
-      <div class="bracket" id="loser-bracket">
-        <!-- Runde 1 -->
-        <div class="round">
-          <div class="pair">
-            <div class="team-box">Loser Match 1</div>
-            <div class="team-box">Loser Match 2</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Loser Match 3</div>
-            <div class="team-box">Loser Match 4</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Loser Match 5</div>
-            <div class="team-box">Loser Match 6</div>
-          </div>
-          <div class="pair">
-            <div class="team-box">Loser Match 7</div>
-            <div class="team-box">Loser Match 8</div>
-          </div>
-        </div>
-
-        <!-- Runde 2 -->
-        <div class="round">
-          <div class="team-box next-match">Sieger L-R1M1</div>
-          <div class="team-box next-match">Sieger L-R1M2</div>
-          <div class="team-box next-match">Sieger L-R1M3</div>
-          <div class="team-box next-match">Sieger L-R1M4</div>
-        </div>
-
-        <!-- Runde 3 -->
-        <div class="round">
-          <div class="team-box next-match">Sieger L-R2M1</div>
-          <div class="team-box next-match">Sieger L-R2M2</div>
-        </div>
-
-        <!-- Loser Finale -->
-        <div class="round">
-          <div class="team-box next-match">Loser Finale</div>
-        </div>
-      </div>
+      <!-- Loser Bracket -->
+      <div class="bracket" id="loser-bracket"></div>
     </div>
-  </div>
+  </main>
 
+  <footer>
+    © 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.
+  </footer>
+
+  <!-- Google Sheet Import -->
   <script>
-    // 👉 Google Sheet CSV-Link hier eintragen:
-    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSoO9rihcjkr6HAW3lZm_8HyMxBoOrdKz0_gqa_XCBfAG2KDT6823ZbBGrBzmR5ev6F-IUw1aDayrOJ/pub?output=csv";
+    // Sheet-ID hier eintragen
+    const SHEET_ID = "DEINE_SHEET_ID"; 
+    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
     async function loadTeams() {
-      const response = await fetch(sheetURL);
-      const csv = await response.text();
-      const rows = csv.split("\n").map(r => r.split(","));
-      
-      // Annahme: erste Spalte = Teamname
-      const teams = rows.slice(1).map(r => r[0]).filter(Boolean);
+      const response = await fetch(SHEET_URL);
+      const data = await response.text();
+      const rows = data.split("\n").map(r => r.split(",")).filter(r => r[0]);
 
-      const round1 = document.getElementById("round1");
-      round1.innerHTML = "";
+      // Teams aus der ersten Spalte ziehen
+      const teams = rows.slice(1).map(r => r[0]); // erste Zeile ist Überschrift
 
-      // Teams in Paaren einsetzen
+      renderBracket(teams);
+    }
+
+    function renderBracket(teams) {
+      const winnerBracket = document.getElementById("winner-bracket");
+      const loserBracket = document.getElementById("loser-bracket");
+
+      // Beispiel: 16 Teams → 8 Matches in Runde 1
+      const round1 = document.createElement("div");
+      round1.classList.add("round");
+
       for (let i = 0; i < teams.length; i += 2) {
         const pair = document.createElement("div");
-        pair.className = "pair";
-        pair.innerHTML = `
-          <div class="team-box">${teams[i] || ""}</div>
-          <div class="team-box">${teams[i+1] || ""}</div>
-        `;
+        pair.classList.add("pair");
+
+        const team1 = document.createElement("div");
+        team1.classList.add("team-box");
+        team1.textContent = teams[i] || "Frei";
+
+        const team2 = document.createElement("div");
+        team2.classList.add("team-box");
+        team2.textContent = teams[i + 1] || "Frei";
+
+        pair.appendChild(team1);
+        pair.appendChild(team2);
         round1.appendChild(pair);
       }
+
+      winnerBracket.appendChild(round1);
+
+      // Loser Bracket erstmal leer als Platzhalter
+      const loserRound = document.createElement("div");
+      loserRound.classList.add("round");
+      loserRound.innerHTML = `
+        <div class="pair"><div class="team-box">Loser Match 1</div><div class="team-box">Loser Match 2</div></div>
+        <div class="pair"><div class="team-box">Loser Match 3</div><div class="team-box">Loser Match 4</div></div>
+      `;
+      loserBracket.appendChild(loserRound);
     }
 
     loadTeams();
