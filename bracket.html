@@ -45,15 +45,25 @@ body {
 .hero__content { position: relative; z-index: 2; text-shadow: 2px 2px 8px #000; }
 
 /* Container */
-.container { padding:1rem; display:flex; justify-content:center; overflow-x:auto; }
+.container { padding:1rem; display:flex; justify-content:center; }
 
 /* Bracket Container */
 .bracket-container {
   display:flex;
-  align-items:flex-start;
-  gap:2rem;
-  position:relative;
-  flex-wrap:nowrap;
+  flex-direction: column;
+  align-items:center;
+  gap:3rem;
+  width:100%;
+  max-width:100%;
+}
+
+/* Abschnitt */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom:1rem;
+  text-align:center;
+  color:#ff4f4f;
 }
 
 /* Brackets */
@@ -66,14 +76,9 @@ body {
 /* Finale */
 .center-final { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:1rem; min-width:180px; position:relative;}
 .final-box { background:#222; border:2px solid #ff4f4f; padding:1rem 2rem; border-radius:10px; text-align:center; min-width:160px; font-weight:bold; position:relative; z-index:1;}
-.final-line-left, .final-line-right { position:absolute; top:50%; width:50px; height:2px; background:#ff4f4f; z-index:0; }
-.final-line-left { left:-50px; }
-.final-line-right { right:-50px; }
 .muted { color:#aaa; font-size:0.9rem; }
 
-/* Verbindungslinien */
-.match-line { position:absolute; width:2px; background-color:#ff4f4f; z-index:0; top:0; left:50%; height:100%; transform:translateX(-50%); }
-
+/* Responsive */
 @media(max-width:768px){
   .round { gap:2rem; min-width:80px; }
   .team-box { min-width:70px; padding:0.3rem 0.5rem; font-size:0.85rem; }
@@ -103,16 +108,22 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 
 <main class="container">
   <div class="bracket-container">
-    <div class="bracket winner-bracket" id="winner-bracket"></div>
+    
+    <div>
+      <div class="section-title">Winner Bracket</div>
+      <div class="bracket" id="winner-bracket"></div>
+    </div>
 
     <div class="center-final">
-      <div class="final-line-left"></div>
       <div class="final-box">Finale</div>
-      <div class="final-line-right"></div>
       <div class="muted">Grand Champion</div>
     </div>
 
-    <div class="bracket loser-bracket" id="loser-bracket"></div>
+    <div>
+      <div class="section-title">Loser Bracket</div>
+      <div class="bracket" id="loser-bracket"></div>
+    </div>
+
   </div>
 </main>
 
@@ -120,6 +131,7 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 
 <script>
 // --- Google Sheet ---
+// HIER deine Sheet-ID einsetzen
 const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
@@ -142,12 +154,6 @@ function createMatchPair(team1, team2){
   div.classList.add("match-pair");
   div.appendChild(createTeamBox(team1));
   div.appendChild(createTeamBox(team2));
-
-  if(team1 && team2){
-    const line = document.createElement("div");
-    line.classList.add("match-line");
-    div.appendChild(line);
-  }
   return div;
 }
 
@@ -182,7 +188,7 @@ function createDoubleElimRounds(teams){
     if(currentTeams.length<=1) break;
   }
 
-  // Loser-Bracket (alle Runden)
+  // Loser-Bracket (einfach, gleiche Struktur)
   let loserPrev = winnerRounds[0].map(()=>["TBD","TBD"]);
   while(loserPrev.length>0){
     loserRounds.push(loserPrev);
@@ -200,7 +206,7 @@ async function loadBracket(){
     const csv = await response.text();
     const data = parseCSV(csv);
 
-    // Alle Teams aus allen Spalten sammeln
+    // Alle Teams sammeln
     const teams = [];
     for(let row=1; row<data.length; row++){
       for(let col=0; col<data[row].length; col++){
@@ -212,7 +218,7 @@ async function loadBracket(){
     const {winnerRounds, loserRounds} = createDoubleElimRounds(teams.slice(0,16));
 
     generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-    generateBracket(document.getElementById("loser-bracket"), loserRounds.reverse());
+    generateBracket(document.getElementById("loser-bracket"), loserRounds);
 
   } catch(e){
     console.error("Fehler beim Laden der Daten:", e);
