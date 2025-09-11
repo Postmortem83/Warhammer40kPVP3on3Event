@@ -6,7 +6,7 @@
   <style>
     body {
       margin:0;
-      font-family: Arial, sans-serif;
+      font-family: Arial,sans-serif;
       background:#000;
       color:#eee;
     }
@@ -49,13 +49,15 @@
       display:flex;
       justify-content:center;
       align-items:flex-start;
-      gap:4rem;
+      gap:2rem;
       overflow-x:auto;
       padding:1rem;
       width:100%;
     }
+
+    /* Brackets */
     .bracket { display:flex; flex-direction:row; gap:2rem; flex:0 0 auto; }
-    .round { display:flex; flex-direction:column; justify-content:center; gap:4rem; min-width:160px; }
+    .round { display:flex; flex-direction:column; justify-content:center; gap:4rem; min-width:160px; position:relative; }
     .match-pair { display:flex; flex-direction:column; gap:0.5rem; position:relative; }
     .team-box {
       background:#111;
@@ -69,7 +71,7 @@
     }
     .team-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    /* Winner Lines */
+    /* Linien Winner-Bracket */
     .winner-bracket .round .match-pair::after {
       content:"";
       position:absolute;
@@ -101,7 +103,8 @@
     .winner-bracket .round:last-child .match-pair::after,
     .winner-bracket .round:last-child .match-pair::before { display:none; }
 
-    /* Loser Lines */
+    /* Linien Loser-Bracket */
+    .loser-bracket { flex-direction:row-reverse; }
     .loser-bracket .round { align-items:flex-end; }
     .loser-bracket .round .match-pair::after {
       content:"";
@@ -140,7 +143,7 @@
       flex-direction:column;
       justify-content:center;
       align-items:center;
-      gap:2rem;
+      gap:1rem;
       min-width:200px;
       position:relative;
     }
@@ -155,8 +158,6 @@
       position:relative;
       z-index:1;
     }
-
-    /* Verbindungslinien zum Finale */
     .final-line-left, .final-line-right {
       position:absolute;
       top:50%;
@@ -169,6 +170,7 @@
     .final-line-right { right:-50px; }
 
     .muted { color:#aaa; font-size:0.9rem; }
+
     footer { text-align:center; padding:1rem; background:#111; border-top:2px solid #ff4f4f; margin-top:2rem; }
   </style>
 </head>
@@ -204,79 +206,111 @@
     </div>
   </main>
 
-  <footer>
-    © 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.
-  </footer>
+  <footer>© 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.</footer>
 
   <script>
-const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+    // ---- Google Sheet ----
+    const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
+    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-function parseCSV(csv){
-  return csv.split('\n').map(row => row.split(',').map(cell=>cell.replace(/"/g,'').trim()));
-}
-
-function createTeamBox(teamName){
-  const div = document.createElement("div");
-  div.classList.add("team-box");
-  div.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
-  return div;
-}
-
-function createMatchPair(team1, team2){
-  const div = document.createElement("div");
-  div.classList.add("match-pair");
-  div.appendChild(createTeamBox(team1));
-  div.appendChild(createTeamBox(team2));
-  return div;
-}
-
-function generateBracket(container, teams, rounds, reverse=false){
-  container.innerHTML='';
-  let teamIndex = 0;
-
-  for(let r=0;r<rounds;r++){
-    const roundDiv = document.createElement("div");
-    roundDiv.classList.add("round");
-
-    const matches = Math.pow(2, rounds-r-1);
-    for(let m=0;m<matches;m++){
-      const t1 = teams[teamIndex] || "TBD";
-      const t2 = teams[teamIndex+1] || "TBD";
-      teamIndex += 2;
-      roundDiv.appendChild(createMatchPair(t1,t2));
+    function parseCSV(csv){
+      return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()));
     }
 
-    if(reverse) container.insertBefore(roundDiv, container.firstChild);
-    else container.appendChild(roundDiv);
-  }
-}
+    function createTeamBox(teamName){
+      const div = document.createElement("div");
+      div.classList.add("team-box");
+      div.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
+      return div;
+    }
 
-async function loadBracket(){
-  try{
-    const response = await fetch(SHEET_URL);
-    const csv = await response.text();
-    const data = parseCSV(csv);
+    function createMatchPair(team1, team2){
+      const div = document.createElement("div");
+      div.classList.add("match-pair");
 
-    const teams=[];
-    for(let col=10; col<=19; col++){
-      for(let row=1; row<data.length; row++){
-        if(data[row][col]) teams.push(data[row][col]);
+      div.appendChild(createTeamBox(team1));
+      div.appendChild(createTeamBox(team2));
+
+      // Vertikale Linie zwischen Teams
+      if(team1 && team2){
+        const line = document.createElement("div");
+        line.style.position = "absolute";
+        line.style.left = "50%";
+        line.style.top = "0";
+        line.style.width = "2px";
+        line.style.height = "100%";
+        line.style.backgroundColor = "#ff4f4f";
+        line.style.transform = "translateX(-50%)";
+        div.appendChild(line);
+      }
+
+      return div;
+    }
+
+    function generateBracket(container, teams, rounds, reverse=false){
+      container.innerHTML = '';
+      let teamIndex = 0;
+
+      for(let r=0; r<rounds; r++){
+        const roundDiv = document.createElement("div");
+        roundDiv.classList.add("round");
+
+        const matches = Math.pow(2, rounds - r - 1);
+        for(let m=0; m<matches; m++){
+          const t1 = teams[teamIndex] || "";
+          const t2 = teams[teamIndex + 1] || "";
+          if(!t1 && !t2) continue;
+          teamIndex += 2;
+
+          const matchDiv = createMatchPair(t1, t2);
+
+          // Linie zum nächsten Match
+          if(r < rounds - 1){
+            const connector = document.createElement("div");
+            connector.style.position = "absolute";
+            connector.style.right = reverse ? "auto" : "-1rem";
+            connector.style.left = reverse ? "-1rem" : "auto";
+            connector.style.top = "50%";
+            connector.style.width = "1rem";
+            connector.style.height = "2px";
+            connector.style.backgroundColor = "#ff4f4f";
+            connector.style.transform = "translateY(-50%)";
+            matchDiv.appendChild(connector);
+          }
+
+          roundDiv.appendChild(matchDiv);
+        }
+
+        if(reverse) container.insertBefore(roundDiv, container.firstChild);
+        else container.appendChild(roundDiv);
       }
     }
 
-    const winnerBracket=document.getElementById("winner-bracket");
-    const loserBracket=document.getElementById("loser-bracket");
+    async function loadBracket(){
+      try {
+        const response = await fetch(SHEET_URL);
+        const csv = await response.text();
+        const data = parseCSV(csv);
 
-    generateBracket(winnerBracket, teams.slice(0,16), 4, false);
-    generateBracket(loserBracket, teams.slice(0,16).reverse(), 4, true);
+        const teams = [];
+        for(let col=10; col<=19; col++){ // Spalten je nach Sheet anpassen
+          for(let row=1; row<data.length; row++){
+            if(data[row][col]) teams.push(data[row][col]);
+          }
+        }
 
-  } catch(e){
-    console.error("Fehler beim Laden der Daten:", e);
-  }
-}
+        const winnerBracket = document.getElementById("winner-bracket");
+        const loserBracket = document.getElementById("loser-bracket");
 
-loadBracket();
+        generateBracket(winnerBracket, teams.slice(0,16), 4, false);
+        generateBracket(loserBracket, teams.slice(0,16).reverse(), 4, true);
+
+      } catch(e){
+        console.error("Fehler beim Laden der Daten:", e);
+      }
+    }
+
+    loadBracket();
   </script>
 </body>
 </html>
