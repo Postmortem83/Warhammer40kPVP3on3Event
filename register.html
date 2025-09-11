@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Team-Anmeldung – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
@@ -62,6 +62,18 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
+    .success-message {
+      margin-top: 1rem;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+
+    .error-message {
+      margin-top: 1rem;
+      color: #FF4F4F;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -88,6 +100,8 @@
         <button class="btn--primary" type="submit">Team anmelden</button>
       </form>
 
+      <div id="message"></div>
+
       <h2>Registrierte Teams</h2>
       <div id="registeredTeams" class="registered-list"></div>
     </section>
@@ -96,46 +110,61 @@
   <script>
     const form = document.getElementById('teamForm');
     const list = document.getElementById('registeredTeams');
+    const message = document.getElementById('message');
 
-    // Google Apps Script Web-App URL
-    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyu5kxKBU5GZ08p-QV1qwwVuQ8KJ8cZI-_4AHmBR1Gdu4FyWaU9X82ygvsC2S7NxDNQ/exec';
+    // Deine Web-App URL vom Google Apps Script
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxeZgcwIRqzRVWKhtYvAr7CklGQMxLtYBipLW2ZEh1iAUY5ZCb6T6L5PlkBrsRPA_px/exec';
 
     // Formular absenden
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      message.textContent = '';
+      message.className = '';
+
       const data = Object.fromEntries(new FormData(form).entries());
 
-      fetch(SHEET_URL, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(res => res.json())
-      .then(res => {
-        alert('Team erfolgreich registriert!');
-        form.reset();
-        loadTeams(); // Liste aktualisieren
-      })
-      .catch(err => alert('Fehler beim Absenden: ' + err));
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await res.json();
+
+        if(result.status === "success") {
+          message.textContent = 'Team erfolgreich registriert!';
+          message.className = 'success-message';
+          form.reset();
+          loadTeams();
+        } else {
+          message.textContent = 'Fehler: ' + result.message;
+          message.className = 'error-message';
+        }
+      } catch(err) {
+        message.textContent = 'Fehler beim Absenden: ' + err;
+        message.className = 'error-message';
+      }
     });
 
     // Registrierte Teams aus Sheet laden
-    function loadTeams() {
-      fetch(SHEET_URL)
-        .then(res => res.json())
-        .then(teams => {
-          list.innerHTML = '';
-          teams.forEach(team => {
-            const item = document.createElement('div');
-            item.className = 'registered-item';
-            item.innerHTML = `
-              <span>${team.Teamname} (Leader: ${team['Leader(Nickname)']})</span>
-              <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
-            `;
-            list.appendChild(item);
-          });
-        })
-        .catch(err => console.error('Fehler beim Laden der Teams:', err));
+    async function loadTeams() {
+      try {
+        const res = await fetch(SHEET_URL);
+        const teams = await res.json();
+
+        list.innerHTML = '';
+        teams.forEach(team => {
+          const item = document.createElement('div');
+          item.className = 'registered-item';
+          item.innerHTML = `
+            <span>${team.Teamname} (Leader: ${team['Leader(Nickname)']})</span>
+            <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
+          `;
+          list.appendChild(item);
+        });
+      } catch(err) {
+        console.error('Fehler beim Laden der Teams:', err);
+      }
     }
 
     // Beim Start die Teams laden
