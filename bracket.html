@@ -128,9 +128,14 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 <footer>© 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.</footer>
 
 <script>
-// --- Beispiel-Teams ---
-const teams = ["Team A","Team B","Team C","Team D","Team E","Team F","Team G","Team H",
-               "Team I","Team J","Team K","Team L","Team M","Team N","Team O","Team P"];
+// --- Google Sheet Setup ---
+const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+
+// CSV parse
+function parseCSV(csv){
+  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()).filter(c=>c));
+}
 
 // Team Box erstellen
 function createTeamBox(teamName){
@@ -167,36 +172,58 @@ function createDoubleElimRounds(teams){
   const winnerRounds = [];
   const loserRounds = [];
 
-  // Winner-Bracket
-  let currentTeams = teams.slice();
+  let currentTeams = teams.slice(0,16); // max 16 Teams
+
+  // Winner Bracket
   while(currentTeams.length > 1){
     const roundMatches = [];
     for(let i=0;i<currentTeams.length;i+=2){
       roundMatches.push([currentTeams[i] || "Frei", currentTeams[i+1] || "Frei"]);
     }
     winnerRounds.push(roundMatches);
-    // Halbiere Teams für die nächste Runde
-    currentTeams = roundMatches.map(() => "TBD");
+    currentTeams = roundMatches.map(()=>"TBD");
     currentTeams = currentTeams.slice(0, Math.ceil(roundMatches.length));
   }
 
-  // Loser-Bracket: gleiche Struktur wie Winner-Bracket
-  let currentLoser = winnerRounds[0].map(()=>["TBD","TBD"]);
-  while(currentLoser.length > 0){
-    loserRounds.push(currentLoser);
-    currentLoser = currentLoser.map(()=>["TBD","TBD"]);
-    currentLoser = currentLoser.slice(0, Math.ceil(currentLoser.length / 2));
-    if(currentLoser.length <= 1) break;
+  // Loser Bracket
+  let loserTeams = winnerRounds[0].map(()=>["TBD","TBD"]); // initial
+  while(loserTeams.length > 0){
+    loserRounds.push(loserTeams);
+    loserTeams = loserTeams.map(()=>["TBD","TBD"]);
+    loserTeams = loserTeams.slice(0, Math.ceil(loserTeams.length / 2));
+    if(loserTeams.length <=1) break;
   }
 
   return {winnerRounds, loserRounds};
 }
 
-// Bracket laden
-function loadBracket(){
-  const {winnerRounds, loserRounds} = createDoubleElimRounds(teams.slice(0,16));
-  generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-  generateBracket(document.getElementById("loser-bracket"), loserRounds);
+// Teams aus allen Zellen sammeln
+async function loadBracket(){
+  try{
+    const response = await fetch(SHEET_URL);
+    const csv = await response.text();
+    const data = parseCSV(csv);
+
+    // alle Zellen als Teams nutzen
+    const teams = [];
+    data.forEach(row=>{
+      row.forEach(cell=>{
+        if(cell) teams.push(cell);
+      });
+    });
+
+    const {winnerRounds, loserRounds} = createDoubleElimRounds(teams);
+    generateBracket(document.getElementById("winner-bracket"), winnerRounds);
+    generateBracket(document.getElementById("loser-bracket"), loserRounds);
+
+  } catch(e){
+    console.error("Fehler beim Laden der Daten:", e);
+    // Fallback
+    const fallbackTeams = ["Team A","Team B","Team C","Team D"];
+    const {winnerRounds, loserRounds} = createDoubleElimRounds(fallbackTeams);
+    generateBracket(document.getElementById("winner-bracket"), winnerRounds);
+    generateBracket(document.getElementById("loser-bracket"), loserRounds);
+  }
 }
 
 loadBracket();
