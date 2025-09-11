@@ -141,7 +141,7 @@ function parseCSV(csv){
 function createTeamBox(teamName){
   const div = document.createElement("div");
   div.classList.add("team-box");
-  div.innerHTML = `<div class="team-name">${teamName || "Frei"}</div>`;
+  div.innerHTML = `<div class="team-name">${teamName}</div>`;
   return div;
 }
 
@@ -149,8 +149,8 @@ function createTeamBox(teamName){
 function createMatchPair(team1, team2){
   const div = document.createElement("div");
   div.classList.add("match-pair");
-  div.appendChild(createTeamBox(team1));
-  div.appendChild(createTeamBox(team2));
+  div.appendChild(createTeamBox(team1 || ""));
+  div.appendChild(createTeamBox(team2 || ""));
   return div;
 }
 
@@ -167,62 +167,51 @@ function generateBracket(container, roundsData){
   });
 }
 
-// Double-Elimination Runden erstellen
-function createDoubleElimRounds(teams){
+// Bracket aus Sheet bauen
+function buildBrackets(data){
+  // Alle Zeilen im Sheet durchgehen
   const winnerRounds = [];
   const loserRounds = [];
 
-  let currentTeams = teams.slice(0,16); // max 16 Teams
+  // Winner-Bracket: jede Zeile als Match nehmen
+  data.forEach((row, index)=>{
+    if(row.length >= 2){
+      const match = [row[0], row[1]]; // Team 1, Team 2
+      if(!winnerRounds[index]) winnerRounds[index] = [];
+      winnerRounds[index].push(match);
 
-  // Winner Bracket
-  while(currentTeams.length > 1){
-    const roundMatches = [];
-    for(let i=0;i<currentTeams.length;i+=2){
-      roundMatches.push([currentTeams[i] || "Frei", currentTeams[i+1] || "Frei"]);
+      // Loser-Bracket: optional, hier nur Verlierer
+      const loser = [];
+      if(row[2] && row[2] !== row[0] && row[2] !== row[1]){
+        // Ungültiger Eintrag, ignorieren
+      } else if(row[2]){
+        loser.push(row[2] === row[0] ? row[1] : row[0]);
+      } else {
+        loser.push(""); // noch kein Ergebnis
+      }
+      if(!loserRounds[index]) loserRounds[index] = [];
+      loserRounds[index].push(loser);
     }
-    winnerRounds.push(roundMatches);
-    currentTeams = roundMatches.map(()=>"TBD");
-    currentTeams = currentTeams.slice(0, Math.ceil(roundMatches.length));
-  }
-
-  // Loser Bracket
-  let loserTeams = winnerRounds[0].map(()=>["TBD","TBD"]); // initial
-  while(loserTeams.length > 0){
-    loserRounds.push(loserTeams);
-    loserTeams = loserTeams.map(()=>["TBD","TBD"]);
-    loserTeams = loserTeams.slice(0, Math.ceil(loserTeams.length / 2));
-    if(loserTeams.length <=1) break;
-  }
+  });
 
   return {winnerRounds, loserRounds};
 }
 
-// Teams aus allen Zellen sammeln
+// Daten aus Sheet laden
 async function loadBracket(){
   try{
     const response = await fetch(SHEET_URL);
     const csv = await response.text();
     const data = parseCSV(csv);
 
-    // alle Zellen als Teams nutzen
-    const teams = [];
-    data.forEach(row=>{
-      row.forEach(cell=>{
-        if(cell) teams.push(cell);
-      });
-    });
-
-    const {winnerRounds, loserRounds} = createDoubleElimRounds(teams);
+    const {winnerRounds, loserRounds} = buildBrackets(data);
     generateBracket(document.getElementById("winner-bracket"), winnerRounds);
     generateBracket(document.getElementById("loser-bracket"), loserRounds);
 
   } catch(e){
     console.error("Fehler beim Laden der Daten:", e);
-    // Fallback
-    const fallbackTeams = ["Team A","Team B","Team C","Team D"];
-    const {winnerRounds, loserRounds} = createDoubleElimRounds(fallbackTeams);
-    generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-    generateBracket(document.getElementById("loser-bracket"), loserRounds);
+    document.getElementById("winner-bracket").innerHTML = "Fehler beim Laden der Daten";
+    document.getElementById("loser-bracket").innerHTML = "Fehler beim Laden der Daten";
   }
 }
 
