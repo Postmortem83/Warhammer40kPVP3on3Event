@@ -112,7 +112,7 @@
     const list = document.getElementById('registeredTeams');
     const message = document.getElementById('message');
 
-    // Deine Web-App URL vom Google Apps Script
+    // Netlify Function URL
     const SHEET_URL = '/.netlify/functions/register-team';
 
     // Formular absenden
@@ -129,6 +129,9 @@
           body: JSON.stringify(data),
           headers: { 'Content-Type': 'application/json' }
         });
+
+        if (!res.ok) throw new Error('Server antwortet nicht richtig');
+
         const result = await res.json();
 
         if(result.status === "success") {
@@ -137,11 +140,11 @@
           form.reset();
           loadTeams();
         } else {
-          message.textContent = 'Fehler: ' + result.message;
+          message.textContent = 'Fehler: ' + (result.message || 'Unbekannter Fehler');
           message.className = 'error-message';
         }
       } catch(err) {
-        message.textContent = 'Fehler beim Absenden: ' + err;
+        message.textContent = 'Fehler beim Absenden: ' + err.message;
         message.className = 'error-message';
       }
     });
@@ -150,6 +153,8 @@
     async function loadTeams() {
       try {
         const res = await fetch(SHEET_URL);
+        if(!res.ok) throw new Error('Teams konnten nicht geladen werden');
+
         const teams = await res.json();
 
         list.innerHTML = '';
@@ -163,7 +168,8 @@
           list.appendChild(item);
         });
       } catch(err) {
-        console.error('Fehler beim Laden der Teams:', err);
+        message.textContent = 'Fehler beim Laden der Teams: ' + err.message;
+        message.className = 'error-message';
       }
     }
 
