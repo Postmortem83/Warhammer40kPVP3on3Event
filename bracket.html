@@ -89,7 +89,7 @@
       gap: 0.5rem;
       position: relative;
     }
-    
+
     .team-box {
       background: #111;
       border: 2px solid #ff4f4f;
@@ -107,28 +107,26 @@
       text-overflow: ellipsis;
     }
 
-    /* Linien für das Winner Bracket (links) */
+    /* Linien Winner Bracket (links > rechts) */
     .winner-bracket .round .match-pair::after {
       content: "";
       position: absolute;
-      right: -1rem; /* Passt den horizontalen Abstand an */
+      right: -1rem;
       top: 50%;
       width: 1rem;
       height: 2px;
       background-color: #ff4f4f;
       transform: translateY(-50%);
     }
-
     .winner-bracket .round .match-pair:nth-child(odd)::before {
       content: "";
       position: absolute;
-      bottom: -2rem; /* Halbiert den vertikalen Abstand */
+      bottom: -2rem;
       right: -1rem;
       width: 2px;
       height: 2rem;
       background-color: #ff4f4f;
     }
-
     .winner-bracket .round .match-pair:nth-child(even)::before {
       content: "";
       position: absolute;
@@ -138,29 +136,25 @@
       height: 2rem;
       background-color: #ff4f4f;
     }
-    
-    /* Letzte Runde im Winner Bracket (verbindet zum Finale) */
     .winner-bracket .round:last-child .match-pair::after,
     .winner-bracket .round:last-child .match-pair::before {
-        display: none;
+      display: none;
     }
 
-    /* Linien für das Loser Bracket (rechts) */
+    /* Linien Loser Bracket (rechts < links) */
     .loser-bracket .round {
-        align-items: flex-end;
+      align-items: flex-end;
     }
-
     .loser-bracket .round .match-pair::after {
       content: "";
       position: absolute;
-      left: -1rem; /* Passt den horizontalen Abstand an */
+      left: -1rem;
       top: 50%;
       width: 1rem;
       height: 2px;
       background-color: #ff4f4f;
       transform: translateY(-50%);
     }
-
     .loser-bracket .round .match-pair:nth-child(odd)::before {
       content: "";
       position: absolute;
@@ -170,7 +164,6 @@
       height: 2rem;
       background-color: #ff4f4f;
     }
-
     .loser-bracket .round .match-pair:nth-child(even)::before {
       content: "";
       position: absolute;
@@ -180,11 +173,9 @@
       height: 2rem;
       background-color: #ff4f4f;
     }
-
-    /* Letzte Runde im Loser Bracket (verbindet zum Finale) */
     .loser-bracket .round:last-child .match-pair::after,
     .loser-bracket .round:last-child .match-pair::before {
-        display: none;
+      display: none;
     }
 
     /* Finale */
@@ -239,14 +230,12 @@
   <main class="container">
     <div class="bracket-container">
       <div class="bracket winner-bracket" id="winner-bracket"></div>
-
       <div class="center-final">
         <h2>Finale</h2>
         <div class="final-box">Winner Bracket Sieger</div>
         <div class="final-box">Loser Bracket Sieger</div>
         <p class="muted">Grand Champion</p>
       </div>
-
       <div class="bracket loser-bracket" id="loser-bracket"></div>
     </div>
   </main>
@@ -255,89 +244,41 @@
     © 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.
   </footer>
 
-  <script>
-    const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
-    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+<script>
+const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-    function parseCSV(csv) {
-        return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g, '').trim()));
-    }
+function parseCSV(csv) {
+  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()));
+}
 
-    function createTeamBox(teamName) {
-        const teamBox = document.createElement("div");
-        teamBox.classList.add("team-box");
-        teamBox.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
-        return teamBox;
-    }
+function createTeamBox(teamName) {
+  const div = document.createElement("div");
+  div.classList.add("team-box");
+  div.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
+  return div;
+}
 
-    function createMatchPair(team1, team2) {
-        const pair = document.createElement("div");
-        pair.classList.add("match-pair");
-        pair.appendChild(createTeamBox(team1));
-        pair.appendChild(createTeamBox(team2));
-        return pair;
-    }
+function createMatchPair(team1, team2) {
+  const div = document.createElement("div");
+  div.classList.add("match-pair");
+  div.appendChild(createTeamBox(team1));
+  div.appendChild(createTeamBox(team2));
+  return div;
+}
 
-    // Funktion zum Rendern des Turnierbaums basierend auf dynamischen Spalten
-    function renderBracket(data, container, startCol, endCol, step) {
-        container.innerHTML = '';
-        const numTeams = data.length - 1;
+// Runden rendern, Winner: links->rechts, Loser: rechts->links
+function renderBracket(data, container, startCol, rounds, reverse=false) {
+  container.innerHTML = '';
+  for (let r=0; r<rounds; r++) {
+    const roundDiv = document.createElement("div");
+    roundDiv.classList.add("round");
 
-        // Finde alle relevanten Spalten innerhalb des angegebenen Bereichs
-        const columns = [];
-        for (let i = startCol; (step > 0 ? i <= endCol : i >= endCol) && i < data[0].length; i += step) {
-            columns.push(i);
-        }
+    const matches = Math.pow(2, rounds-r-1); // Matches pro Runde
+    for (let m=0; m<matches; m++) {
+      // Teamnamen aus Google Sheet Spalten K-T
+      const colIndex = startCol + r;
+      const row1 = 1 + m*2;
+      const row2 = row1 + 1;
 
-        for (const colIndex of columns) {
-            const roundDiv = document.createElement("div");
-            roundDiv.classList.add("round");
-
-            for (let j = 1; j < data.length; j += 2) {
-                const team1 = data[j] && data[j][colIndex] ? data[j][colIndex] : null;
-                const team2 = (j + 1 < data.length) && data[j+1][colIndex] ? data[j+1][colIndex] : null;
-                
-                if (team1 || team2) {
-                    roundDiv.appendChild(createMatchPair(team1, team2));
-                }
-            }
-            container.appendChild(roundDiv);
-        }
-    }
-
-    async function loadTeamsAndRender() {
-        try {
-            const response = await fetch(SHEET_URL);
-            const csvData = await response.text();
-            const tableData = parseCSV(csvData);
-
-            const winnerBracket = document.getElementById("winner-bracket");
-            const loserBracket = document.getElementById("loser-bracket");
-
-            // ACHTUNG: jetzt werden die "bereinigten" Spalten K–T verwendet
-            const winnerBracketStartCol = 10; // Spalte K
-            const winnerBracketEndCol = 14;  // bis O oder weiter anpassen
-            const loserBracketStartCol = 16; // Spalte Q
-            const loserBracketEndCol = 19;   // bis T oder weiter anpassen
-            
-            // Rendering des Winner Brackets von links nach rechts
-            renderBracket(tableData, winnerBracket, winnerBracketStartCol, winnerBracketEndCol, 2);
-
-            // Rendering des Loser Brackets von rechts nach links
-            renderBracket(tableData, loserBracket, loserBracketEndCol, loserBracketStartCol, -2);
-            
-        } catch (error) {
-            console.error("Fehler beim Laden der Daten aus dem Google Sheet:", error);
-            // Fallback-Logik bei Fehler
-            const winnerBracket = document.getElementById("winner-bracket");
-            const loserBracket = document.getElementById("loser-bracket");
-            const dummyTeams = Array.from({length: 16}, (_, i) => `Team ${i + 1}`);
-            renderBracket(dummyTeams, winnerBracket, 0, 0, 1);
-            renderBracket(dummyTeams, loserBracket, 0, 0, 1);
-        }
-    }
-
-    loadTeamsAndRender();
-</script>
-</body>
-</html>
+      const t1 = data[row1] && data[row1][colIndex] ? data[row1][colIndex] :
