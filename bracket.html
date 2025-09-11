@@ -279,43 +279,17 @@
         return pair;
     }
 
-    function renderWinnerBracket(data, container) {
+    function renderBracket(data, container, columns) {
         container.innerHTML = '';
         
-        const winnerBracketColumns = [2, 5, 8, 11, 14]; // Spalten C, F, I, L, O in der Tabelle
-        const numRounds = winnerBracketColumns.length;
-
-        for (let i = 0; i < numRounds; i++) {
+        for (const colIndex of columns) {
             const roundDiv = document.createElement("div");
             roundDiv.classList.add("round");
-            const colIndex = winnerBracketColumns[i];
-
+            
+            // Jede zweite Zeile ist ein Team
             for (let j = 1; j < data.length; j += 2) {
-                const team1 = data[j][colIndex];
-                const team2 = data[j+1] ? data[j+1][colIndex] : null;
-                
-                if (team1 || team2) {
-                    roundDiv.appendChild(createMatchPair(team1, team2));
-                }
-            }
-            container.appendChild(roundDiv);
-        }
-    }
-
-    function renderLoserBracket(data, container) {
-        container.innerHTML = '';
-        
-        const loserBracketColumns = [17, 19, 21, 23]; // Spalten R, T, V, X in der Tabelle
-        const numRounds = loserBracketColumns.length;
-
-        for (let i = 0; i < numRounds; i++) {
-            const roundDiv = document.createElement("div");
-            roundDiv.classList.add("round");
-            const colIndex = loserBracketColumns[i];
-
-            for (let j = 1; j < data.length; j += 2) {
-                const team1 = data[j][colIndex];
-                const team2 = data[j+1] ? data[j+1][colIndex] : null;
+                const team1 = data[j] && data[j][colIndex] ? data[j][colIndex].trim() : null;
+                const team2 = data[j+1] && data[j+1][colIndex] ? data[j+1][colIndex].trim() : null;
                 
                 if (team1 || team2) {
                     roundDiv.appendChild(createMatchPair(team1, team2));
@@ -330,12 +304,16 @@
             const response = await fetch(SHEET_URL);
             const csvData = await response.text();
             const tableData = parseCSV(csvData);
-            
+
             const winnerBracket = document.getElementById("winner-bracket");
             const loserBracket = document.getElementById("loser-bracket");
 
-            renderWinnerBracket(tableData, winnerBracket);
-            renderLoserBracket(tableData, loserBracket);
+            // Angepasste Spaltenindizes, die zu deiner bereinigten Tabelle passen
+            const winnerBracketColumns = [0, 1, 2, 3]; // Spalten A, B, C, D
+            const loserBracketColumns = [4, 5, 6, 7]; // Spalten E, F, G, H
+
+            renderBracket(tableData, winnerBracket, winnerBracketColumns);
+            renderBracket(tableData, loserBracket, loserBracketColumns);
 
         } catch (error) {
             console.error("Fehler beim Laden der Daten aus dem Google Sheet:", error);
@@ -345,8 +323,8 @@
             const winnerBracket = document.getElementById("winner-bracket");
             const loserBracket = document.getElementById("loser-bracket");
 
-            renderWinnerBracket(teams, winnerBracket);
-            renderLoserBracket(teams, loserBracket);
+            renderBracket(teams, winnerBracket, [0]);
+            renderBracket(teams, loserBracket, [0]);
         }
     }
 
