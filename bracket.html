@@ -5,80 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Turnierbaum – Warhammer 40k PvP Clash</title>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #eee;
-}
-
-/* Navigation */
-.topnav {
-  display: flex;
-  justify-content: center;
-  background: #111;
-  padding: 0.8rem;
-  gap: 1.5rem;
-  border-bottom: 2px solid #ff4f4f;
-}
-.topnav a {
-  color: #eee;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.2s;
-}
+body { margin:0; font-family:Arial,sans-serif; background:#000; color:#eee; }
+.topnav { display:flex; justify-content:center; background:#111; padding:0.8rem; gap:1.5rem; border-bottom:2px solid #ff4f4f; }
+.topnav a { color:#eee; text-decoration:none; font-weight:bold; transition:0.2s; }
 .topnav a:hover { color:#ff4f4f; }
 
-/* Hero */
-.hero {
-  position: relative;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
-  background-size: cover;
-  color: #fff;
-}
+.hero { position:relative; height:250px; display:flex; align-items:center; justify-content:center; text-align:center; background:#222; color:#fff; }
 .hero .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6);}
-.hero__content { position: relative; z-index: 2; text-shadow: 2px 2px 8px #000; }
+.hero__content { position:relative; z-index:2; text-shadow:2px 2px 8px #000; }
 
-/* Container */
-.container { padding:1rem; display:flex; justify-content:center; flex-wrap: wrap; gap:2rem; }
+.container { padding:1rem; display:flex; justify-content:center; flex-direction:column; gap:2rem; }
+.bracket-container { display:flex; flex-direction:column; align-items:center; gap:3rem; width:100%; max-width:100%; }
 
-/* Bracket Container */
-.bracket-container {
-  display:flex;
-  flex-direction: column;
-  align-items:center;
-  gap:3rem;
-  width:100%;
-  max-width:1200px;
-}
-
-/* Abschnitt */
-.section-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom:1rem;
-  text-align:center;
-  color:#ff4f4f;
-}
-
-/* Brackets */
-.bracket { display:flex; flex-direction:row; gap:2rem; flex-wrap: nowrap; justify-content:center; }
+.section-title { font-size:1.5rem; font-weight:bold; margin-bottom:1rem; text-align:center; color:#ff4f4f; }
+.bracket { display:flex; flex-direction:row; gap:2rem; flex:0 0 auto; }
 .round { display:flex; flex-direction:column; justify-content:center; gap:2.5rem; min-width:120px; position:relative; }
 .match-pair { display:flex; flex-direction:column; gap:0.3rem; position:relative; }
 .team-box { background:#111; border:2px solid #ff4f4f; padding:0.5rem 0.8rem; border-radius:8px; text-align:center; min-width:100px; font-weight:bold;}
 .team-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-/* Finale */
 .center-final { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:1rem; min-width:180px; position:relative;}
 .final-box { background:#222; border:2px solid #ff4f4f; padding:1rem 2rem; border-radius:10px; text-align:center; min-width:160px; font-weight:bold; position:relative; z-index:1;}
 .muted { color:#aaa; font-size:0.9rem; }
 
-/* Responsive */
 @media(max-width:768px){
   .round { gap:2rem; min-width:80px; }
   .team-box { min-width:70px; padding:0.3rem 0.5rem; font-size:0.85rem; }
@@ -102,7 +51,7 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
   <div class="overlay"></div>
   <div class="hero__content">
     <h1>Turnierbaum</h1>
-    <p>Doppel-Eliminierung – Wer verliert, kämpft sich durchs Loser Bracket zurück!</p>
+    <p>Doppel-Eliminierung – Trage die Teams direkt ins Sheet ein!</p>
   </div>
 </header>
 
@@ -128,87 +77,69 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 <footer>© 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.</footer>
 
 <script>
-const SHEET_ID = "1SLboycZSBzamTyQUKAg4iDBti-p7lKVwfeKy9ahF_hM";
+// --- Google Sheet Setup ---
+const SHEET_ID = "1SLboycZSBzamTyQUKAg4iDBti-p7lKVwfeKy9ahF_hM"; // <-- Sheet-ID einsetzen
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRYv16SEpDn7IxjQVVJ3BKDwuEgYuCtWypJbKGe62pnuOpGH43ke2O-xWU96-EaCXAyGWLrJ23iaJuY/pub?output=csv`;
 
+// CSV parse
 function parseCSV(csv){
-  return csv.split('\n')
-    .map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()).filter(c=>c));
+  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()));
 }
 
+// Team Box erstellen
 function createTeamBox(teamName){
   const div = document.createElement("div");
   div.classList.add("team-box");
-  div.innerHTML = `<div class="team-name">${teamName}</div>`;
+  div.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
   return div;
 }
 
+// Match erstellen
 function createMatchPair(team1, team2){
   const div = document.createElement("div");
   div.classList.add("match-pair");
-  div.appendChild(createTeamBox(team1 || ""));
-  div.appendChild(createTeamBox(team2 || ""));
+  div.appendChild(createTeamBox(team1));
+  div.appendChild(createTeamBox(team2));
   return div;
 }
 
-// Generiert Runden für Bracket
-function generateRounds(teams){
-  const rounds = [];
-  let current = teams.slice();
-  while(current.length > 0){
-    const matches = [];
-    for(let i=0;i<current.length;i+=2){
-      matches.push([current[i] || "", current[i+1] || ""]);
-    }
-    rounds.push(matches);
-    current = matches.map(match => match[0]); // Nächste Runde: Gewinner manuell im Sheet eintragen
-    if(current.length <= 1) break;
-  }
-  return rounds;
-}
-
-function generateBracket(container, rounds){
+// Bracket erstellen
+function generateBracket(container, roundsData){
   container.innerHTML = '';
-  rounds.forEach(round=>{
+  roundsData.forEach(round=>{
     const roundDiv = document.createElement("div");
     roundDiv.classList.add("round");
     round.forEach(match=>{
-      roundDiv.appendChild(createMatchPair(match[0], match[1]));
+      const matchDiv = createMatchPair(match[0], match[1]);
+      roundDiv.appendChild(matchDiv);
     });
     container.appendChild(roundDiv);
   });
 }
 
-// Daten aus Sheet laden und Brackets bauen
-async function loadBracket(){
-  try{
-    const response = await fetch(SHEET_URL);
-    const csv = await response.text();
-    const data = parseCSV(csv);
+// Einfaches Sheet-zu-Bracket Mapping
+function loadBracket(){
+  fetch(SHEET_URL)
+    .then(res => res.text())
+    .then(csv => {
+      const data = parseCSV(csv);
 
-    // Winner-Bracket (Runden oben)
-    const winnerTeams = [];
-    data.forEach(row=>{
-      if(row[0]) winnerTeams.push(row[0]);
-      if(row[1]) winnerTeams.push(row[1]);
-    });
-    const winnerRounds = generateRounds(winnerTeams.slice(0,16)); // max 16 Teams
-    generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-
-    // Loser-Bracket (Runden unten, nur Verlierer aus Runde 1)
-    const loserTeams = [];
-    data.forEach(row=>{
-      if(row[2]) {
-        if(row[2] === row[0]) loserTeams.push(row[1]);
-        else loserTeams.push(row[0]);
+      // Winner-Bracket: je 2 Teams pro Match, Runde 1–5
+      const winnerRounds = [];
+      for(let i=0;i<8;i++){ // 8 Matches erste Runde
+        winnerRounds.push([[data[0][i*2] || "TBD", data[0][i*2+1] || "TBD"]]);
       }
-    });
-    const loserRounds = generateRounds(loserTeams.slice(0,8)); // max 8 Teams
-    generateBracket(document.getElementById("loser-bracket"), loserRounds);
 
-  } catch(e){
-    console.error("Fehler beim Laden der Daten:", e);
-  }
+      // Loser-Bracket: optisch unterhalb, Platzhalter-TBD
+      const loserRounds = [];
+      for(let i=0;i<4;i++){ // 4 Matches erste Runde
+        loserRounds.push([[data[1] ? data[1][i*2] || "TBD" : "TBD", data[1] ? data[1][i*2+1] || "TBD" : "TBD"]]);
+      }
+
+      generateBracket(document.getElementById("winner-bracket"), winnerRounds);
+      generateBracket(document.getElementById("loser-bracket"), loserRounds);
+    })
+    .catch(err=>console.error("Fehler beim Laden der Daten:",err));
 }
 
 loadBracket();
