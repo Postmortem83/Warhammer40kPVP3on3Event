@@ -6,7 +6,7 @@
   <title>Team-Anmeldung – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Hero-Bereich mit eigenem Bild */
+    /* Hero-Bereich */
     .hero {
       position: relative;
       height: 400px;
@@ -18,7 +18,6 @@
       background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
       background-size: cover;
     }
-
     .hero .overlay {
       position: absolute;
       top:0; left:0;
@@ -27,7 +26,6 @@
       background: rgba(0,0,0,0.6);
       z-index:1;
     }
-
     .hero__content {
       position: relative;
       z-index: 2;
@@ -35,23 +33,10 @@
       color: #ff4f4f;
       text-shadow: 0 0 10px #000;
     }
-
     .hero__content h1 {
       font-size: 3rem;
       margin-bottom: 1rem;
     }
-
-    /* Status-Farben */
-    .status {
-      padding: 0.3rem 0.8rem;
-      border-radius: 8px;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .status.green { background: #28a745; }
-    .status.red { background: #dc3545; }
 
     .registered-list {
       margin-top: 2rem;
@@ -68,6 +53,15 @@
       border-radius: 10px;
       border: 1px solid #444;
     }
+
+    .btn--primary {
+      background: #ff4f4f;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -77,14 +71,6 @@
       <h1>Team-Anmeldung</h1>
     </div>
   </header>
-
-  <nav class="topnav">
-    <a href="index.html">Start</a>
-    <a href="about.html">Überblick</a>
-    <a href="rules.html">Regeln & Ablauf</a>
-    <a href="bracket.html">Turnierbaum</a>
-    <a href="report.html">Match-Reporting</a>
-  </nav>
 
   <main class="container">
     <section class="card">
@@ -99,7 +85,7 @@
           <label>Spieler 3<input type="text" name="p3" required></label>
           <label>Ersatz<input type="text" name="sub"></label>
         </div>
-        <button class="btn btn--primary" type="submit">Team anmelden</button>
+        <button class="btn--primary" type="submit">Team anmelden</button>
       </form>
 
       <h2>Registrierte Teams</h2>
@@ -111,49 +97,50 @@
     const form = document.getElementById('teamForm');
     const list = document.getElementById('registeredTeams');
 
-    // Lade lokale Registrierungen beim Start
-    let teams = JSON.parse(localStorage.getItem('teams')) || [];
-
-    function renderList() {
-      list.innerHTML = '';
-      teams.forEach((team, index) => {
-        const item = document.createElement('div');
-        item.className = 'registered-item';
-        item.innerHTML = `
-          <span>${team.teamname} (Leader: ${team.leader})</span>
-          <span class="status ${team.status}" data-index="${index}">${team.status === 'green' ? 'DABEI' : 'RAUS'}</span>
-        `;
-        list.appendChild(item);
-      });
-
-      // Status-Buttons anklickbar machen
-      document.querySelectorAll('.status').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const idx = btn.dataset.index;
-          teams[idx].status = teams[idx].status === 'green' ? 'red' : 'green';
-          localStorage.setItem('teams', JSON.stringify(teams));
-          renderList();
-        });
-      });
-    }
+    // Google Apps Script Web-App URL hier eintragen
+    const SHEET_URL = 'DEINE_WEB_APP_URL_HIER';
 
     // Formular absenden
     form.addEventListener('submit', e => {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
-      data.status = 'green'; // Standard: dabei
-      teams.push(data);
-      localStorage.setItem('teams', JSON.stringify(teams));
-      form.reset();
-      renderList();
 
-      // Pop-up mit Discord-Link
-      if(confirm("Dein Team wurde registriert!\nWillst du unserem Discord beitreten?")) {
-        window.open("https://discord.gg/Cy78DEeD", "_blank");
-      }
+      // Daten an Google Sheet senden
+      fetch(SHEET_URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => res.json())
+      .then(res => {
+        alert('Team erfolgreich registriert!');
+        form.reset();
+        loadTeams(); // Liste aktualisieren
+      })
+      .catch(err => alert('Fehler beim Absenden: ' + err));
     });
 
-    renderList();
+    // Registrierte Teams aus Sheet laden
+    function loadTeams() {
+      fetch(SHEET_URL)
+        .then(res => res.json())
+        .then(teams => {
+          list.innerHTML = '';
+          teams.forEach(team => {
+            const item = document.createElement('div');
+            item.className = 'registered-item';
+            item.innerHTML = `
+              <span>${team.teamname} (Leader: ${team.leader})</span>
+              <span>${team.p1}, ${team.p2}, ${team.p3}${team.sub ? ', Ersatz: ' + team.sub : ''}</span>
+            `;
+            list.appendChild(item);
+          });
+        })
+        .catch(err => console.error('Fehler beim Laden der Teams:', err));
+    }
+
+    // Beim Start die Teams laden
+    loadTeams();
   </script>
 </body>
 </html>
