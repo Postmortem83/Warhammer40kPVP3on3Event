@@ -110,23 +110,25 @@ function generateBracket(container, data, mapping){
     const roundDiv = document.createElement("div");
     roundDiv.classList.add("round");
     roundMapping.forEach(cell => {
-      const teamName = data[cell.row] ? data[cell.row][cell.col] : "TBD";
-      const matchDiv = createMatchPair(teamName, ""); // leeres zweites Feld für Optik
+      const team1 = data[cell.row] ? data[cell.row][cell.col1] : "TBD";
+      const team2 = data[cell.row] ? data[cell.row][cell.col2] : "TBD";
+      const matchDiv = createMatchPair(team1, team2);
       roundDiv.appendChild(matchDiv);
     });
     container.appendChild(roundDiv);
   });
 }
 
-// Mapping: jedes Kästchen ist eine bestimmte Zelle im Sheet
+// Mapping: Winner-Bracket 16 Teams, 8 Matches Runde 1 etc.
 const winnerMapping = [
   // Runde 1: 8 Matches
-  [{row:0,col:0},{row:0,col:1},{row:0,col:2},{row:0,col:3},{row:0,col:4},{row:0,col:5},{row:0,col:6},{row:0,col:7}]
+  [{row:0,col1:0,col2:1},{row:0,col1:2,col2:3},{row:0,col1:4,col2:5},{row:0,col1:6,col2:7},
+   {row:0,col1:8,col2:9},{row:0,col1:10,col2:11},{row:0,col1:12,col2:13},{row:0,col1:14,col2:15}]
 ];
 
+// Mapping: Loser-Bracket optisch unterhalb, 8 Teams erste Runde
 const loserMapping = [
-  // Runde 1: 4 Matches
-  [{row:1,col:0},{row:1,col:1},{row:1,col:2},{row:1,col:3}]
+  [{row:1,col1:0,col2:1},{row:1,col1:2,col2:3},{row:1,col1:4,col2:5},{row:1,col1:6,col2:7}]
 ];
 
 // Bracket laden
@@ -138,6 +140,7 @@ fetch(SHEET_URL)
     generateBracket(document.getElementById("loser-bracket"), data, loserMapping);
   })
   .catch(err => console.error("Fehler beim Laden der Daten:", err));
+
 </script>
 
 </body>
