@@ -77,13 +77,13 @@
       <h2>Team Formular</h2>
       <form id="teamForm">
         <div class="form-grid">
-          <label>Teamname<input type="text" name="teamname" required></label>
-          <label>Leader (Nickname)<input type="text" name="leader" required></label>
-          <label>Kontakt E-Mail<input type="email" name="email" required></label>
-          <label>Spieler 1<input type="text" name="p1" required></label>
-          <label>Spieler 2<input type="text" name="p2" required></label>
-          <label>Spieler 3<input type="text" name="p3" required></label>
-          <label>Ersatz<input type="text" name="sub"></label>
+          <label>Teamname<input type="text" name="Teamname" required></label>
+          <label>Leader (Nickname)<input type="text" name="Leader(Nickname)" required></label>
+          <label>Kontakt E-Mail<input type="email" name="Kontakt E-Mail" required></label>
+          <label>Spieler 1<input type="text" name="Spieler 1" required></label>
+          <label>Spieler 2<input type="text" name="Spieler 2" required></label>
+          <label>Spieler 3<input type="text" name="Spieler 3" required></label>
+          <label>Ersatz<input type="text" name="Ersatz"></label>
         </div>
         <button class="btn--primary" type="submit">Team anmelden</button>
       </form>
@@ -97,8 +97,8 @@
     const form = document.getElementById('teamForm');
     const list = document.getElementById('registeredTeams');
 
-    // Hier die aktuelle Google Apps Script Web-App URL einfügen (exec-URL)
-    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwSnw_JyZe10YPFbI_qrUaT69iabaooq4Y40Ud0IhG-pY_17xkjkmkLUZIk7fwv9Vvd/exec';
+    // Deine Google Apps Script Web-App URL
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyu5kxKBU5GZ08p-QV1qwwVuQ8KJ8cZI-_4AHmBR1Gdu4FyWaU9X82ygvsC2S7NxDNQ/exec';
 
     // Formular absenden
     form.addEventListener('submit', e => {
@@ -129,7 +129,7 @@
             const item = document.createElement('div');
             item.className = 'registered-item';
             item.innerHTML = `
-              <span>${team.Teamname} (Leader: ${team['Leader (Nickname)']})</span>
+              <span>${team.Teamname} (Leader: ${team['Leader(Nickname)']})</span>
               <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
             `;
             list.appendChild(item);
