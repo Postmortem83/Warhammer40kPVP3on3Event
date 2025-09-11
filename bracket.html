@@ -45,7 +45,7 @@ body {
 .hero__content { position: relative; z-index: 2; text-shadow: 2px 2px 8px #000; }
 
 /* Container */
-.container { padding:1rem; display:flex; justify-content:center; }
+.container { padding:1rem; display:flex; justify-content:center; flex-wrap: wrap; gap:2rem; }
 
 /* Bracket Container */
 .bracket-container {
@@ -54,7 +54,7 @@ body {
   align-items:center;
   gap:3rem;
   width:100%;
-  max-width:100%;
+  max-width:1200px;
 }
 
 /* Abschnitt */
@@ -67,7 +67,7 @@ body {
 }
 
 /* Brackets */
-.bracket { display:flex; flex-direction:row; gap:2rem; flex:0 0 auto; }
+.bracket { display:flex; flex-direction:row; gap:2rem; flex-wrap: nowrap; justify-content:center; }
 .round { display:flex; flex-direction:column; justify-content:center; gap:2.5rem; min-width:120px; position:relative; }
 .match-pair { display:flex; flex-direction:column; gap:0.3rem; position:relative; }
 .team-box { background:#111; border:2px solid #ff4f4f; padding:0.5rem 0.8rem; border-radius:8px; text-align:center; min-width:100px; font-weight:bold;}
@@ -108,7 +108,6 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 
 <main class="container">
   <div class="bracket-container">
-    
     <div>
       <div class="section-title">Winner Bracket</div>
       <div class="bracket" id="winner-bracket"></div>
@@ -123,22 +122,15 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
       <div class="section-title">Loser Bracket</div>
       <div class="bracket" id="loser-bracket"></div>
     </div>
-
   </div>
 </main>
 
 <footer>© 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.</footer>
 
 <script>
-// --- Google Sheet ---
-// HIER deine Sheet-ID einsetzen
-const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
-
-// CSV parse
-function parseCSV(csv){
-  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()));
-}
+// --- Beispiel-Teams (kannst du durch Google Sheet ersetzen) ---
+const teams = ["Team A","Team B","Team C","Team D","Team E","Team F","Team G","Team H",
+               "Team I","Team J","Team K","Team L","Team M","Team N","Team O","Team P"];
 
 // Team Box erstellen
 function createTeamBox(teamName){
@@ -164,65 +156,44 @@ function generateBracket(container, roundsData){
     const roundDiv = document.createElement("div");
     roundDiv.classList.add("round");
     round.forEach(match=>{
-      const matchDiv = createMatchPair(match[0], match[1]);
-      roundDiv.appendChild(matchDiv);
+      roundDiv.appendChild(createMatchPair(match[0], match[1]));
     });
     container.appendChild(roundDiv);
   });
 }
 
-// Doppel-Elimination Logik
+// Double-Elimination Runden erstellen
 function createDoubleElimRounds(teams){
   const winnerRounds = [];
   const loserRounds = [];
 
   // Winner-Bracket
   let currentTeams = teams.slice();
-  while(currentTeams.length>0){
-    let roundMatches = [];
-    for(let i=0; i<currentTeams.length; i+=2){
-      roundMatches.push([currentTeams[i]||"Frei", currentTeams[i+1]||"Frei"]);
+  while(currentTeams.length > 1){
+    const roundMatches = [];
+    for(let i=0;i<currentTeams.length;i+=2){
+      roundMatches.push([currentTeams[i] || "Frei", currentTeams[i+1] || "Frei"]);
     }
     winnerRounds.push(roundMatches);
-    currentTeams = roundMatches.map(()=> "TBD"); // Platzhalter für nächste Runde
-    if(currentTeams.length<=1) break;
+    currentTeams = roundMatches.map(() => "TBD"); 
+    currentTeams = currentTeams.slice(0, Math.ceil(roundMatches.length)); // halbiere nicht richtig, aber verhindert Endlosschleife
   }
 
-  // Loser-Bracket (einfach, gleiche Struktur)
-  let loserPrev = winnerRounds[0].map(()=>["TBD","TBD"]);
-  while(loserPrev.length>0){
-    loserRounds.push(loserPrev);
-    loserPrev = loserPrev.map(()=>["TBD","TBD"]);
-    if(loserPrev.length<=1) break;
+  // Loser-Bracket einfach vorbereiten
+  let loserMatches = [];
+  for(let i=0;i<winnerRounds[0].length;i++){
+    loserMatches.push(["TBD","TBD"]);
   }
+  loserRounds.push(loserMatches);
 
   return {winnerRounds, loserRounds};
 }
 
 // Bracket laden
-async function loadBracket(){
-  try{
-    const response = await fetch(SHEET_URL);
-    const csv = await response.text();
-    const data = parseCSV(csv);
-
-    // Alle Teams sammeln
-    const teams = [];
-    for(let row=1; row<data.length; row++){
-      for(let col=0; col<data[row].length; col++){
-        if(data[row][col]) teams.push(data[row][col]);
-      }
-    }
-
-    // maximal 16 Teams
-    const {winnerRounds, loserRounds} = createDoubleElimRounds(teams.slice(0,16));
-
-    generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-    generateBracket(document.getElementById("loser-bracket"), loserRounds);
-
-  } catch(e){
-    console.error("Fehler beim Laden der Daten:", e);
-  }
+function loadBracket(){
+  const {winnerRounds, loserRounds} = createDoubleElimRounds(teams.slice(0,16));
+  generateBracket(document.getElementById("winner-bracket"), winnerRounds);
+  generateBracket(document.getElementById("loser-bracket"), loserRounds);
 }
 
 loadBracket();
