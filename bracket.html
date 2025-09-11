@@ -260,8 +260,7 @@
     const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
     function parseCSV(csv) {
-        const rows = csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g, '')));
-        return rows;
+        return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g, '').trim()));
     }
 
     function createTeamBox(teamName) {
@@ -279,17 +278,24 @@
         return pair;
     }
 
-    function renderBracket(data, container, columns) {
+    // Funktion zum Rendern des Turnierbaums basierend auf dynamischen Spalten
+    function renderBracket(data, container, startCol, endCol, step) {
         container.innerHTML = '';
-        
+        const numTeams = data.length - 1;
+
+        // Finde alle relevanten Spalten innerhalb des angegebenen Bereichs
+        const columns = [];
+        for (let i = startCol; i < data[0].length && i <= endCol; i += step) {
+            columns.push(i);
+        }
+
         for (const colIndex of columns) {
             const roundDiv = document.createElement("div");
             roundDiv.classList.add("round");
-            
-            // Jede zweite Zeile ist ein Team
+
             for (let j = 1; j < data.length; j += 2) {
-                const team1 = data[j] && data[j][colIndex] ? data[j][colIndex].trim() : null;
-                const team2 = data[j+1] && data[j+1][colIndex] ? data[j+1][colIndex].trim() : null;
+                const team1 = data[j] && data[j][colIndex] ? data[j][colIndex] : null;
+                const team2 = (j + 1 < data.length) && data[j+1][colIndex] ? data[j+1][colIndex] : null;
                 
                 if (team1 || team2) {
                     roundDiv.appendChild(createMatchPair(team1, team2));
@@ -308,27 +314,30 @@
             const winnerBracket = document.getElementById("winner-bracket");
             const loserBracket = document.getElementById("loser-bracket");
 
-            // Angepasste Spaltenindizes, die zu deiner bereinigten Tabelle passen
-            const winnerBracketColumns = [0, 1, 2, 3]; // Spalten A, B, C, D
-            const loserBracketColumns = [4, 5, 6, 7]; // Spalten E, F, G, H
+            // Die Spaltenbereiche basierend auf deiner Tabelle (siehe Bild)
+            const winnerBracketStartCol = 0; // Spalte A
+            const winnerBracketEndCol = 14; // Spalte O
+            const loserBracketStartCol = 16; // Spalte Q
+            const loserBracketEndCol = 22; // Spalte W
+            
+            // Rendering des Winner Brackets von links nach rechts
+            renderBracket(tableData, winnerBracket, winnerBracketStartCol, winnerBracketEndCol, 2);
 
-            renderBracket(tableData, winnerBracket, winnerBracketColumns);
-            renderBracket(tableData, loserBracket, loserBracketColumns);
-
+            // Rendering des Loser Brackets von rechts nach links
+            renderBracket(tableData, loserBracket, loserBracketEndCol, loserBracketStartCol, -2);
+            
         } catch (error) {
             console.error("Fehler beim Laden der Daten aus dem Google Sheet:", error);
-            // Fallback-Logik mit Dummy-Daten, falls die Tabelle nicht geladen werden kann
-            const teams = Array.from({length: 16}, (_, i) => `Team ${i + 1}`);
-            
+            // Fallback-Logik bei Fehler
             const winnerBracket = document.getElementById("winner-bracket");
             const loserBracket = document.getElementById("loser-bracket");
-
-            renderBracket(teams, winnerBracket, [0]);
-            renderBracket(teams, loserBracket, [0]);
+            const dummyTeams = Array.from({length: 16}, (_, i) => `Team ${i + 1}`);
+            renderBracket(dummyTeams, winnerBracket, 0, 0, 1);
+            renderBracket(dummyTeams, loserBracket, 0, 0, 1);
         }
     }
 
     loadTeamsAndRender();
-  </script>
+</script>
 </body>
 </html>
