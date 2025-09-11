@@ -97,7 +97,7 @@
     const form = document.getElementById('teamForm');
     const list = document.getElementById('registeredTeams');
 
-    // Google Apps Script Web-App URL hier eintragen
+    // Google Apps Script Web-App URL
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyO_5XwcFUojXRYPJ8F3kf8kIuC7szMgd1xWCmlc7bP6VfCJRC0uY46DhhWlkUgIUuP/exec';
 
     // Formular absenden
@@ -105,7 +105,6 @@
       e.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
 
-      // Daten an Google Sheet senden
       fetch(SHEET_URL, {
         method: 'POST',
         body: JSON.stringify(data),
