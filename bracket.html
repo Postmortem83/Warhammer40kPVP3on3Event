@@ -1,226 +1,133 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Turnierbaum – Warhammer 40k PvP Clash</title>
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #eee;
-}
+  <meta charset="UTF-8">
+  <title>Turnierbaum – Double Elimination (Test)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 20px;
+    }
 
-/* Navigation */
-.topnav {
-  display: flex;
-  justify-content: center;
-  background: #111;
-  padding: 0.8rem;
-  gap: 1.5rem;
-  border-bottom: 2px solid #ff4f4f;
-}
-.topnav a {
-  color: #eee;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.2s;
-}
-.topnav a:hover { color:#ff4f4f; }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-/* Hero */
-.hero {
-  position: relative;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
-  background-size: cover;
-  color: #fff;
-}
-.hero .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6);}
-.hero__content { position: relative; z-index: 2; text-shadow: 2px 2px 8px #000; }
+    .bracket {
+      display: flex;
+      justify-content: space-around;
+      gap: 50px;
+    }
 
-/* Container */
-.container { padding:1rem; display:flex; justify-content:center; overflow-x:auto; }
+    .round {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-/* Bracket Container */
-.bracket-container {
-  display:flex;
-  align-items:flex-start;
-  gap:2rem;
-  position:relative;
-  flex-wrap:nowrap;
-}
+    .match {
+      border: 2px solid #444;
+      border-radius: 10px;
+      padding: 10px;
+      background: #222;
+      width: 160px;
+      text-align: center;
+    }
 
-/* Brackets */
-.bracket { display:flex; flex-direction:row; gap:2rem; flex:0 0 auto; }
-.round { display:flex; flex-direction:column; justify-content:center; gap:2.5rem; min-width:120px; position:relative; }
-.match-pair { display:flex; flex-direction:column; gap:0.3rem; position:relative; }
-.team-box { background:#111; border:2px solid #ff4f4f; padding:0.5rem 0.8rem; border-radius:8px; text-align:center; min-width:100px; font-weight:bold;}
-.team-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .loser {
+      margin-top: 40px;
+    }
 
-/* Finale */
-.center-final { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:1rem; min-width:180px; position:relative;}
-.final-box { background:#222; border:2px solid #ff4f4f; padding:1rem 2rem; border-radius:10px; text-align:center; min-width:160px; font-weight:bold; position:relative; z-index:1;}
-.final-line-left, .final-line-right { position:absolute; top:50%; width:50px; height:2px; background:#ff4f4f; z-index:0; }
-.final-line-left { left:-50px; }
-.final-line-right { right:-50px; }
-.muted { color:#aaa; font-size:0.9rem; }
-
-/* Verbindungslinien */
-.match-line { position:absolute; width:2px; background-color:#ff4f4f; z-index:0; top:0; left:50%; height:100%; transform:translateX(-50%); }
-
-@media(max-width:768px){
-  .round { gap:2rem; min-width:80px; }
-  .team-box { min-width:70px; padding:0.3rem 0.5rem; font-size:0.85rem; }
-  .hero { height:180px; }
-}
-
-footer { text-align:center; padding:1rem; background:#111; border-top:2px solid #ff4f4f; margin-top:2rem;}
-</style>
+    .finals {
+      margin-top: 60px;
+      border: 2px solid gold;
+      background: #333;
+    }
+  </style>
 </head>
 <body>
+  <h1>Double Elimination – Testdaten</h1>
+  <div id="bracket" class="bracket"></div>
 
-<nav class="topnav">
-  <a href="index.html">Start</a>
-  <a href="about.html">Überblick</a>
-  <a href="rules.html">Regeln & Ablauf</a>
-  <a href="bracket.html">Turnierbaum</a>
-  <a href="report.html">Match-Reporting</a>
-</nav>
+  <script>
+    // Test-Teams (8 Teams)
+    const teams = ["Team A","Team B","Team C","Team D","Team E","Team F","Team G","Team H"];
 
-<header class="hero">
-  <div class="overlay"></div>
-  <div class="hero__content">
-    <h1>Turnierbaum</h1>
-    <p>Doppel-Eliminierung – Wer verliert, kämpft sich durchs Loser Bracket zurück!</p>
-  </div>
-</header>
-
-<main class="container">
-  <div class="bracket-container">
-    <div class="bracket winner-bracket" id="winner-bracket"></div>
-
-    <div class="center-final">
-      <div class="final-line-left"></div>
-      <div class="final-box">Finale</div>
-      <div class="final-line-right"></div>
-      <div class="muted">Grand Champion</div>
-    </div>
-
-    <div class="bracket loser-bracket" id="loser-bracket"></div>
-  </div>
-</main>
-
-<footer>© 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.</footer>
-
-<script>
-// --- Google Sheet ---
-const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
-
-// CSV parse
-function parseCSV(csv){
-  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()));
-}
-
-// Team Box erstellen
-function createTeamBox(teamName){
-  const div = document.createElement("div");
-  div.classList.add("team-box");
-  div.innerHTML = `<div class="team-name">${teamName || "Frei"}</div>`;
-  return div;
-}
-
-// Match erstellen
-function createMatchPair(team1, team2){
-  const div = document.createElement("div");
-  div.classList.add("match-pair");
-  div.appendChild(createTeamBox(team1));
-  div.appendChild(createTeamBox(team2));
-
-  if(team1 && team2){
-    const line = document.createElement("div");
-    line.classList.add("match-line");
-    div.appendChild(line);
-  }
-  return div;
-}
-
-// Bracket erstellen
-function generateBracket(container, roundsData){
-  container.innerHTML = '';
-  roundsData.forEach(round=>{
-    const roundDiv = document.createElement("div");
-    roundDiv.classList.add("round");
-    round.forEach(match=>{
-      const matchDiv = createMatchPair(match[0], match[1]);
-      roundDiv.appendChild(matchDiv);
-    });
-    container.appendChild(roundDiv);
-  });
-}
-
-// Doppel-Elimination Logik
-function createDoubleElimRounds(teams){
-  const winnerRounds = [];
-  const loserRounds = [];
-
-  // Winner-Bracket
-  let currentTeams = teams.slice();
-  while(currentTeams.length>0){
-    let roundMatches = [];
-    for(let i=0; i<currentTeams.length; i+=2){
-      roundMatches.push([currentTeams[i]||"Frei", currentTeams[i+1]||"Frei"]);
-    }
-    winnerRounds.push(roundMatches);
-    currentTeams = roundMatches.map(()=> "TBD"); // Platzhalter für nächste Runde
-    if(currentTeams.length<=1) break;
-  }
-
-  // Loser-Bracket (alle Runden)
-  let loserPrev = winnerRounds[0].map(()=>["TBD","TBD"]);
-  while(loserPrev.length>0){
-    loserRounds.push(loserPrev);
-    loserPrev = loserPrev.map(()=>["TBD","TBD"]);
-    if(loserPrev.length<=1) break;
-  }
-
-  return {winnerRounds, loserRounds};
-}
-
-// Bracket laden
-async function loadBracket(){
-  try{
-    const response = await fetch(SHEET_URL);
-    const csv = await response.text();
-    const data = parseCSV(csv);
-
-    // Alle Teams aus allen Spalten sammeln
-    const teams = [];
-    for(let row=1; row<data.length; row++){
-      for(let col=0; col<data[row].length; col++){
-        if(data[row][col]) teams.push(data[row][col]);
+    // Funktion: Matches aus Teams erzeugen
+    function createMatches(arr) {
+      let matches = [];
+      for (let i = 0; i < arr.length; i += 2) {
+        matches.push([arr[i] || "TBD", arr[i+1] || "TBD"]);
       }
+      return matches;
     }
 
-    // maximal 16 Teams
-    const {winnerRounds, loserRounds} = createDoubleElimRounds(teams.slice(0,16));
+    // Gewinnerseite (Winner Bracket)
+    let winnerRounds = [];
+    winnerRounds.push(createMatches(teams)); // Runde 1
+    winnerRounds.push(createMatches(Array(winnerRounds[0].length).fill("TBD"))); // Runde 2
+    winnerRounds.push(createMatches(Array(winnerRounds[1].length).fill("TBD"))); // Halbfinale
+    winnerRounds.push([["TBD","TBD"]]); // Finale Winner
 
-    generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-    generateBracket(document.getElementById("loser-bracket"), loserRounds.reverse());
+    // Verliererseite (Loser Bracket)
+    let loserRounds = [];
+    loserRounds.push(createMatches(Array(winnerRounds[0].length).fill("TBD")));
+    loserRounds.push(createMatches(Array(winnerRounds[1].length).fill("TBD")));
+    loserRounds.push(createMatches(Array(winnerRounds[2].length).fill("TBD")));
+    loserRounds.push([["TBD","TBD"]]);
 
-  } catch(e){
-    console.error("Fehler beim Laden der Daten:", e);
-  }
-}
+    // Gesamtes Bracket rendern
+    function renderBracket() {
+      const bracket = document.getElementById("bracket");
+      bracket.innerHTML = "";
 
-loadBracket();
-</script>
+      // Winner Bracket
+      const winners = document.createElement("div");
+      winners.className = "rounds";
+      winnerRounds.forEach((round, i) => {
+        const r = document.createElement("div");
+        r.className = "round";
+        r.innerHTML = `<h3>Winner Runde ${i+1}</h3>`;
+        round.forEach(match => {
+          const m = document.createElement("div");
+          m.className = "match";
+          m.innerHTML = `<div>${match[0]}</div><div>${match[1]}</div>`;
+          r.appendChild(m);
+        });
+        winners.appendChild(r);
+      });
 
+      // Loser Bracket
+      const losers = document.createElement("div");
+      losers.className = "rounds loser";
+      loserRounds.forEach((round, i) => {
+        const r = document.createElement("div");
+        r.className = "round";
+        r.innerHTML = `<h3>Loser Runde ${i+1}</h3>`;
+        round.forEach(match => {
+          const m = document.createElement("div");
+          m.className = "match";
+          m.innerHTML = `<div>${match[0]}</div><div>${match[1]}</div>`;
+          r.appendChild(m);
+        });
+        losers.appendChild(r);
+      });
+
+      // Finale
+      const finals = document.createElement("div");
+      finals.className = "round finals";
+      finals.innerHTML = `<h3>Grand Final</h3><div class="match"><div>TBD</div><div>TBD</div></div>`;
+
+      bracket.appendChild(winners);
+      bracket.appendChild(losers);
+      bracket.appendChild(finals);
+    }
+
+    renderBracket();
+  </script>
 </body>
 </html>
