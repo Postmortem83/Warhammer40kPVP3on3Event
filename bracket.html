@@ -285,7 +285,7 @@
 
         // Finde alle relevanten Spalten innerhalb des angegebenen Bereichs
         const columns = [];
-        for (let i = startCol; i < data[0].length && i <= endCol; i += step) {
+        for (let i = startCol; (step > 0 ? i <= endCol : i >= endCol) && i < data[0].length; i += step) {
             columns.push(i);
         }
 
@@ -314,11 +314,11 @@
             const winnerBracket = document.getElementById("winner-bracket");
             const loserBracket = document.getElementById("loser-bracket");
 
-            // Die Spaltenbereiche basierend auf deiner Tabelle (siehe Bild)
-            const winnerBracketStartCol = 0; // Spalte A
-            const winnerBracketEndCol = 14; // Spalte O
+            // ACHTUNG: jetzt werden die "bereinigten" Spalten K–T verwendet
+            const winnerBracketStartCol = 10; // Spalte K
+            const winnerBracketEndCol = 14;  // bis O oder weiter anpassen
             const loserBracketStartCol = 16; // Spalte Q
-            const loserBracketEndCol = 22; // Spalte W
+            const loserBracketEndCol = 19;   // bis T oder weiter anpassen
             
             // Rendering des Winner Brackets von links nach rechts
             renderBracket(tableData, winnerBracket, winnerBracketStartCol, winnerBracketEndCol, 2);
