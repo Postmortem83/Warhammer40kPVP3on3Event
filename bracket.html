@@ -128,16 +128,14 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 <footer>© 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.</footer>
 
 <script>
-// --- Google Sheet Setup ---
 const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-// CSV parse
 function parseCSV(csv){
-  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()).filter(c=>c));
+  return csv.split('\n')
+    .map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()).filter(c=>c));
 }
 
-// Team Box erstellen
 function createTeamBox(teamName){
   const div = document.createElement("div");
   div.classList.add("team-box");
@@ -145,7 +143,6 @@ function createTeamBox(teamName){
   return div;
 }
 
-// Match erstellen
 function createMatchPair(team1, team2){
   const div = document.createElement("div");
   div.classList.add("match-pair");
@@ -154,10 +151,25 @@ function createMatchPair(team1, team2){
   return div;
 }
 
-// Bracket erstellen
-function generateBracket(container, roundsData){
+// Generiert Runden für Bracket
+function generateRounds(teams){
+  const rounds = [];
+  let current = teams.slice();
+  while(current.length > 0){
+    const matches = [];
+    for(let i=0;i<current.length;i+=2){
+      matches.push([current[i] || "", current[i+1] || ""]);
+    }
+    rounds.push(matches);
+    current = matches.map(match => match[0]); // Nächste Runde: Gewinner manuell im Sheet eintragen
+    if(current.length <= 1) break;
+  }
+  return rounds;
+}
+
+function generateBracket(container, rounds){
   container.innerHTML = '';
-  roundsData.forEach(round=>{
+  rounds.forEach(round=>{
     const roundDiv = document.createElement("div");
     roundDiv.classList.add("round");
     round.forEach(match=>{
@@ -167,51 +179,35 @@ function generateBracket(container, roundsData){
   });
 }
 
-// Bracket aus Sheet bauen
-function buildBrackets(data){
-  // Alle Zeilen im Sheet durchgehen
-  const winnerRounds = [];
-  const loserRounds = [];
-
-  // Winner-Bracket: jede Zeile als Match nehmen
-  data.forEach((row, index)=>{
-    if(row.length >= 2){
-      const match = [row[0], row[1]]; // Team 1, Team 2
-      if(!winnerRounds[index]) winnerRounds[index] = [];
-      winnerRounds[index].push(match);
-
-      // Loser-Bracket: optional, hier nur Verlierer
-      const loser = [];
-      if(row[2] && row[2] !== row[0] && row[2] !== row[1]){
-        // Ungültiger Eintrag, ignorieren
-      } else if(row[2]){
-        loser.push(row[2] === row[0] ? row[1] : row[0]);
-      } else {
-        loser.push(""); // noch kein Ergebnis
-      }
-      if(!loserRounds[index]) loserRounds[index] = [];
-      loserRounds[index].push(loser);
-    }
-  });
-
-  return {winnerRounds, loserRounds};
-}
-
-// Daten aus Sheet laden
+// Daten aus Sheet laden und Brackets bauen
 async function loadBracket(){
   try{
     const response = await fetch(SHEET_URL);
     const csv = await response.text();
     const data = parseCSV(csv);
 
-    const {winnerRounds, loserRounds} = buildBrackets(data);
+    // Winner-Bracket (Runden oben)
+    const winnerTeams = [];
+    data.forEach(row=>{
+      if(row[0]) winnerTeams.push(row[0]);
+      if(row[1]) winnerTeams.push(row[1]);
+    });
+    const winnerRounds = generateRounds(winnerTeams.slice(0,16)); // max 16 Teams
     generateBracket(document.getElementById("winner-bracket"), winnerRounds);
+
+    // Loser-Bracket (Runden unten, nur Verlierer aus Runde 1)
+    const loserTeams = [];
+    data.forEach(row=>{
+      if(row[2]) {
+        if(row[2] === row[0]) loserTeams.push(row[1]);
+        else loserTeams.push(row[0]);
+      }
+    });
+    const loserRounds = generateRounds(loserTeams.slice(0,8)); // max 8 Teams
     generateBracket(document.getElementById("loser-bracket"), loserRounds);
 
   } catch(e){
     console.error("Fehler beim Laden der Daten:", e);
-    document.getElementById("winner-bracket").innerHTML = "Fehler beim Laden der Daten";
-    document.getElementById("loser-bracket").innerHTML = "Fehler beim Laden der Daten";
   }
 }
 
