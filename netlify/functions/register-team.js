@@ -1,7 +1,7 @@
 // Netlify Function: register-team.js
 // Leitet Anfragen an dein Google Apps Script weiter und löst CORS-Probleme
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxeZgcwIRqzRVWKhtYvAr7CklGQMxLtYBipLW2ZEh1iAUY5ZCb6T6L5PlkBrsRPA_px/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycby9ZRUGrkLhLptrn7xTVfLVYrDMP-JVt7v0sY3lqulD_CoOZed4BCJ0LlmRgo18n2mw/exec';
 
 export async function handler(event, context) {
   // Standard CORS Header
