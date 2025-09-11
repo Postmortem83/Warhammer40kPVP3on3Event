@@ -27,7 +27,7 @@ body {
   font-weight: bold;
   transition: 0.2s;
 }
-.topnav a:hover { color: #ff4f4f; }
+.topnav a:hover { color:#ff4f4f; }
 
 /* Hero */
 .hero {
@@ -41,111 +41,46 @@ body {
   background-size: cover;
   color: #fff;
 }
-.hero .overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); }
+.hero .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6);}
 .hero__content { position: relative; z-index: 2; text-shadow: 2px 2px 8px #000; }
 
 /* Container */
-.container {
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  overflow-x: auto;
-}
+.container { padding:1rem; display:flex; justify-content:center; overflow-x:auto; }
 
 /* Bracket Container */
 .bracket-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
-  position: relative;
-  flex-wrap: nowrap;
+  display:flex;
+  align-items:flex-start;
+  gap:2rem;
+  position:relative;
+  flex-wrap:nowrap;
 }
 
 /* Brackets */
-.bracket {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  flex: 0 0 auto;
-}
-.round {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2.5rem;
-  min-width: 120px;
-  position: relative;
-}
-.match-pair {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  position: relative;
-}
-.team-box {
-  background: #111;
-  border: 2px solid #ff4f4f;
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-  text-align: center;
-  min-width: 100px;
-  font-weight: bold;
-}
-.team-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bracket { display:flex; flex-direction:row; gap:2rem; flex:0 0 auto; }
+.round { display:flex; flex-direction:column; justify-content:center; gap:2.5rem; min-width:120px; position:relative; }
+.match-pair { display:flex; flex-direction:column; gap:0.3rem; position:relative; }
+.team-box { background:#111; border:2px solid #ff4f4f; padding:0.5rem 0.8rem; border-radius:8px; text-align:center; min-width:100px; font-weight:bold;}
+.team-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* Finale */
-.center-final {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  min-width: 180px;
-  position: relative;
-}
-.final-box {
-  background: #222;
-  border: 2px solid #ff4f4f;
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  text-align: center;
-  min-width: 160px;
-  font-weight: bold;
-  position: relative;
-  z-index: 1;
-}
-.final-line-left, .final-line-right {
-  position: absolute;
-  top: 50%;
-  width: 50px;
-  height: 2px;
-  background: #ff4f4f;
-  z-index: 0;
-}
-.final-line-left { left: -50px; }
-.final-line-right { right: -50px; }
-.muted { color: #aaa; font-size: 0.9rem; }
+.center-final { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:1rem; min-width:180px; position:relative;}
+.final-box { background:#222; border:2px solid #ff4f4f; padding:1rem 2rem; border-radius:10px; text-align:center; min-width:160px; font-weight:bold; position:relative; z-index:1;}
+.final-line-left, .final-line-right { position:absolute; top:50%; width:50px; height:2px; background:#ff4f4f; z-index:0; }
+.final-line-left { left:-50px; }
+.final-line-right { right:-50px; }
+.muted { color:#aaa; font-size:0.9rem; }
 
-/* Linien */
-.match-line {
-  position: absolute;
-  width: 2px;
-  background-color: #ff4f4f;
-  z-index: 0;
+/* Verbindungslinien */
+.match-line { position:absolute; width:2px; background-color:#ff4f4f; z-index:0; top:0; left:50%; height:100%; transform:translateX(-50%); }
+
+@media(max-width:768px){
+  .round { gap:2rem; min-width:80px; }
+  .team-box { min-width:70px; padding:0.3rem 0.5rem; font-size:0.85rem; }
+  .hero { height:180px; }
 }
 
-@media (max-width: 768px) {
-  .round { gap: 2rem; min-width: 80px; }
-  .team-box { min-width: 70px; padding: 0.3rem 0.5rem; font-size: 0.85rem; }
-  .hero { height: 180px; }
-}
-footer {
-  text-align: center;
-  padding: 1rem;
-  background: #111;
-  border-top: 2px solid #ff4f4f;
-  margin-top: 2rem;
-}
+footer { text-align:center; padding:1rem; background:#111; border-top:2px solid #ff4f4f; margin-top:2rem;}
 </style>
 </head>
 <body>
@@ -188,10 +123,12 @@ footer {
 const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
+// CSV parse
 function parseCSV(csv){
   return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()));
 }
 
+// Team Box erstellen
 function createTeamBox(teamName){
   const div = document.createElement("div");
   div.classList.add("team-box");
@@ -199,76 +136,83 @@ function createTeamBox(teamName){
   return div;
 }
 
+// Match erstellen
 function createMatchPair(team1, team2){
   const div = document.createElement("div");
   div.classList.add("match-pair");
   div.appendChild(createTeamBox(team1));
   div.appendChild(createTeamBox(team2));
 
-  // vertikale Linie zwischen Teams
   if(team1 && team2){
     const line = document.createElement("div");
     line.classList.add("match-line");
-    line.style.top = "0";
-    line.style.left = "50%";
-    line.style.height = "100%";
-    line.style.transform = "translateX(-50%)";
     div.appendChild(line);
   }
-
   return div;
 }
 
-function generateBracket(container, teams, totalRounds, reverse=false){
+// Bracket erstellen
+function generateBracket(container, roundsData){
   container.innerHTML = '';
-  let rounds = [];
-  
-  // Teams in Matches für jede Runde aufteilen
-  let currentRoundTeams = teams.slice(); 
-  for(let r=0; r<totalRounds; r++){
-    let matches = [];
-    for(let i=0; i<currentRoundTeams.length; i+=2){
-      matches.push([currentRoundTeams[i] || "", currentRoundTeams[i+1] || ""]);
-    }
-    rounds.push(matches);
-
-    // Teams für nächste Runde = Gewinner jedes Matchs (Platzhalter "TBD")
-    currentRoundTeams = matches.map(() => "TBD");
-  }
-
-  // Runden erstellen
-  rounds.forEach((matches, rIndex)=>{
+  roundsData.forEach(round=>{
     const roundDiv = document.createElement("div");
     roundDiv.classList.add("round");
-
-    matches.forEach(match=>{
+    round.forEach(match=>{
       const matchDiv = createMatchPair(match[0], match[1]);
       roundDiv.appendChild(matchDiv);
     });
-
-    if(reverse) container.insertBefore(roundDiv, container.firstChild);
-    else container.appendChild(roundDiv);
+    container.appendChild(roundDiv);
   });
 }
 
+// --- Doppel-Elimination Logik ---
+function createDoubleElimRounds(teams){
+  const winnerRounds = [];
+  const loserRounds = [];
+
+  // Winner-Bracket Runden
+  let currentTeams = teams.slice();
+  while(currentTeams.length>0){
+    let roundMatches = [];
+    for(let i=0; i<currentTeams.length; i+=2){
+      roundMatches.push([currentTeams[i]||"", currentTeams[i+1]||""]);
+    }
+    winnerRounds.push(roundMatches);
+    // Nächste Runde = Gewinner-Platzhalter
+    currentTeams = roundMatches.map(()=> "TBD");
+    if(currentTeams.length<=1) break;
+  }
+
+  // Loser-Bracket = nur erste Runde aus Gewinnern der ersten Runde
+  const loserFirstRound = winnerRounds[0].map(match=>["TBD","TBD"]);
+  loserRounds.push(loserFirstRound);
+  // Weitere Runden = Platzhalter
+  while(loserRounds[loserRounds.length-1].length>1){
+    const nextRound = loserRounds[loserRounds.length-1].map(()=>["TBD","TBD"]);
+    loserRounds.push(nextRound);
+  }
+
+  return {winnerRounds, loserRounds};
+}
+
+// --- Bracket laden ---
 async function loadBracket(){
-  try {
+  try{
     const response = await fetch(SHEET_URL);
     const csv = await response.text();
     const data = parseCSV(csv);
 
     const teams = [];
-    for(let col=10; col<=19; col++){ // je nach Sheet anpassen
+    for(let col=10; col<=19; col++){
       for(let row=1; row<data.length; row++){
         if(data[row][col]) teams.push(data[row][col]);
       }
     }
 
-    const winnerBracket = document.getElementById("winner-bracket");
-    const loserBracket = document.getElementById("loser-bracket");
+    const {winnerRounds, loserRounds} = createDoubleElimRounds(teams.slice(0,16));
 
-    generateBracket(winnerBracket, teams.slice(0,16), 4, false);
-    generateBracket(loserBracket, teams.slice(0,16).reverse(), 4, true);
+    generateBracket(document.getElementById("winner-bracket"), winnerRounds);
+    generateBracket(document.getElementById("loser-bracket"), loserRounds.reverse());
 
   } catch(e){
     console.error("Fehler beim Laden der Daten:", e);
