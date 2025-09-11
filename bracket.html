@@ -256,98 +256,101 @@
   </footer>
 
   <script>
-  const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
-  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+    const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
+    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-  // Hilfsfunktion, um ein Team-Element zu erstellen
-  function createTeamBox(teamName) {
-    const teamBox = document.createElement("div");
-    teamBox.classList.add("team-box");
-    teamBox.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
-    return teamBox;
-  }
-
-  // Hilfsfunktion, um ein Match-Element zu erstellen
-  function createMatchPair(team1, team2) {
-    const pair = document.createElement("div");
-    pair.classList.add("match-pair");
-    pair.appendChild(createTeamBox(team1));
-    pair.appendChild(createTeamBox(team2));
-    return pair;
-  }
-
-  // Funktion zum Rendern des Winner Brackets
-  function renderWinnerBracket(teams, container) {
-    let currentTeams = [...teams];
-    const rounds = Math.ceil(Math.log2(currentTeams.length));
-    container.innerHTML = '';
-
-    for (let i = 0; i < rounds; i++) {
-      const roundDiv = document.createElement("div");
-      roundDiv.classList.add("round");
-      const nextRoundTeams = [];
-
-      for (let j = 0; j < currentTeams.length; j += 2) {
-        if (currentTeams[j] || currentTeams[j + 1]) {
-          roundDiv.appendChild(createMatchPair(currentTeams[j], currentTeams[j + 1]));
-        }
-        nextRoundTeams.push(null);
-      }
-      container.appendChild(roundDiv);
-      currentTeams = nextRoundTeams;
+    function parseCSV(csv) {
+        const rows = csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g, '')));
+        return rows;
     }
-  }
 
-  // Funktion zum Rendern des Loser Brackets
-  function renderLoserBracket(teams, container) {
-    let currentTeams = new Array(teams.length).fill("Verlierer");
-    container.innerHTML = '';
-    
-    // Die Anzahl der Runden im Loser Bracket ist anders als im Winner Bracket
-    let loserRounds = Math.log2(teams.length) * 2 - 2; 
+    function createTeamBox(teamName) {
+        const teamBox = document.createElement("div");
+        teamBox.classList.add("team-box");
+        teamBox.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
+        return teamBox;
+    }
 
-    for (let i = 0; i < loserRounds; i++) {
-        const roundDiv = document.createElement("div");
-        roundDiv.classList.add("round");
-        const nextRoundTeams = [];
+    function createMatchPair(team1, team2) {
+        const pair = document.createElement("div");
+        pair.classList.add("match-pair");
+        pair.appendChild(createTeamBox(team1));
+        pair.appendChild(createTeamBox(team2));
+        return pair;
+    }
 
-        for (let j = 0; j < currentTeams.length; j += 2) {
-            if (currentTeams[j] || currentTeams[j + 1]) {
-                roundDiv.appendChild(createMatchPair(currentTeams[j], currentTeams[j + 1]));
+    function renderWinnerBracket(data, container) {
+        container.innerHTML = '';
+        
+        const winnerBracketColumns = [2, 5, 8, 11, 14]; // Spalten C, F, I, L, O in der Tabelle
+        const numRounds = winnerBracketColumns.length;
+
+        for (let i = 0; i < numRounds; i++) {
+            const roundDiv = document.createElement("div");
+            roundDiv.classList.add("round");
+            const colIndex = winnerBracketColumns[i];
+
+            for (let j = 1; j < data.length; j += 2) {
+                const team1 = data[j][colIndex];
+                const team2 = data[j+1] ? data[j+1][colIndex] : null;
+                
+                if (team1 || team2) {
+                    roundDiv.appendChild(createMatchPair(team1, team2));
+                }
             }
-            nextRoundTeams.push(null);
+            container.appendChild(roundDiv);
         }
-        container.appendChild(roundDiv);
-        currentTeams = nextRoundTeams;
     }
-  }
 
-  // Hauptfunktion zum Laden der Teams und Rendern der Brackets
-  async function loadTeamsAndRender() {
-    try {
-      const response = await fetch(SHEET_URL);
-      const data = await response.text();
-      const rows = data.split("\n").map(r => r.split(",")).filter(r => r[0]);
-      const teams = rows.slice(1).map(r => r[0].replace(/"/g, ''));
-      
-      const winnerBracket = document.getElementById("winner-bracket");
-      const loserBracket = document.getElementById("loser-bracket");
+    function renderLoserBracket(data, container) {
+        container.innerHTML = '';
+        
+        const loserBracketColumns = [17, 19, 21, 23]; // Spalten R, T, V, X in der Tabelle
+        const numRounds = loserBracketColumns.length;
 
-      renderWinnerBracket(teams, winnerBracket);
-      renderLoserBracket(teams, loserBracket);
+        for (let i = 0; i < numRounds; i++) {
+            const roundDiv = document.createElement("div");
+            roundDiv.classList.add("round");
+            const colIndex = loserBracketColumns[i];
 
-    } catch (error) {
-      onsole.error("Fehler beim Laden der Teams aus dem Google Sheet:", error);
-      // Fallback-Logik mit Dummy-Daten
-      const teams = Array.from({length: 16}, (_, i) => `Team ${i + 1}`);
-      const winnerBracket = document.getElementById("winner-bracket");
-      const loserBracket = document.getElementById("loser-bracket");
-      renderWinnerBracket(teams, winnerBracket);
-      renderLoserBracket(teams, loserBracket);
+            for (let j = 1; j < data.length; j += 2) {
+                const team1 = data[j][colIndex];
+                const team2 = data[j+1] ? data[j+1][colIndex] : null;
+                
+                if (team1 || team2) {
+                    roundDiv.appendChild(createMatchPair(team1, team2));
+                }
+            }
+            container.appendChild(roundDiv);
+        }
     }
-  }
 
-  loadTeamsAndRender();
-</script>
+    async function loadTeamsAndRender() {
+        try {
+            const response = await fetch(SHEET_URL);
+            const csvData = await response.text();
+            const tableData = parseCSV(csvData);
+            
+            const winnerBracket = document.getElementById("winner-bracket");
+            const loserBracket = document.getElementById("loser-bracket");
+
+            renderWinnerBracket(tableData, winnerBracket);
+            renderLoserBracket(tableData, loserBracket);
+
+        } catch (error) {
+            console.error("Fehler beim Laden der Daten aus dem Google Sheet:", error);
+            // Fallback-Logik mit Dummy-Daten, falls die Tabelle nicht geladen werden kann
+            const teams = Array.from({length: 16}, (_, i) => `Team ${i + 1}`);
+            
+            const winnerBracket = document.getElementById("winner-bracket");
+            const loserBracket = document.getElementById("loser-bracket");
+
+            renderWinnerBracket(teams, winnerBracket);
+            renderLoserBracket(teams, loserBracket);
+        }
+    }
+
+    loadTeamsAndRender();
+  </script>
 </body>
 </html>
