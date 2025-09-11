@@ -78,7 +78,7 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 <footer>© 2025 Warhammer 40k PvP Clash – Alle Rechte vorbehalten.</footer>
 
 <script>
-// --- Google Sheet Setup ---
+// --- Google Sheet CSV-Link (öffentlicher Link) ---
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYv16SEpDn7IxjQVVJ3BKDwuEgYuCtWypJbKGe62pnuOpGH43ke2O-xWU96-EaCXAyGWLrJ23iaJuY/pub?output=csv";
 
 // CSV parse
@@ -119,19 +119,32 @@ function generateBracket(container, data, mapping){
   });
 }
 
-// Mapping: Winner-Bracket 16 Teams, 8 Matches Runde 1 etc.
+// Mapping: Winner-Bracket (alle Runden)
 const winnerMapping = [
-  // Runde 1: 8 Matches
+  // Runde 1: 8 Matches (16 Teams)
   [{row:0,col1:0,col2:1},{row:0,col1:2,col2:3},{row:0,col1:4,col2:5},{row:0,col1:6,col2:7},
-   {row:0,col1:8,col2:9},{row:0,col1:10,col2:11},{row:0,col1:12,col2:13},{row:0,col1:14,col2:15}]
+   {row:0,col1:8,col2:9},{row:0,col1:10,col2:11},{row:0,col1:12,col2:13},{row:0,col1:14,col2:15}],
+  // Runde 2: 4 Matches (8 Teams)
+  [{row:0,col1:16,col2:17},{row:0,col1:18,col2:19},{row:0,col1:20,col2:21},{row:0,col1:22,col2:23}],
+  // Runde 3: 2 Matches (4 Teams)
+  [{row:0,col1:24,col2:25},{row:0,col1:26,col2:27}],
+  // Runde 4: 1 Match (2 Teams)
+  [{row:0,col1:28,col2:29}]
 ];
 
-// Mapping: Loser-Bracket optisch unterhalb, 8 Teams erste Runde
+// Mapping: Loser-Bracket (optisch)
 const loserMapping = [
-  [{row:1,col1:0,col2:1},{row:1,col1:2,col2:3},{row:1,col1:4,col2:5},{row:1,col1:6,col2:7}]
+  // Runde 1: 4 Matches (8 Teams)
+  [{row:1,col1:0,col2:1},{row:1,col1:2,col2:3},{row:1,col1:4,col2:5},{row:1,col1:6,col2:7}],
+  // Runde 2: 2 Matches (4 Teams)
+  [{row:1,col1:8,col2:9},{row:1,col1:10,col2:11}],
+  // Runde 3: 1 Match (2 Teams)
+  [{row:1,col1:12,col2:13}],
+  // Runde 4: Finale
+  [{row:1,col1:14,col2:15}]
 ];
 
-// Bracket laden
+// Daten laden und Brackets erzeugen
 fetch(SHEET_URL)
   .then(res => res.text())
   .then(csv => {
