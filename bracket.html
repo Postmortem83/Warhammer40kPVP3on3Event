@@ -10,7 +10,7 @@ body { margin:0; font-family:Arial,sans-serif; background:#000; color:#eee; }
 .topnav a { color:#eee; text-decoration:none; font-weight:bold; transition:0.2s; }
 .topnav a:hover { color:#ff4f4f; }
 
-.hero { position:relative; height:250px; display:flex; align-items:center; justify-content:center; text-align:center; background:#222; color:#fff; }
+.hero { position:relative; height:200px; display:flex; align-items:center; justify-content:center; text-align:center; background:#222; color:#fff; }
 .hero .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6);}
 .hero__content { position:relative; z-index:2; text-shadow:2px 2px 8px #000; }
 
@@ -31,7 +31,7 @@ body { margin:0; font-family:Arial,sans-serif; background:#000; color:#eee; }
 @media(max-width:768px){
   .round { gap:2rem; min-width:80px; }
   .team-box { min-width:70px; padding:0.3rem 0.5rem; font-size:0.85rem; }
-  .hero { height:180px; }
+  .hero { height:150px; }
 }
 
 footer { text-align:center; padding:1rem; background:#111; border-top:2px solid #ff4f4f; margin-top:2rem;}
@@ -40,23 +40,23 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 <body>
 
 <nav class="topnav">
-  <a href="index.html">Start</a>
-  <a href="about.html">Überblick</a>
-  <a href="rules.html">Regeln & Ablauf</a>
-  <a href="bracket.html">Turnierbaum</a>
-  <a href="report.html">Match-Reporting</a>
+  <a href="#">Start</a>
+  <a href="#">Überblick</a>
+  <a href="#">Regeln & Ablauf</a>
+  <a href="#">Turnierbaum</a>
 </nav>
 
 <header class="hero">
   <div class="overlay"></div>
   <div class="hero__content">
     <h1>Turnierbaum</h1>
-    <p>Doppel-Eliminierung – Trage die Teams direkt ins Sheet ein!</p>
+    <p>Doppel-Eliminierung – Teams aus dem Sheet</p>
   </div>
 </header>
 
 <main class="container">
   <div class="bracket-container">
+
     <div>
       <div class="section-title">Winner Bracket</div>
       <div class="bracket" id="winner-bracket"></div>
@@ -71,6 +71,7 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
       <div class="section-title">Loser Bracket</div>
       <div class="bracket" id="loser-bracket"></div>
     </div>
+
   </div>
 </main>
 
@@ -78,8 +79,7 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 
 <script>
 // --- Google Sheet Setup ---
-const SHEET_ID = "1SLboycZSBzamTyQUKAg4iDBti-p7lKVwfeKy9ahF_hM"; // <-- Sheet-ID einsetzen
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRYv16SEpDn7IxjQVVJ3BKDwuEgYuCtWypJbKGe62pnuOpGH43ke2O-xWU96-EaCXAyGWLrJ23iaJuY/pub?output=csv`;
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYv16SEpDn7IxjQVVJ3BKDwuEgYuCtWypJbKGe62pnuOpGH43ke2O-xWU96-EaCXAyGWLrJ23iaJuY/pub?output=csv";
 
 // CSV parse
 function parseCSV(csv){
@@ -104,45 +104,40 @@ function createMatchPair(team1, team2){
 }
 
 // Bracket erstellen
-function generateBracket(container, roundsData){
+function generateBracket(container, data, mapping){
   container.innerHTML = '';
-  roundsData.forEach(round=>{
+  mapping.forEach(roundMapping => {
     const roundDiv = document.createElement("div");
     roundDiv.classList.add("round");
-    round.forEach(match=>{
-      const matchDiv = createMatchPair(match[0], match[1]);
+    roundMapping.forEach(cell => {
+      const teamName = data[cell.row] ? data[cell.row][cell.col] : "TBD";
+      const matchDiv = createMatchPair(teamName, ""); // leeres zweites Feld für Optik
       roundDiv.appendChild(matchDiv);
     });
     container.appendChild(roundDiv);
   });
 }
 
-// Einfaches Sheet-zu-Bracket Mapping
-function loadBracket(){
-  fetch(SHEET_URL)
-    .then(res => res.text())
-    .then(csv => {
-      const data = parseCSV(csv);
+// Mapping: jedes Kästchen ist eine bestimmte Zelle im Sheet
+const winnerMapping = [
+  // Runde 1: 8 Matches
+  [{row:0,col:0},{row:0,col:1},{row:0,col:2},{row:0,col:3},{row:0,col:4},{row:0,col:5},{row:0,col:6},{row:0,col:7}]
+];
 
-      // Winner-Bracket: je 2 Teams pro Match, Runde 1–5
-      const winnerRounds = [];
-      for(let i=0;i<8;i++){ // 8 Matches erste Runde
-        winnerRounds.push([[data[0][i*2] || "TBD", data[0][i*2+1] || "TBD"]]);
-      }
+const loserMapping = [
+  // Runde 1: 4 Matches
+  [{row:1,col:0},{row:1,col:1},{row:1,col:2},{row:1,col:3}]
+];
 
-      // Loser-Bracket: optisch unterhalb, Platzhalter-TBD
-      const loserRounds = [];
-      for(let i=0;i<4;i++){ // 4 Matches erste Runde
-        loserRounds.push([[data[1] ? data[1][i*2] || "TBD" : "TBD", data[1] ? data[1][i*2+1] || "TBD" : "TBD"]]);
-      }
-
-      generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-      generateBracket(document.getElementById("loser-bracket"), loserRounds);
-    })
-    .catch(err=>console.error("Fehler beim Laden der Daten:",err));
-}
-
-loadBracket();
+// Bracket laden
+fetch(SHEET_URL)
+  .then(res => res.text())
+  .then(csv => {
+    const data = parseCSV(csv);
+    generateBracket(document.getElementById("winner-bracket"), data, winnerMapping);
+    generateBracket(document.getElementById("loser-bracket"), data, loserMapping);
+  })
+  .catch(err => console.error("Fehler beim Laden der Daten:", err));
 </script>
 
 </body>
