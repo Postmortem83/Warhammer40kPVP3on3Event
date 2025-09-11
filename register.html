@@ -97,7 +97,7 @@
     const form = document.getElementById('teamForm');
     const list = document.getElementById('registeredTeams');
 
-    // Google Apps Script Web-App URL
+    // Hier die aktuelle Google Apps Script Web-App URL einfügen (exec-URL)
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwSnw_JyZe10YPFbI_qrUaT69iabaooq4Y40Ud0IhG-pY_17xkjkmkLUZIk7fwv9Vvd/exec';
 
     // Formular absenden
@@ -129,8 +129,8 @@
             const item = document.createElement('div');
             item.className = 'registered-item';
             item.innerHTML = `
-              <span>${team.teamname} (Leader: ${team.leader})</span>
-              <span>${team.p1}, ${team.p2}, ${team.p3}${team.sub ? ', Ersatz: ' + team.sub : ''}</span>
+              <span>${team.Teamname} (Leader: ${team['Leader (Nickname)']})</span>
+              <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
             `;
             list.appendChild(item);
           });
