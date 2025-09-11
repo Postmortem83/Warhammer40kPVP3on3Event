@@ -5,82 +5,251 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Turnierbaum – Warhammer 40k PvP Clash</title>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #eee;
-}
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: #eee;
+    overflow-x: hidden;
+  }
 
-/* Navigation */
-.topnav {
-  display: flex;
-  justify-content: center;
-  background: #111;
-  padding: 0.8rem;
-  gap: 1.5rem;
-  border-bottom: 2px solid #ff4f4f;
-}
-.topnav a {
-  color: #eee;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.2s;
-}
-.topnav a:hover { color:#ff4f4f; }
+  /* Navigation */
+  .topnav {
+    display: flex;
+    justify-content: center;
+    background: #111;
+    padding: 0.8rem;
+    gap: 1.5rem;
+    border-bottom: 2px solid #ff4f4f;
+  }
+  .topnav a {
+    color: #eee;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+  }
+  .topnav a:hover {
+    color: #ff4f4f;
+  }
 
-/* Hero */
-.hero {
-  position: relative;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
-  background-size: cover;
-  color: #fff;
-}
-.hero .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6);}
-.hero__content { position: relative; z-index: 2; text-shadow: 2px 2px 8px #000; }
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: url('images/WARHAMMER-40K_SPACE-MARINE-2_SCREENSHOT_LOGO_1920x1080_04.jpg') no-repeat center center;
+    background-size: cover;
+    color: #fff;
+  }
+  .hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    text-shadow: 2px 2px 8px #000;
+  }
 
-/* Container */
-.container { padding:1rem; display:flex; justify-content:center; overflow-x:auto; }
+  /* Turnierbaum Container */
+  .bracket-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+  }
 
-/* Bracket Container */
-.bracket-container {
-  display:flex;
-  align-items:flex-start;
-  gap:2rem;
-  position:relative;
-  flex-wrap:nowrap;
-}
+  .bracket-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-width: 1200px;
+  }
 
-/* Brackets */
-.bracket { display:flex; flex-direction:row; gap:2rem; flex:0 0 auto; }
-.round { display:flex; flex-direction:column; justify-content:center; gap:2.5rem; min-width:120px; position:relative; }
-.match-pair { display:flex; flex-direction:column; gap:0.3rem; position:relative; }
-.team-box { background:#111; border:2px solid #ff4f4f; padding:0.5rem 0.8rem; border-radius:8px; text-align:center; min-width:100px; font-weight:bold;}
-.team-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  /* Runden-Anzeige */
+  .round-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff4f4f;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    white-space: nowrap;
+  }
 
-/* Finale */
-.center-final { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:1rem; min-width:180px; position:relative;}
-.final-box { background:#222; border:2px solid #ff4f4f; padding:1rem 2rem; border-radius:10px; text-align:center; min-width:160px; font-weight:bold; position:relative; z-index:1;}
-.final-line-left, .final-line-right { position:absolute; top:50%; width:50px; height:2px; background:#ff4f4f; z-index:0; }
-.final-line-left { left:-50px; }
-.final-line-right { right:-50px; }
-.muted { color:#aaa; font-size:0.9rem; }
+  /* Runden- und Match-Struktur */
+  .bracket-half {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 400px; /* Adjust based on your needs */
+  }
 
-/* Verbindungslinien */
-.match-line { position:absolute; width:2px; background-color:#ff4f4f; z-index:0; top:0; left:50%; height:100%; transform:translateX(-50%); }
+  .winner-bracket, .loser-bracket {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
-@media(max-width:768px){
-  .round { gap:2rem; min-width:80px; }
-  .team-box { min-width:70px; padding:0.3rem 0.5rem; font-size:0.85rem; }
-  .hero { height:180px; }
-}
+  .round {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    margin: 0 1rem;
+    position: relative;
+    gap: 1.5rem;
+  }
 
-footer { text-align:center; padding:1rem; background:#111; border-top:2px solid #ff4f4f; margin-top:2rem;}
+  /* Matchboxen */
+  .match-pair {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .team-box {
+    background: #111;
+    border: 2px solid #ff4f4f;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 150px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .empty-box {
+    background: transparent;
+    border: 2px dashed #ff4f4f;
+    min-height: 40px;
+    visibility: hidden;
+  }
+
+  /* Finale */
+  .center-final {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 2rem;
+  }
+
+  .final-box {
+    background: #222;
+    border: 2px solid #ff4f4f;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 200px;
+    font-weight: bold;
+    z-index: 1;
+  }
+
+  .muted {
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+  
+  /* Verbindungslinien */
+  .match-line {
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    background-color: #ff4f4f;
+    z-index: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .match-pair-connector {
+    position: relative;
+    width: 2px;
+    height: 20px;
+    background-color: #ff4f4f;
+  }
+
+  .winner-bracket .round:not(:last-child) .match-pair:before,
+  .loser-bracket .round:not(:last-child) .match-pair:before {
+    content: '';
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    width: 1rem;
+    height: 2px;
+    background: #ff4f4f;
+    transform: translateY(-50%);
+  }
+  
+  .winner-bracket .round:not(:first-child) .match-pair:before {
+    left: -1rem;
+    right: auto;
+  }
+
+  /* Spezielle Linien für das Loser Bracket */
+  .loser-bracket .round:last-of-type .match-pair:after {
+    content: '';
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    width: 1rem;
+    height: 2px;
+    background: #ff4f4f;
+    transform: translateY(-50%);
+  }
+
+  .winner-bracket-line {
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    width: 2rem;
+    height: 2px;
+    background: #ff4f4f;
+    transform: translateY(-50%);
+  }
+
+  .final-line-left, .final-line-right {
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 2px;
+    background: #ff4f4f;
+    z-index: 0;
+  }
+  .final-line-left { left: -50px; }
+  .final-line-right { right: -50px; }
+  
+  @media(max-width:768px) {
+    .round { min-width: 80px; }
+    .team-box { min-width: 70px; padding: 0.3rem 0.5rem; font-size: 0.85rem; }
+    .hero { height: 180px; }
+  }
+
+  footer {
+    text-align: center;
+    padding: 1rem;
+    background: #111;
+    border-top: 2px solid #ff4f4f;
+    margin-top: 2rem;
+  }
 </style>
 </head>
 <body>
@@ -103,16 +272,28 @@ footer { text-align:center; padding:1rem; background:#111; border-top:2px solid 
 
 <main class="container">
   <div class="bracket-container">
-    <div class="bracket winner-bracket" id="winner-bracket"></div>
+    <div class="bracket-wrapper">
+      <div class="bracket-half winner-bracket-container">
+        <div class="round-label">Round 1</div>
+        <div class="round-label">Round 2</div>
+        <div class="round-label">Round 3</div>
+        <div class="round-label">Round 4</div>
+        <div class="round-label">Round 5</div>
+        <div class="winner-bracket" id="winner-bracket"></div>
+      </div>
+      
+      <div class="center-final">
+        <div class="final-box">Finale</div>
+        <div class="muted">Grand Champion</div>
+      </div>
 
-    <div class="center-final">
-      <div class="final-line-left"></div>
-      <div class="final-box">Finale</div>
-      <div class="final-line-right"></div>
-      <div class="muted">Grand Champion</div>
+      <div class="bracket-half loser-bracket-container">
+        <div class="round-label">Round 1</div>
+        <div class="round-label">Round 2</div>
+        <div class="round-label">Round 3</div>
+        <div class="loser-bracket" id="loser-bracket"></div>
+      </div>
     </div>
-
-    <div class="bracket loser-bracket" id="loser-bracket"></div>
   </div>
 </main>
 
@@ -124,12 +305,12 @@ const SHEET_ID = "1myC3N5XIXElxu8qIJ6dm8QfBnYs9FTNYyYnV8c1MZ6s";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
 // CSV parse
-function parseCSV(csv){
-  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g,'').trim()));
+function parseCSV(csv) {
+  return csv.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g, '').trim()));
 }
 
 // Team Box erstellen
-function createTeamBox(teamName){
+function createTeamBox(teamName) {
   const div = document.createElement("div");
   div.classList.add("team-box");
   div.innerHTML = `<div class="team-name">${teamName || "TBD"}</div>`;
@@ -137,27 +318,28 @@ function createTeamBox(teamName){
 }
 
 // Match erstellen
-function createMatchPair(team1, team2){
+function createMatchPair(team1, team2) {
   const div = document.createElement("div");
   div.classList.add("match-pair");
   div.appendChild(createTeamBox(team1));
   div.appendChild(createTeamBox(team2));
-
-  if(team1 && team2){
-    const line = document.createElement("div");
-    line.classList.add("match-line");
-    div.appendChild(line);
-  }
   return div;
 }
 
 // Bracket erstellen
-function generateBracket(container, roundsData){
+function generateBracket(container, roundsData, isLoserBracket = false) {
   container.innerHTML = '';
-  roundsData.forEach(round=>{
+  roundsData.forEach((round, roundIndex) => {
     const roundDiv = document.createElement("div");
     roundDiv.classList.add("round");
-    round.forEach(match=>{
+
+    if (isLoserBracket) {
+      roundDiv.classList.add(`round-loser-${roundIndex + 1}`);
+    } else {
+      roundDiv.classList.add(`round-winner-${roundIndex + 1}`);
+    }
+
+    round.forEach(match => {
       const matchDiv = createMatchPair(match[0], match[1]);
       roundDiv.appendChild(matchDiv);
     });
@@ -166,55 +348,62 @@ function generateBracket(container, roundsData){
 }
 
 // --- Doppel-Elimination Logik ---
-function createDoubleElimRounds(teams){
+function createDoubleElimRounds(teams) {
   const winnerRounds = [];
   const loserRounds = [];
 
-  // Winner-Bracket Runden
-  let currentTeams = teams.slice();
-  while(currentTeams.length>0){
+  // Winner-Bracket
+  let currentWinnerTeams = teams.slice();
+  while (currentWinnerTeams.length > 1) {
     let roundMatches = [];
-    for(let i=0; i<currentTeams.length; i+=2){
-      roundMatches.push([currentTeams[i]||"", currentTeams[i+1]||""]);
+    for (let i = 0; i < currentWinnerTeams.length; i += 2) {
+      roundMatches.push([currentWinnerTeams[i] || "TBD", currentWinnerTeams[i + 1] || "TBD"]);
     }
     winnerRounds.push(roundMatches);
-    // Nächste Runde = Gewinner-Platzhalter
-    currentTeams = roundMatches.map(()=> "TBD");
-    if(currentTeams.length<=1) break;
+    currentWinnerTeams = roundMatches.map(() => "TBD");
   }
 
-  // Loser-Bracket = nur erste Runde aus Gewinnern der ersten Runde
-  const loserFirstRound = winnerRounds[0].map(match=>["TBD","TBD"]);
-  loserRounds.push(loserFirstRound);
-  // Weitere Runden = Platzhalter
-  while(loserRounds[loserRounds.length-1].length>1){
-    const nextRound = loserRounds[loserRounds.length-1].map(()=>["TBD","TBD"]);
-    loserRounds.push(nextRound);
+  // Loser-Bracket
+  // Zuerst die Verlierer aus der ersten Runde des Winner-Brackets
+  const losersFromRound1 = Array(winnerRounds[0].length).fill(["TBD", "TBD"]);
+  loserRounds.push(losersFromRound1);
+  
+  // Dann die Verlierer der nächsten Runden (kommen von oben)
+  let currentLoserTeams = losersFromRound1.slice();
+  let winnerRoundIndex = 0;
+  while (currentLoserTeams.length > 1) {
+      let roundMatches = [];
+      for (let i = 0; i < currentLoserTeams.length; i += 2) {
+          roundMatches.push(["TBD", "TBD"]);
+      }
+      loserRounds.push(roundMatches);
+      currentLoserTeams = roundMatches.slice();
+      winnerRoundIndex++;
   }
 
-  return {winnerRounds, loserRounds};
+  return { winnerRounds, loserRounds };
 }
 
 // --- Bracket laden ---
-async function loadBracket(){
-  try{
+async function loadBracket() {
+  try {
     const response = await fetch(SHEET_URL);
     const csv = await response.text();
     const data = parseCSV(csv);
 
     const teams = [];
-    for(let col=10; col<=19; col++){
-      for(let row=1; row<data.length; row++){
-        if(data[row][col]) teams.push(data[row][col]);
+    for (let col = 10; col <= 19; col++) {
+      for (let row = 1; row < data.length; row++) {
+        if (data[row][col]) teams.push(data[row][col]);
       }
     }
 
-    const {winnerRounds, loserRounds} = createDoubleElimRounds(teams.slice(0,16));
+    const { winnerRounds, loserRounds } = createDoubleElimRounds(teams.slice(0, 16));
 
     generateBracket(document.getElementById("winner-bracket"), winnerRounds);
-    generateBracket(document.getElementById("loser-bracket"), loserRounds.reverse());
+    generateBracket(document.getElementById("loser-bracket"), loserRounds.reverse(), true);
 
-  } catch(e){
+  } catch (e) {
     console.error("Fehler beim Laden der Daten:", e);
   }
 }
