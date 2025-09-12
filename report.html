@@ -31,6 +31,12 @@
       color: #ff4f4f;
       text-shadow: 0 0 10px #000;
     }
+
+    /* Grauer Placeholder für das Kommentar-Feld */
+    textarea::placeholder {
+      color: #888;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -72,9 +78,6 @@
               <option value="Grand Final">Grand Final</option>
             </select>
           </label>
-          <label>Match-ID
-            <input type="text" name="match_id" required placeholder="z.B. W1">
-          </label>
           <label>Team A
             <input type="text" name="team_a" required>
           </label>
@@ -87,11 +90,8 @@
           <label>Gewinner
             <input type="text" name="winner" required>
           </label>
-          <label>VOD/Clip-Link
-            <input type="url" name="vod">
-          </label>
           <label>Kommentar
-            <textarea name="comment" rows="3"></textarea>
+            <textarea name="comment" rows="3" placeholder="Hier bitte dein Channel Raum angeben wo du dich gerade befindest und dein TeamName. Screenshot von dem Sieg in deinem aktuellen Channel posten. Dein nächster Gegner wartet schon auf dich!"></textarea>
           </label>
         </div>
 
@@ -104,10 +104,10 @@
     const form = document.getElementById('matchForm');
 
     form.addEventListener('submit', function(e) {
-      // Hier lassen wir das Netlify-Formular normal weiterlaufen,
-      // aber zusätzlich erscheint der Discord-Hinweis
-      alert("Danke für dein Ergebnis!\n\nBitte denke daran, im Discord Event-Channel unter 'Bilder' einen Screenshot als Beweis hochzuladen.");
+      // Alert 1: Hinweis Screenshot hochladen
+      alert("Bitte denke daran, im Discord dein Screenshot hochzuladen in dem du dich gerade befindest. Dein Imperator dankt !");
 
+      // Alert 2: Discord-Link öffnen
       if(confirm("Willst du jetzt direkt zum Discord-Server wechseln?")) {
         window.open("https://discord.gg/Cy78DEeD", "_blank");
       }
