@@ -38,6 +38,23 @@
       margin-bottom: 1rem;
     }
 
+    /* Counter */
+    .team-counter {
+      margin: 2rem auto 1rem auto;
+      padding: 1rem;
+      background: #222;
+      border: 2px solid #ff4f4f;
+      border-radius: 10px;
+      max-width: 500px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+    .team-counter span {
+      color: #ff4f4f;
+    }
+
     .registered-list {
       margin-top: 2rem;
       display: flex;
@@ -95,6 +112,11 @@
     </div>
   </header>
 
+  <!-- Counter -->
+  <div class="team-counter">
+    ⚔️ <span id="teamCount">0</span> / 16 Teams angemeldet ⚔️
+  </div>
+
   <main class="container">
     <section class="card">
       <h2>Team Formular</h2>
@@ -128,6 +150,7 @@
     const form = document.getElementById('teamForm');
     const list = document.getElementById('registeredTeams');
     const message = document.getElementById('message');
+    const counter = document.getElementById('teamCount');
 
     // Netlify Function URL
     const SHEET_URL = '/.netlify/functions/register-team';
@@ -190,6 +213,7 @@
 
         list.innerHTML = '';
         teamCount = teams.length; // Anzahl Teams setzen
+        counter.textContent = teamCount; // Counter aktualisieren
 
         teams.forEach(team => {
           const item = document.createElement('div');
