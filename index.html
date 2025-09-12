@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Willkommen – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -53,6 +53,41 @@
       flex-wrap: wrap;
       margin-top: 1rem;
     }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .btn--primary {
+      background-color: #ff4f4f;
+      color: white;
+    }
+
+    .btn--primary:hover {
+      background-color: #e04343;
+    }
+
+    .btn--ghost {
+      background-color: transparent;
+      color: #ff4f4f;
+      border: 2px solid #ff4f4f;
+    }
+
+    .btn--ghost:hover {
+      background-color: #ff4f4f;
+      color: white;
+    }
+
+    .turnierstart {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #ffd700;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -68,6 +103,7 @@
         <a class="btn btn--primary" href="register.html">Jetzt anmelden</a>
         <a class="btn btn--ghost" href="bracket.html">Turnierbaum ansehen</a>
       </div>
+      <p class="turnierstart">📅 Turnierstart: 14.09.2025 · 20.09.2025 · 21.09.2025</p>
     </div>
   </header>
 
