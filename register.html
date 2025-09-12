@@ -74,6 +74,17 @@
       color: #FF4F4F;
       font-weight: bold;
     }
+
+    .info-hint {
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+      background: #333;
+      border-radius: 8px;
+      border: 1px solid #555;
+      color: #ffcc00;
+      font-weight: bold;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -87,6 +98,13 @@
   <main class="container">
     <section class="card">
       <h2>Team Formular</h2>
+
+      <!-- Hinweis -->
+      <div class="info-hint">
+        ⚔️ Es können sich maximal <strong>16 Teams</strong> anmelden.<br>
+        Nur ernstgemeinte Teamnamen und Spielernamen werden akzeptiert!
+      </div>
+
       <form id="teamForm">
         <div class="form-grid">
           <label>Teamname<input type="text" name="Teamname" required></label>
@@ -114,11 +132,19 @@
     // Netlify Function URL
     const SHEET_URL = '/.netlify/functions/register-team';
 
+    let teamCount = 0; // Aktuelle Anzahl Teams
+
     // Formular absenden
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       message.textContent = '';
       message.className = '';
+
+      if (teamCount >= 16) {
+        message.textContent = '❌ Die maximale Anzahl von 16 Teams ist bereits erreicht!';
+        message.className = 'error-message';
+        return;
+      }
 
       const data = Object.fromEntries(new FormData(form).entries());
 
@@ -163,6 +189,8 @@
         const teams = await res.json();
 
         list.innerHTML = '';
+        teamCount = teams.length; // Anzahl Teams setzen
+
         teams.forEach(team => {
           const item = document.createElement('div');
           item.className = 'registered-item';
