@@ -37,6 +37,34 @@
       color: #888;
       font-style: italic;
     }
+
+    .registered-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .registered-item {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem 1rem;
+      background: #222;
+      border-radius: 10px;
+      border: 1px solid #444;
+      color: #fff;
+    }
+
+    .success-message {
+      margin-top: 1rem;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+
+    .error-message {
+      margin-top: 1rem;
+      color: #FF4F4F;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -59,7 +87,7 @@
   <main class="container">
     <section class="card">
       <h2>Teamleader Formular</h2>
-      <form id="matchForm" name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="thank-you.html">
+      <form id="matchForm" name="match-report" method="POST" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="match-report">
 
         <!-- Honeypot Feld für Bots -->
@@ -97,21 +125,79 @@
 
         <button class="btn btn--primary" type="submit">Ergebnis senden</button>
       </form>
+
+      <div id="message"></div>
+
+      <h2>Bereits eingetragene Reports</h2>
+      <div id="reportList" class="registered-list"></div>
     </section>
   </main>
 
   <script>
     const form = document.getElementById('matchForm');
+    const reportList = document.getElementById('reportList');
+    const message = document.getElementById('message');
 
-    form.addEventListener('submit', function(e) {
-      // Alert 1: Hinweis Screenshot hochladen
-      alert("Bitte denke daran, im Discord dein Screenshot hochzuladen in dem du dich gerade befindest. Dein Imperator dankt !");
+    // URL zu deiner Netlify-Funktion
+    const SHEET_URL = '/.netlify/functions/register-report'; // passe ggf. an
 
-      // Alert 2: Discord-Link öffnen
-      if(confirm("Willst du jetzt direkt zum Discord-Server wechseln?")) {
-        window.open("https://discord.gg/Cy78DEeD", "_blank");
+    async function loadReports() {
+      try {
+        const res = await fetch(SHEET_URL);
+        if(!res.ok) throw new Error('Reports konnten nicht geladen werden');
+        const reports = await res.json();
+
+        reportList.innerHTML = '';
+        reports.forEach(report => {
+          const item = document.createElement('div');
+          item.className = 'registered-item';
+          item.innerHTML = `
+            <strong>${report.match_id || 'Match'}</strong> - ${report.team_a} vs ${report.team_b} | Score: ${report.score} | Gewinner: ${report.winner} <br>
+            Kommentar: ${report.comment || 'Kein Kommentar'}
+          `;
+          reportList.appendChild(item);
+        });
+      } catch(err) {
+        message.textContent = 'Fehler beim Laden der Reports: ' + err.message;
+        message.className = 'error-message';
+      }
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {'Content-Type': 'application/json'}
+        });
+        if(!res.ok) throw new Error('Server antwortet nicht richtig');
+
+        const result = await res.json();
+        if(result.status === 'success') {
+          message.textContent = 'Report erfolgreich eingetragen!';
+          message.className = 'success-message';
+          form.reset();
+          loadReports();
+
+          // Popups
+          alert("Bitte denke daran, im Discord dein Screenshot hochzuladen in dem du dich gerade befindest. Dein Imperator dankt !");
+          if(confirm("Willst du jetzt direkt zum Discord-Server wechseln?")) {
+            window.open("https://discord.gg/Cy78DEeD", "_blank");
+          }
+        } else {
+          throw new Error(result.message || 'Unbekannter Fehler');
+        }
+      } catch(err) {
+        message.textContent = 'Fehler beim Absenden: ' + err.message;
+        message.className = 'error-message';
       }
     });
+
+    // Beim Start die Reports laden
+    loadReports();
   </script>
 </body>
 </html>
