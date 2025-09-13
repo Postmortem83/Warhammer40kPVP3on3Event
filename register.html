@@ -130,7 +130,7 @@
       <form id="teamForm">
         <div class="form-grid">
           <label>Teamname<input type="text" name="Teamname" required></label>
-          <label>Leader (Nickname)<input type="text" name="Leader(Nickname)" required></label>
+          <label>Leader (TwitchName)<input type="text" name="Leader(TwitchName)" required></label>
           <label>Spieler 1<input type="text" name="Spieler 1" required></label>
           <label>Spieler 2<input type="text" name="Spieler 2" required></label>
           <label>Spieler 3<input type="text" name="Spieler 3" required></label>
@@ -219,7 +219,7 @@
           const item = document.createElement('div');
           item.className = 'registered-item';
           item.innerHTML = `
-            <span>${team.Teamname} (Leader: ${team['Leader(Nickname)']})</span>
+            <span>${team.Teamname} (Leader: ${team['Leader(TwitchName)']})</span>
             <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
           `;
           list.appendChild(item);
