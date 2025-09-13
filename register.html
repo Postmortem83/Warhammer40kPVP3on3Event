@@ -85,23 +85,6 @@
       font-weight: bold;
       text-align: center;
     }
-
-    .form-grid label {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-      color: #ffcc00;
-    }
-
-    .form-grid input {
-      padding: 0.4rem;
-      border-radius: 4px;
-      border: 1px solid #444;
-      margin-top: 0.2rem;
-      background: #222;
-      color: #fff;
-    }
   </style>
 </head>
 <body>
@@ -128,26 +111,12 @@
 
       <form id="teamForm">
         <div class="form-grid">
-          <label>Teamname
-            <input type="text" name="Teamname" required>
-          </label>
-
-          <label>Leader/TwitchName
-            <input type="text" name="TwitchName" required>
-          </label>
-
-          <label>Spieler 1
-            <input type="text" name="Spieler 1" required>
-          </label>
-          <label>Spieler 2
-            <input type="text" name="Spieler 2" required>
-          </label>
-          <label>Spieler 3
-            <input type="text" name="Spieler 3" required>
-          </label>
-          <label>Ersatz
-            <input type="text" name="Ersatz">
-          </label>
+          <label>Teamname<input type="text" name="Teamname" required></label>
+          <label>Leader/TwitchName<input type="text" name="TwitchName" required></label>
+          <label>Spieler 1<input type="text" name="Spieler 1" required></label>
+          <label>Spieler 2<input type="text" name="Spieler 2" required></label>
+          <label>Spieler 3<input type="text" name="Spieler 3" required></label>
+          <label>Ersatz<input type="text" name="Ersatz"></label>
         </div>
         <button class="btn--primary" type="submit">Team anmelden</button>
       </form>
@@ -225,12 +194,12 @@
         counter.textContent = teamCount;
 
         teams.forEach(team => {
-          const leaderName = team.TwitchName || team['Leader/TwitchName'] || "unbekannt"; // Fallback
           const item = document.createElement('div');
           item.className = 'registered-item';
           item.innerHTML = `
-            <span>${team.Teamname} (Leader/TwitchName: ${leaderName})</span>
-            <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
+            <div><strong>Team:</strong> ${team.Teamname}</div>
+            <div><strong>Leader/TwitchName:</strong> ${team.TwitchName}</div>
+            <div><strong>Spieler:</strong> ${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</div>
           `;
           list.appendChild(item);
         });
