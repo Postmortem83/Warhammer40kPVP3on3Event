@@ -219,7 +219,7 @@
           const item = document.createElement('div');
           item.className = 'registered-item';
           item.innerHTML = `
-            <span>${team.Teamname} (Leader: ${team['Leader(Nickname)']})</span>
+            <span>${team.Teamname} (Leader: ${team.TwitchName})</span>
             <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
           `;
           list.appendChild(item);
