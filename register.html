@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Team-Anmeldung – Warhammer 40k PvP Clash</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Hero-Bereich */
     .hero {
       position: relative;
       height: 400px;
@@ -33,12 +32,8 @@
       color: #ff4f4f;
       text-shadow: 0 0 10px #000;
     }
-    .hero__content h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
+    .hero__content h1 { font-size: 3rem; margin-bottom: 1rem; }
 
-    /* Counter */
     .team-counter {
       margin: 2rem auto 1rem auto;
       padding: 1rem;
@@ -51,9 +46,7 @@
       font-weight: bold;
       color: #ffcc00;
     }
-    .team-counter span {
-      color: #ff4f4f;
-    }
+    .team-counter span { color: #ff4f4f; }
 
     .registered-list {
       margin-top: 2rem;
@@ -80,18 +73,8 @@
       cursor: pointer;
     }
 
-    .success-message {
-      margin-top: 1rem;
-      color: #4CAF50;
-      font-weight: bold;
-    }
-
-    .error-message {
-      margin-top: 1rem;
-      color: #FF4F4F;
-      font-weight: bold;
-    }
-
+    .success-message { margin-top: 1rem; color: #4CAF50; font-weight: bold; }
+    .error-message { margin-top: 1rem; color: #FF4F4F; font-weight: bold; }
     .info-hint {
       margin-bottom: 1rem;
       padding: 0.8rem;
@@ -121,7 +104,6 @@
     <section class="card">
       <h2>Team Formular</h2>
 
-      <!-- Hinweis -->
       <div class="info-hint">
         ⚔️ Es können sich maximal <strong>16 Teams</strong> anmelden.<br>
         Nur ernstgemeinte Teamnamen und Spielernamen werden akzeptiert!
@@ -130,7 +112,7 @@
       <form id="teamForm">
         <div class="form-grid">
           <label>Teamname<input type="text" name="Teamname" required></label>
-          <label>Leader(TwitchName)<input type="text" name="Leader(TwitchName)" required></label>
+          <label>Leader/TwitchName<input type="text" name="TwitchName" required></label>
           <label>Spieler 1<input type="text" name="Spieler 1" required></label>
           <label>Spieler 2<input type="text" name="Spieler 2" required></label>
           <label>Spieler 3<input type="text" name="Spieler 3" required></label>
@@ -152,12 +134,9 @@
     const message = document.getElementById('message');
     const counter = document.getElementById('teamCount');
 
-    // Netlify Function URL
     const SHEET_URL = '/.netlify/functions/register-team';
+    let teamCount = 0;
 
-    let teamCount = 0; // Aktuelle Anzahl Teams
-
-    // Formular absenden
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       message.textContent = '';
@@ -203,7 +182,6 @@
       }
     });
 
-    // Registrierte Teams aus Sheet laden
     async function loadTeams() {
       try {
         const res = await fetch(SHEET_URL);
@@ -212,14 +190,14 @@
         const teams = await res.json();
 
         list.innerHTML = '';
-        teamCount = teams.length; // Anzahl Teams setzen
-        counter.textContent = teamCount; // Counter aktualisieren
+        teamCount = teams.length;
+        counter.textContent = teamCount;
 
         teams.forEach(team => {
           const item = document.createElement('div');
           item.className = 'registered-item';
           item.innerHTML = `
-            <span>${team.Teamname} (Leader: ${team['Leader(TwitchName)']})</span>
+            <span>${team.Teamname} (Leader/TwitchName: ${team.TwitchName})</span>
             <span>${team['Spieler 1']}, ${team['Spieler 2']}, ${team['Spieler 3']}${team.Ersatz ? ', Ersatz: ' + team.Ersatz : ''}</span>
           `;
           list.appendChild(item);
@@ -230,7 +208,6 @@
       }
     }
 
-    // Beim Start die Teams laden
     loadTeams();
   </script>
 </body>
